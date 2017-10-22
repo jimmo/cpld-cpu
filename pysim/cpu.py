@@ -12,6 +12,35 @@ def debug(msg):
     print('Depth limit exceeded')
     sys.exit(1)
 
+
+class Inst:
+  @classmethod
+  def load(cls, reg, nibble):
+    # 0xxx xndd load imm (n=high/low) (dd=A/B/C/D) (xxxx=data)
+    reg = reg.lower()
+    if len(reg) != 2 or reg[0] not in ('a', 'b', 'c', 'd',) or reg[1] not in ('l', 'h',):
+      raise ValueError(f'Invalid register for load: {reg}.')
+    index = ord(reg[0]) - ord('a')
+    return (nibble << 3) | (4 if reg[1] == 'h' else 0) | (index)
+
+  @classmethod
+  def mov(dst, src):
+    # 10ss sddd copy register sss to ddd (rrr=A/B/C/D/E/F/G/H)
+    dst = dst.lower()
+    src = src.lower()
+    if len(dst) != 1:
+      raise ValueError(f'Invalid destination register: {dst}')
+    if len(src) != 1:
+      raise ValueError(f'Invalid source register: {src}')
+    return (1<<7) | ((ord(src) - ord('a'))<<3) | (ord(dst) - ord('a'))
+
+  def add(dst):
+    dst = dst.lower()
+    if dst not in ('a', 'c',):
+      raise ValueError(f'Invalid destination register for add: {reg}.')
+    return 0
+
+
 # Represents either a pin (or set of pins) on a component.
 # Multiple signals are joined together in a Net.
 class Signal:
@@ -41,7 +70,7 @@ class Signal:
   def drive(self, v):
     depth(1)
     if v is not None and (v < 0 or v >= 2**self.w):
-      print('Driving "{}/{}/{}" to "{}" invalid value.'.format(self.net.name, self.parent.name, self.name(), v))
+      print('Driving "{}/{}/{}" to "{}" invalid value for {}bit signal.'.format(self.net.name, self.parent.name, self.name(), v, self.w))
     #debug('driving "{}/{}/{}" to "{}" (was "{}/{}")'.format(self.net.name, self.parent.name, self.name(), v, 'hiz' if self.hiz else 'loz', self.v))
     # Do nothing for no-op changes.
     if v is None:
@@ -153,47 +182,47 @@ class Logic(Component):
     self.oe = Signal(self, 1)
 
   def update(self):
-    pass
-
-class Register(Component):
-  def __init__(self, n):
-    super().__init__('reg ' + n)
-    self.v = 0
-    self.data = Signal(self, 8)
-    self.ie_l = Signal(self, 1)
-    self.ie_h = Signal(self, 1)
-    self.oe = Signal(self, 1)
-
-  def update(self):
-    depth(1)
-    #debug('updating register')
-    if self.ie_l.v:
-      self.v = self.v & 0xf0 | self.data.v & 0x0f
-    if self.ie_h.v:
-      self.v = self.data.v & 0xf0 | self.v & 0x0f
     if self.oe.v:
-      self.data.drive(self.v)
+      a = self.in_a.v
+      b = self.in_b.v
+      o = 0
+      fn = self.fn.v
+      if fn == 0:
+        o = a + b
+      elif fn == 1:
+        o = a - b
+      elif fn == 2:
+        o = a > b
+      elif fn == 3:
+        o = a < b
+      elif fn == 4:
+        o = a == b
+      elif fn == 5:
+        o = a & b
+      elif fn == 6:
+        o = a | b
+      elif fn == 7:
+        o = a ^ b
+      elif fn == 8:
+        o = ~a
+      elif fn == 9:
+        o = a == 0
+      elif fn == 10:
+        o = a >> 1
+      elif fn == 11:
+        o = b << 1
+      elif fn == 12:
+        o = a
+      elif fn == 13:
+        o = a
+      elif fn == 14:
+        o = a
+      elif fn == 15:
+        o = a
+      self.out.drive(o % 0x100)
     else:
-      self.data.drive(None)
-    depth(-1)
-
-class BusConnect(Component):
-  def __init__(self, n):
-    super().__init__('bus conn ' + n)
-    self.a = Signal(self, 8)
-    self.b = Signal(self, 8)
-    self.a_to_b = Signal(self, 1)
-    self.b_to_a = Signal(self, 1)
-
-  def update(self):
-    if self.a_to_b.v:
-      self.b.drive(self.a.v)
-    else:
-      self.b.drive(None)
-    if self.b_to_a.v:
-      self.a.drive(self.b.v)
-    else:
-      self.a.drive(None)
+      self.out.drive(None)
+      self.flags.drive(None)
 
 class DecoderA(Component):
   def __init__(self):
@@ -240,17 +269,46 @@ class DecoderA(Component):
   # 1111 0wtt read/write mem (w=read/write) (tt=type)
   # 1111 1?rr unconditional jump (rr=A:B/C:D/E:F/G:H) (?=type?)
   def update(self):
-    if self.instr.v & (1<<7):
-      if self.instr.v & (1<<6):
-        pass
-      else:
-        pass
-    else:
+    if self.instr.v & (1<<7) == 0:
       # Load immediate
       self.stage(0)
       self.stage(1)
       self.stage(2, self.a_to_b)
-      self.stage(3, self.pc_inc, self.a_to_b, [self.ie_a_l, self.ie_b_l, self.ie_c_l, self.ie_d_l][self.instr.v & 3])
+      if self.instr.v & (1<<2):
+        dest = (self.ie_a_h, self.ie_b_h, self.ie_c_h, self.ie_d_h)[self.instr.v & 3]
+      else:
+        dest = (self.ie_a_l, self.ie_b_l, self.ie_c_l, self.ie_d_l)[self.instr.v & 3]
+      self.stage(3, self.pc_inc, self.a_to_b, dest)
+    elif self.instr.v & (1<<6) == 0:
+      # copy register
+      self.stage(0)
+      self.stage(1)
+      self.stage(2)
+      self.stage(3, self.pc_inc)
+    elif self.instr.v & (1<<5) == 0:
+      # ALU
+      self.stage(0)
+      self.stage(1)
+      self.stage(2)
+      self.stage(3, self.pc_inc)
+    elif self.instr.v & (1<<6) == 0:
+      # skip
+      self.stage(0)
+      self.stage(1)
+      self.stage(2)
+      self.stage(3, self.pc_inc)
+    elif self.instr.v & (1<<6) == 0:
+      # read/write mem
+      self.stage(0)
+      self.stage(1)
+      self.stage(2)
+      self.stage(3, self.pc_inc)
+    else:
+      # unconditional jump
+      self.stage(0)
+      self.stage(1)
+      self.stage(2)
+      self.stage(3, self.pc_inc)
 
 
 class DecoderB(Component):
@@ -293,7 +351,7 @@ class DecoderB(Component):
       else:
         s.drive(0)
 
-  # 0xxx xndd load imm (n=high/low) (dd=A/B/C/D) (xxxx=data)
+  # 0xxx xndd load imm (n=high/low nibble) (dd=A/B/C/D) (xxxx=data)
   # 10ss sddd copy register sss to ddd  (rrr=A/B/C/D/E/F/G/H)
   # 110f ffdf ALU (d=A/C) (ffff=function)
   # 1110 tttt skip (tttt=type)
@@ -305,7 +363,7 @@ class DecoderB(Component):
     else:
       # Load immediate
       self.stage(0)
-      self.stage(1)
+      self.stage(1, self.oe_imm)
       self.stage(2, self.oe_imm)
       self.stage(3, self.oe_imm)
 
@@ -320,11 +378,13 @@ class InstructionRegister(Component):
     self.oe_imm = Signal(self, 1)
 
   def update(self):
-    if self.ie.v:
+    if self.ie.was_edge(1):
+      print('reg ir load 0x{:02x}'.format(self.data.v))
       self.v = self.data.v
       self.instr.drive(self.v)
     if self.oe_imm.v:
-      self.imm.drive(0)
+      imm = (self.v >> 3) & 0xf
+      self.imm.drive(imm << 4 | imm)
     else:
       self.imm.drive(None)
 
@@ -416,50 +476,18 @@ class MemControl(Component):
       self.oe_io.drive(0)
       self.oe_ram.drive(0)
 
-class Rom(Component):
-  def __init__(self):
-    super().__init__('rom')
-    self.rom = list(range(65536))
-    self.addr_l = Signal(self, 8)
-    self.addr_h = Signal(self, 8)
-    self.data = Signal(self, 8)
 
-  def update(self):
-    addr = self.addr_h.v << 8 | self.addr_l.v
-    if addr < len(self.rom):
-      self.data.drive(self.rom[addr])
-    else:
-      self.data.drive(0)
-
-class Ram(Component):
-  def __init__(self):
-    super().__init__('ram')
-    self.ram = [0] * 65536
-    self.addr_l = Signal(self, 8)
-    self.addr_h = Signal(self, 8)
-    self.data = Signal(self, 8)
-    self.ie = Signal(self, 1)
-    self.oe = Signal(self, 1)
-
-  def update(self):
-    addr = self.addr_h.v << 8 | self.addr_l.v
-
-    if self.ie.v:
-      self.ram[addr] = self.data.v
-
-    if self.oe.v:
-      self.data.drive(self.ram[addr])
-    else:
-      self.data.drive(None)
 
 class Clock(Component):
   def __init__(self):
     super().__init__('clock')
+    self.v = 3
     self.clk = Signal(self, 2)
 
   def tick(self):
     debug('tick')
-    self.clk.drive((self.clk.v + 1) % 4)
+    self.v = (self.v + 1) % 4
+    self.clk.drive(self.v)
 
   def update(self):
     pass
@@ -571,9 +599,11 @@ def main():
           print('  {}({})'.format(n, s.w))
 
   try:
-    while True:
-      clk.tick()
-      print('PC: {:2x}{:2x}'.format(pc_h.addr.value(), pc_l.addr.value()))
+    for i in range(6):
+      for i in range(4):
+        clk.tick()
+      print('PC: 0x{:02x}{:02x} T: 0x{:02x}'.format(pc_h.addr.value(), pc_l.addr.value(), reg_t.data.value()))
+      print('A: 0x{:02x} B: 0x{:02x} C: 0x{:02x} D: 0x{:02x} E: 0x{:02x} F: 0x{:02x} G: 0x{:02x} H: 0x{:02x}'.format(reg_a.data.value(), reg_b.data.value(), reg_c.data.value(), reg_d.data.value(), reg_e.data.value(), reg_f.data.value(), reg_g.data.value(), reg_h.data.value()))
   except KeyboardInterrupt:
     pass
 
