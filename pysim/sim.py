@@ -34,7 +34,8 @@ class Net():
     d = self.driver()
     v = self._pull
     if not d and not v:
-      raise Exception(f'Floating net with no pull-up/down "{self.name()}"')
+      return
+      #raise Exception(f'Floating net with no pull-up/down "{self.name()}"')
     if d:
       v = d.value()
     for p in self._pins:
@@ -42,6 +43,8 @@ class Net():
         p.update(v)
 
   def append(self, p):
+    if p in self._pins:
+      raise Exception(f'Pin "{p.fullname()}" already in net "{self.name()}"')
     p._net = self
     self._pins.append(p)
 
@@ -87,6 +90,7 @@ class Pin():
       return self
     if self._hiz and v is None:
       return self
+    #print(f'drive "{self.fullname()}" to {v}')
     self._value = v
     self._hiz = v is None
     if self._net:
@@ -110,6 +114,9 @@ class Pin():
       other._net = self._net
     return self
 
+  def __add__(self, other):
+    return self.__iadd__(other)
+
 
 class SignalView():
   def __init__(self, signal, pins):
@@ -127,6 +134,7 @@ class SignalView():
       for i in range(len(self._pins)):
         self._pins[i] <<= None
     else:
+      v = int(v)
       if v < 0:
         raise Exception('invalid value -- underflow')
       elif v >= 2**len(self._pins):
@@ -143,6 +151,9 @@ class SignalView():
     for pa, pb in zip(self._pins, other._pins):
       pa += pb
     return self
+
+  def __add__(self, other):
+    return self.__iadd__(other)
 
   def __len__(self):
     return len(self._pins)
@@ -195,6 +206,9 @@ class Signal():
     self._view += other
     return self
 
+  def __add__(self, other):
+    return self.__iadd__(other)
+
   def __len__(self):
     return len(self._pins)
 
@@ -229,6 +243,16 @@ class Clock(Component):
     self.clk <<= self.value
 
 
+class Power(Component):
+  def __init__(self):
+    super().__init__('power')
+    self.low = Signal(self, 'low', 1)
+    self.high = Signal(self, 'high', 1)
+
+  def reset(self):
+    self.low <<= 0
+    self.high <<= 1
+
 class Counter(Component):
   def __init__(self, w):
     super().__init__('counter')
@@ -254,13 +278,16 @@ class Register(Component):
     self.ie = Signal(self, 'ie', 2)
     self.oe = Signal(self, 'oe', 1)
 
+  def value(self):
+    return self.v
+
   def update(self, signal):
     if self.ie.had_edge(0, 1):
-      print(f'{self.name()} load low 0x{self.data.value():1x} (was {self.v})')
+      #print(f'{self.name()} load low 0x{self.data.value():02x} (was {self.v:02x})')
       self.v = (self.v & 0xf0) | (self.data.value() & 0x0f)
     if self.ie.had_edge(1, 1):
-      print(f'{self.name()} load high 0x{self.data.value():1x} (was {self.v})')
-      self.v = (self.data.value() & 0xf0) | (self.v & 0x0f)
+      #print(f'{self.name()} load high 0x{self.data.value():02x} (was {self.v:02x})')
+      self.v = (self.v & 0x0f) | (self.data.value() & 0xf0)
     if self.oe.value():
       self.data <<= self.v
     else:
@@ -270,18 +297,20 @@ class Register(Component):
 class BusConnect(Component):
   def __init__(self, name):
     super().__init__(name)
-    self.a = Signal(self, 8)
-    self.b = Signal(self, 8)
-    self.a_to_b = Signal(self, 1)
-    self.b_to_a = Signal(self, 1)
+    self.a = Signal(self, 'a', 8)
+    self.b = Signal(self, 'b', 8)
+    self.a_to_b = Signal(self, 'a_to_b', 1)
+    self.b_to_a = Signal(self, 'b_to_a', 1)
 
-  def update(self):
+  def update(self, signal):
     if self.a_to_b.value():
+      #print('a to b', self.a.value())
       self.b <<= self.a.value()
     else:
       self.b <<= None
 
     if self.b_to_a.value():
+      #print('b to a', self.b.value())
       self.a <<= self.b.value()
     else:
       self.a <<= None
@@ -295,7 +324,7 @@ class Rom(Component):
     self.data = Signal(self, 'data', data_width)
     self.oe = Signal(self, 'oe', 1)
 
-  def update(self):
+  def update(self, signal):
     if self.oe.value():
       self.data <<= self.rom[self.addr.value()]
     else:
@@ -311,7 +340,7 @@ class Ram(Component):
     self.ie = Signal(self, 'ie', 1)
     self.oe = Signal(self, 'oe', 1)
 
-  def update(self):
+  def update(self, signal):
     if self.ie.value():
       self.ram[self.addr.value()] = self.data.value()
 
@@ -345,8 +374,7 @@ def main():
   d2.data += counter.out[(7,6,5,4,3,2,1,0)]
 
   reg.data += counter.out[0:4]
-  reg.ie[0] += reg.ie[1]
-  reg.ie[0] += counter.out[0]
+  reg.ie[0] += reg.ie[1] + counter.out[0]
 
   for c in (clk, counter, d1, d2, reg,):
     c.reset()
