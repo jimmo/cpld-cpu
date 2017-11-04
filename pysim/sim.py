@@ -13,30 +13,18 @@ def debug(msg):
     sys.exit(1)
 
 
-class Sim(object):
-  def __init__(self):
-    self._components = []
 
-  def add(self, component):
-    self._components.append(component)
-    return component
-
-  def connect(self, name, *signals):
-    Net(name, *signals)
-
-  def reset(self):
-    print('Disconnected signals')
-    depth(1)
-    for c in self._components:
-      debug('{}'.format(type(c)))
-      for n in sorted(c.__dict__.keys()):
-        s = c.__dict__[n]
-        if isinstance(s, Signal):
-          if not s.net:
-            debug('  {}({})'.format(n, s.w))
-    depth(-1)
-    for c in self._components:
-      c.reset()
+  # def reset(self):
+  #   print('Disconnected signals')
+  #   depth(1)
+  #   for c in self._components:
+  #     debug('{}'.format(type(c)))
+  #     for n in sorted(c.__dict__.keys()):
+  #       s = c.__dict__[n]
+  #       if isinstance(s, Signal):
+  #         if not s.net:
+  #           debug('  {}({})'.format(n, s.w))
+  #   depth(-1)
 
 
 # Represents either a pin (or set of pins) on a component.
@@ -44,47 +32,56 @@ class Sim(object):
 class Signal():
   def __init__(self, p, w):
     # Parent component.
-    self.parent = p
+    self._parent = p
     # Width of this signal (i.e. number of bits).
-    self.w = w
+    self._w = w
     # Current value (0..2^w-1).
-    self.v = 0
+    self._v = 0
     # Net that this signal is connected to.
-    self.net = None
+    self._net = None
     # True if this signal is not currently driving the net.
-    self.hiz = True
+    self._hiz = True
     # TODO
-    self.edge = None
+    self._edge = None
 
   def name(self):
-    for n, s in self.parent.__dict__.items():
+    for n, s in self._parent.__dict__.items():
       if s == self:
-        return n
+        return self._parent.name() + '::' + n
     return 'unknown'
+
+  def width(self):
+    return self._w
+
+  def net(self):
+    return self._net
+
+  def is_hiz(self):
+    return self._hiz
 
   # Called by the parent component (usually in update()) to either
   # drive the pin (v = 0 or 1) or set it to hi-z mode ( v= None).
   # All other singals on this net will be updated.
   def drive(self, v):
     depth(1)
-    if v is not None and (v < 0 or v >= 2**self.w):
-      print('Driving "{}/{}/{}" to "{}" invalid value for {}bit signal.'.format(self.net.name, self.parent.name, self.name(), v, self.w))
-    #debug('driving "{}/{}/{}" to "{}" (was "{}/{}")'.format(self.net.name, self.parent.name, self.name(), v, 'hiz' if self.hiz else 'loz', self.v))
+    if v is not None and (v < 0 or v >= 2**self._w):
+      print('Driving "{}/{}/{}" to "{}" invalid value for {}bit signal.'.format(self._net.name, self._parent.name(), self.name(), v, self._w))
+    #debug('driving "{}/{}/{}" to "{}" (was "{}/{}")'.format(self._net.name, self._parent.name, self.name(), v, 'hiz' if self._hiz else 'loz', self._v))
     # Do nothing for no-op changes.
     if v is None:
-      if not self.hiz:
+      if not self._hiz:
         #debug('hiz mode')
-        self.hiz = True
-        self.net.update()
+        self._hiz = True
+        self._net.update()
       #else:
       #  debug('ignore (same-hiz)')
     else:
-      if self.v != v or self.hiz:
+      if self._v != v or self._hiz:
         #debug('driving mode')
-        self.hiz = False
-        self.v = v
-        if self.net:
-          self.net.update()
+        self._hiz = False
+        self._v = v
+        if self._net:
+          self._net.update()
       #else:
       #  debug('ignore (same-v)')
     depth(-1)
@@ -92,72 +89,75 @@ class Signal():
   # Called by the net that this signal is connected to when another signal changes.
   def follow(self):
     depth(1)
-    v = self.net.value()
-    if v and not self.v:
-      self.edge = 1
-    if not v and self.v:
-      self.edge = 0
-    self.v = v
-    #debug('following "{}/{}/{}" to "{}"'.format(self.net.name, self.parent.name, self.name(), v))
-    if not self.hiz:
+    v = self._net.value()
+    if v and not self._v:
+      self._edge = 1
+    if not v and self._v:
+      self._edge = 0
+    self._v = v
+    #debug('following "{}/{}/{}" to "{}"'.format(self._net.name, self._parent.name, self.name(), v))
+    if not self._hiz:
       debug('tried to follow a loz signal')
-    self.parent.update()
+    self._parent.update()
     depth(-1)
 
   # Returns true if this signal had an edge since the last call.
   def was_edge(self, e):
-    r = self.edge == e
-    self.edge = None
+    r = self._edge == e
+    self._edge = None
     return r
 
   def value(self):
-    if self.hiz:
-      if self.net:
-        return self.net.value()
+    if self._hiz:
+      if self._net:
+        return self._net.value()
       else:
-        raise Exception('signal "{}" has no net or was not driven'.format(self.name()))
+        raise Exception('signal "{}" is floating'.format(self.name()))
     else:
-      return self.v
+      return self._v
 
   def select(self, *n):
     s = Select(self, *n)
     Net('{}_{}'.format(self.name(), '_'.join(map(str, n))), self, s.inp)
     return s.out
 
+  def connect(self, *signals):
+    Net(self.name() + ',' + ','.join(s.name() for s in signals), *[self] + list(signals))
+
 
 # Represents a set of connected signals.
 class Net:
   def __init__(self, name, *signals):
-    self.name = name
+    self._n = name
 
     # Check that all signals on this net are the same width.
-    w_min, w_max = min(s.w for s in signals), max(s.w for s in signals)
+    w_min, w_max = min(s.width() for s in signals), max(s.width() for s in signals)
     if w_min != w_max:
-      raise Exception('Mismatched signal widths on "{}".'.format(self.name))
+      raise Exception('Mismatched signal widths [{}] on net "{}".'.format(','.join(str(s.width()) for s in signals), self._n))
 
-    self.w = w_min
-    self.signals = list(signals)
+    self._w = w_min
+    self._signals = list(signals)
 
     # Connect all signals to this net, and if any signals are already connected to nets,
     # join them into this one.
-    for s in list(self.signals):
-      if s.net:
-        self.join(s.net)
-      s.net = self
+    for s in list(self._signals):
+      if s.net():
+        self._join(s.net())
+      s._net = self
 
-  def join(self, other):
-    for s in other.signals:
-      #debug('moving {}.{} to {}'.format(other.name, s.name(), self.name))
-      s.net = self
-      self.signals.append(s)
+  def _join(self, other):
+    for s in other._signals:
+      #debug('moving {}.{} to {}'.format(other.name, s.name(), self._n))
+      s._net = self
+      self._signals.append(s)
 
   def value(self):
     # Find the current driver.
     driver = None
-    for s in self.signals:
-      if not s.hiz:
+    for s in self._signals:
+      if not s.is_hiz():
         if driver is not None:
-          debug('Two drivers on net "{}"'.format(self.name))
+          debug('Two drivers on net "{}"'.format(self._n))
           depth(-1)
           return
         driver = s
@@ -170,11 +170,11 @@ class Net:
   # Called by a signal to update other signals in this net.
   def update(self):
     depth(1)
-    #debug('updating net "{}"'.format(self.name))
+    #debug('updating net "{}"'.format(self._n))
     # Find the current driver.
     driver = None
-    for s in self.signals:
-      if s.hiz:
+    for s in self._signals:
+      if s.is_hiz():
         s.follow()
     depth(-1)
 
@@ -182,7 +182,10 @@ class Net:
 # Base class for all components.
 class Component:
   def __init__(self, n):
-    self.name = n
+    self._n = n
+
+  def name(self):
+    return self._n
 
   def update(self):
     pass
@@ -197,7 +200,7 @@ class Select(Component):
   HIGH = object()
   def __init__(self, s, *n):
     super().__init__('select_{}'.format(Select.N))
-    self.inp = Signal(self, s.w)
+    self.inp = Signal(self, s.width())
     self.out = Signal(self, len(n))
     self.n = n
 
@@ -253,10 +256,10 @@ class Counter(Component):
 
 
 class Register(Component):
-  def __init__(self, n):
-    super().__init__('reg ' + n)
+  def __init__(self, n, w=8):
+    super().__init__('register_' + n)
     self.v = 0
-    self.data = Signal(self, 8)
+    self.data = Signal(self, w)
     self.ie_l = Signal(self, 1)
     self.ie_h = Signal(self, 1)
     self.oe = Signal(self, 1)
@@ -269,7 +272,7 @@ class Register(Component):
     if self.ie_h.was_edge(1):
       print(f'{self.name} load high 0x{self.data.v:1x} (was {self.v})')
       self.v = (self.data.v & 0xf0) | (self.v & 0x0f)
-    if self.oe.v:
+    if self.oe.value():
       self.data.drive(self.v)
     else:
       self.data.drive(None)
@@ -299,10 +302,10 @@ class Rom(Component):
   def __init__(self):
     super().__init__('rom')
     self.rom = [0] * 65536
-    self.rom[0] = Inst.load('al', 0xa)
-    self.rom[1] = Inst.load('ah', 0x1)
-    self.rom[2] = Inst.load('bl', 0xb)
-    self.rom[3] = Inst.load('bh', 0x7)
+    #self.rom[0] = Inst.load('al', 0xa)
+    #self.rom[1] = Inst.load('ah', 0x1)
+    #self.rom[2] = Inst.load('bl', 0xb)
+    #self.rom[3] = Inst.load('bh', 0x7)
     self.addr_l = Signal(self, 8)
     self.addr_h = Signal(self, 8)
     self.data = Signal(self, 8)
@@ -343,20 +346,26 @@ class Display(Component):
     self.data = Signal(self, w)
 
   def update(self):
-    print('{{}} {{:0{}b}}'.format(self.data.w).format(self.name, self.data.value()))
+    print('{{}} {{:0{}b}}'.format(self.data.width()).format(self.name(), self.data.value()))
 
 def main():
-  sim = Sim()
-  clk = sim.add(Clock(6))
-  counter = sim.add(Counter(8))
-  disp = sim.add(Display('status', 8))
-  disp2 = sim.add(Display('disp sel', 7))
+  clk = Clock(6)
+  counter = Counter(8)
+  disp = Display('status', 8)
+  disp2 = Display('disp_sel', 7)
+  reg = Register('a', 4)
 
-  sim.connect('clk', clk.clk.select(0), counter.clk)
-  sim.connect('disp', counter.out, disp.data)
-  sim.connect('disp2', counter.out.select(Select.HIGH, 0, 2, 1, 3, Select.HIGH, Select.LOW), disp2.data)
+  clk.clk.select(0).connect(counter.clk)
+  counter.out.connect(disp.data)
+  counter.out.select(Select.HIGH, 0, 2, 1, 3, Select.HIGH, Select.LOW).connect(disp2.data)
+  #reg.data.connect(counter.out.select(0,1,2,3))
+  #reg.ie_l.connect(reg.ie_h, counter.out.select(2))
 
-  sim.reset()
+  # todo - either add oe to counter or some sort of bus driver.
+  #sim.connect('regoe', reg.
+
+  for c in (clk, counter, disp, disp2, reg,):
+    c.reset()
 
   try:
     for i in range(16):
