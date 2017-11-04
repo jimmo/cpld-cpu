@@ -13,364 +13,347 @@ def debug(msg):
     sys.exit(1)
 
 
+class Net():
+  def __init__(self, pins):
+    self._pins = pins
+    self._pull = None
 
-  # def reset(self):
-  #   print('Disconnected signals')
-  #   depth(1)
-  #   for c in self._components:
-  #     debug('{}'.format(type(c)))
-  #     for n in sorted(c.__dict__.keys()):
-  #       s = c.__dict__[n]
-  #       if isinstance(s, Signal):
-  #         if not s.net:
-  #           debug('  {}({})'.format(n, s.w))
-  #   depth(-1)
+  def name(self):
+    return '/'.join(p.fullname() for p in self._pins)
+
+  def driver(self):
+    d = None
+    for p in self._pins:
+      if not p.is_hiz():
+        if d:
+          raise Exception(f'Multiple drivers for net "{self.name()}"')
+        d = p
+    return d
+
+  def update(self):
+    d = self.driver()
+    v = self._pull
+    if not d and not v:
+      raise Exception(f'Floating net with no pull-up/down "{self.name()}"')
+    if d:
+      v = d.value()
+    for p in self._pins:
+      if p.is_hiz():
+        p.update(v)
+
+  def append(self, p):
+    p._net = self
+    self._pins.append(p)
+
+  def merge(self, n):
+    for p in n._pins:
+      self.append(p)
 
 
-# Represents either a pin (or set of pins) on a component.
-# Multiple signals are joined together in a Net.
-class Signal():
-  def __init__(self, p, w):
-    # Parent component.
-    self._parent = p
-    # Width of this signal (i.e. number of bits).
-    self._w = w
-    # Current value (0..2^w-1).
-    self._v = 0
-    # Net that this signal is connected to.
+class Pin():
+  def __init__(self, name, signal):
+    self._name = name
+    self._signal = signal
     self._net = None
-    # True if this signal is not currently driving the net.
+    self._value = 0
     self._hiz = True
-    # TODO
     self._edge = None
 
   def name(self):
-    for n, s in self._parent.__dict__.items():
-      if s == self:
-        return self._parent.name() + '::' + n
-    return 'unknown'
+    return self._name
 
-  def width(self):
-    return self._w
-
-  def net(self):
-    return self._net
+  def fullname(self):
+    return f'{self._signal._component.name()}:{self.name()}'
 
   def is_hiz(self):
     return self._hiz
 
-  # Called by the parent component (usually in update()) to either
-  # drive the pin (v = 0 or 1) or set it to hi-z mode ( v= None).
-  # All other singals on this net will be updated.
-  def drive(self, v):
-    depth(1)
-    if v is not None and (v < 0 or v >= 2**self._w):
-      print('Driving "{}/{}/{}" to "{}" invalid value for {}bit signal.'.format(self._net.name, self._parent.name(), self.name(), v, self._w))
-    #debug('driving "{}/{}/{}" to "{}" (was "{}/{}")'.format(self._net.name, self._parent.name, self.name(), v, 'hiz' if self._hiz else 'loz', self._v))
-    # Do nothing for no-op changes.
-    if v is None:
-      if not self._hiz:
-        #debug('hiz mode')
-        self._hiz = True
-        self._net.update()
-      #else:
-      #  debug('ignore (same-hiz)')
-    else:
-      if self._v != v or self._hiz:
-        #debug('driving mode')
-        self._hiz = False
-        self._v = v
-        if self._net:
-          self._net.update()
-      #else:
-      #  debug('ignore (same-v)')
-    depth(-1)
+  def value(self):
+    return self._value
 
-  # Called by the net that this signal is connected to when another signal changes.
-  def follow(self):
-    depth(1)
-    v = self._net.value()
-    if v and not self._v:
-      self._edge = 1
-    if not v and self._v:
-      self._edge = 0
-    self._v = v
-    #debug('following "{}/{}/{}" to "{}"'.format(self._net.name, self._parent.name, self.name(), v))
-    if not self._hiz:
-      debug('tried to follow a loz signal')
-    self._parent.update()
-    depth(-1)
+  def update(self, v):
+    if v != self._value:
+      self._edge = v
+    self._value = v
+    self._signal.update()
 
-  # Returns true if this signal had an edge since the last call.
-  def was_edge(self, e):
-    r = self._edge == e
+  def had_edge(self, e):
+    result = self._edge == e
     self._edge = None
-    return r
+    return result
 
-  def value(self):
-    if self._hiz:
-      if self._net:
-        return self._net.value()
-      else:
-        raise Exception('signal "{}" is floating'.format(self.name()))
+  def __ilshift__(self, v):
+    if not self._hiz and v == self._value:
+      return self
+    if self._hiz and v is None:
+      return self
+    self._value = v
+    self._hiz = v is None
+    if self._net:
+      self._net.update()
+    #else:
+    #  print(f'Warning: driving unconnected pin {self.fullname()}')
+    return self
+
+  def __iadd__(self, other):
+    if self._net and other._net:
+      self._net.merge(other._net)
+      other._net = self._net
+    elif self._net:
+      self._net.append(other)
+      other._net = self._net
+    elif other._net:
+      other._net.append(self)
+      self._net = other._net
     else:
-      return self._v
-
-  def select(self, *n):
-    s = Select(self, *n)
-    Net('{}_{}'.format(self.name(), '_'.join(map(str, n))), self, s.inp)
-    return s.out
-
-  def connect(self, *signals):
-    Net(self.name() + ',' + ','.join(s.name() for s in signals), *[self] + list(signals))
+      self._net = Net([self, other])
+      other._net = self._net
+    return self
 
 
-# Represents a set of connected signals.
-class Net:
-  def __init__(self, name, *signals):
-    self._n = name
-
-    # Check that all signals on this net are the same width.
-    w_min, w_max = min(s.width() for s in signals), max(s.width() for s in signals)
-    if w_min != w_max:
-      raise Exception('Mismatched signal widths [{}] on net "{}".'.format(','.join(str(s.width()) for s in signals), self._n))
-
-    self._w = w_min
-    self._signals = list(signals)
-
-    # Connect all signals to this net, and if any signals are already connected to nets,
-    # join them into this one.
-    for s in list(self._signals):
-      if s.net():
-        self._join(s.net())
-      s._net = self
-
-  def _join(self, other):
-    for s in other._signals:
-      #debug('moving {}.{} to {}'.format(other.name, s.name(), self._n))
-      s._net = self
-      self._signals.append(s)
-
-  def value(self):
-    # Find the current driver.
-    driver = None
-    for s in self._signals:
-      if not s.is_hiz():
-        if driver is not None:
-          debug('Two drivers on net "{}"'.format(self._n))
-          depth(-1)
-          return
-        driver = s
-        break
-    if driver:
-      return driver.value()
-    else:
-      return 0
-
-  # Called by a signal to update other signals in this net.
-  def update(self):
-    depth(1)
-    #debug('updating net "{}"'.format(self._n))
-    # Find the current driver.
-    driver = None
-    for s in self._signals:
-      if s.is_hiz():
-        s.follow()
-    depth(-1)
-
-
-# Base class for all components.
-class Component:
-  def __init__(self, n):
-    self._n = n
+class SignalView():
+  def __init__(self, signal, pins):
+    self._signal = signal
+    self._pins = pins
 
   def name(self):
-    return self._n
+    if self == self._signal._view:
+      return self._signal.name()
+    else:
+      return '{}:{}'.format(self._signal._component.name(), ','.join(p.name() for p in self._pins))
+
+  def __ilshift__(self, v):
+    if v is None:
+      for i in range(len(self._pins)):
+        self._pins[i] <<= None
+    else:
+      if v < 0:
+        raise Exception('invalid value -- underflow')
+      elif v >= 2**len(self._pins):
+        raise Exception('invalid value -- overflow')
+      for i in range(len(self._pins)):
+        self._pins[i] <<= (v & 1)
+        v >>= 1
+    return self
+
+  def __iadd__(self, other):
+    print('connect', self.name(), other.name())
+    if len(self._pins) != len(other._pins):
+      raise Exception('Mismatched signal widths: {} and {}'.format(self.name(), other.name()))
+    for pa, pb in zip(self._pins, other._pins):
+      pa += pb
+    return self
+
+  def __len__(self):
+    return len(self._pins)
+
+
+class Signal():
+  def __init__(self, component, name, width):
+    self._pins = []
+    self._name = name
+    self._component = component
+    for i in range(width):
+      self._pins.append(Pin('{}_{}'.format(name, i), self))
+    self._view = SignalView(self, self._pins)
+
+  def name(self):
+    if len(self) == 1:
+      return self._pins[0].fullname()
+    else:
+      return '{}:{}[0..{}]'.format(self._component.name(), self._name, len(self)-1)
 
   def update(self):
+    self._component.update(signal=self)
+
+  def had_edge(self, i, v):
+    return self._pins[i].had_edge(v)
+
+  def value(self):
+    v = 0
+    for i in range(len(self)):
+      v |= (self._pins[i].value() << i)
+    return v
+
+  def __ilshift__(self, v):
+    self._view <<= v
+    return self
+
+  def __getitem__(self, i):
+    if isinstance(i, slice):
+      return SignalView(self, self._pins[i])
+    elif isinstance(i, tuple):
+      return SignalView(self, [self._pins[n] for n in i])
+    else:
+      return SignalView(self, [self._pins[i]])
+
+  def __setitem__(self, i, value):
+    # Required to make `a.b[n] += c.d[m]` work
+    pass
+
+  def __iadd__(self, other):
+    self._view += other
+    return self
+
+  def __len__(self):
+    return len(self._pins)
+
+
+class Component():
+  def __init__(self, name):
+    self._name = name
+
+  def name(self):
+    return self._name
+
+  def update(self, signal):
     pass
 
   def reset(self):
     pass
-
-
-class Select(Component):
-  N = 0
-  LOW = object()
-  HIGH = object()
-  def __init__(self, s, *n):
-    super().__init__('select_{}'.format(Select.N))
-    self.inp = Signal(self, s.width())
-    self.out = Signal(self, len(n))
-    self.n = n
-
-  def update(self):
-    v = 0
-    #print(self.inp.value(), self.n)
-    for i in range(len(self.n)):
-      if self.n[i] == Select.LOW:
-        continue
-      elif self.n[i] == Select.HIGH or (self.inp.value() >> self.n[i]) & 1:
-        v |= (1 << i)
-    #print(v)
-    self.out.drive(v)
 
 
 class Clock(Component):
-  def __init__(self, w=1):
+  def __init__(self, width=1):
     super().__init__('clock')
-    self.v = 0
-    self.w = w
-    self.clk = Signal(self, w)
+    self.value = 0
+    self.clk = Signal(self, 'clk', width)
 
   def tick(self):
-    debug('tick')
-    self.v = (self.v + 1) % (1 << self.w)
-    self.clk.drive(self.v)
-
-  def update(self):
-    pass
+    print('tick')
+    self.value = (self.value + 1) % (1 << len(self.clk))
+    self.clk <<= self.value
 
   def reset(self):
-    self.clk.drive(0)
+    self.value = 0
+    self.clk <<= self.value
 
 
 class Counter(Component):
   def __init__(self, w):
     super().__init__('counter')
     self.v = 0
-    self.w = w
-    self.clk = Signal(self, 1)
-    self.out = Signal(self, w)
+    self.clk = Signal(self, 'clk', 1)
+    self.out = Signal(self, 'out', w)
 
   def reset(self):
-    self.out.drive(self.v)
+    self.v = 0
+    self.out <<= self.v
 
-  def update(self):
-    if self.clk.was_edge(1):
-      self.v = (self.v + 1) % (1 << self.w)
-      self.out.drive(self.v)
-
-  def reset(self):
-    self.out.drive(0)
+  def update(self, signal):
+    if self.clk.had_edge(0, 1):
+      self.v = (self.v + 1) % (1 << len(self.out))
+      self.out <<= self.v
 
 
 class Register(Component):
-  def __init__(self, n, w=8):
-    super().__init__('register_' + n)
+  def __init__(self, name, width=8):
+    super().__init__(name)
     self.v = 0
-    self.data = Signal(self, w)
-    self.ie_l = Signal(self, 1)
-    self.ie_h = Signal(self, 1)
-    self.oe = Signal(self, 1)
+    self.data = Signal(self, 'data', width)
+    self.ie = Signal(self, 'ie', 2)
+    self.oe = Signal(self, 'oe', 1)
 
-  def update(self):
-    depth(1)
-    if self.ie_l.was_edge(1):
-      print(f'{self.name} load low 0x{self.data.v:1x} (was {self.v})')
-      self.v = (self.v & 0xf0) | (self.data.v & 0x0f)
-    if self.ie_h.was_edge(1):
-      print(f'{self.name} load high 0x{self.data.v:1x} (was {self.v})')
-      self.v = (self.data.v & 0xf0) | (self.v & 0x0f)
+  def update(self, signal):
+    if self.ie.had_edge(0, 1):
+      print(f'{self.name()} load low 0x{self.data.value():1x} (was {self.v})')
+      self.v = (self.v & 0xf0) | (self.data.value() & 0x0f)
+    if self.ie.had_edge(1, 1):
+      print(f'{self.name()} load high 0x{self.data.value():1x} (was {self.v})')
+      self.v = (self.data.value() & 0xf0) | (self.v & 0x0f)
     if self.oe.value():
-      self.data.drive(self.v)
+      self.data <<= self.v
     else:
-      self.data.drive(None)
-    depth(-1)
+      self.data <<= None
 
 
 class BusConnect(Component):
-  def __init__(self, n):
-    super().__init__('bus conn ' + n)
+  def __init__(self, name):
+    super().__init__(name)
     self.a = Signal(self, 8)
     self.b = Signal(self, 8)
     self.a_to_b = Signal(self, 1)
     self.b_to_a = Signal(self, 1)
 
   def update(self):
-    if self.a_to_b.v:
-      self.b.drive(self.a.v)
+    if self.a_to_b.value():
+      self.b <<= self.a.value()
     else:
-      self.b.drive(None)
-    if self.b_to_a.v:
-      self.a.drive(self.b.v)
+      self.b <<= None
+
+    if self.b_to_a.value():
+      self.a <<= self.b.value()
     else:
-      self.a.drive(None)
+      self.a <<= None
 
 
 class Rom(Component):
-  def __init__(self):
+  def __init__(self, addr_width=16, data_width=8):
     super().__init__('rom')
-    self.rom = [0] * 65536
-    #self.rom[0] = Inst.load('al', 0xa)
-    #self.rom[1] = Inst.load('ah', 0x1)
-    #self.rom[2] = Inst.load('bl', 0xb)
-    #self.rom[3] = Inst.load('bh', 0x7)
-    self.addr_l = Signal(self, 8)
-    self.addr_h = Signal(self, 8)
-    self.data = Signal(self, 8)
+    self.rom = [0] * (2**addr_width)
+    self.addr = Signal(self, 'addr', addr_width)
+    self.data = Signal(self, 'data', data_width)
+    self.oe = Signal(self, 'oe', 1)
 
   def update(self):
-    addr = self.addr_h.v << 8 | self.addr_l.v
-    if addr < len(self.rom):
-      self.data.drive(self.rom[addr])
+    if self.oe.value():
+      self.data <<= self.rom[self.addr.value()]
     else:
-      self.data.drive(0)
+      self.data <<= None
 
 
 class Ram(Component):
-  def __init__(self):
+  def __init__(self, addr_width=16, data_width=8):
     super().__init__('ram')
-    self.ram = [0] * 65536
-    self.addr_l = Signal(self, 8)
-    self.addr_h = Signal(self, 8)
-    self.data = Signal(self, 8)
-    self.ie = Signal(self, 1)
-    self.oe = Signal(self, 1)
+    self.ram = [0] * (2**addr_width)
+    self.addr = Signal(self, 'addr', addr_width)
+    self.data = Signal(self, 'data', data_width)
+    self.ie = Signal(self, 'ie', 1)
+    self.oe = Signal(self, 'oe', 1)
 
   def update(self):
-    addr = self.addr_h.v << 8 | self.addr_l.v
+    if self.ie.value():
+      self.ram[self.addr.value()] = self.data.value()
 
-    if self.ie.v:
-      self.ram[addr] = self.data.v
-
-    if self.oe.v:
-      self.data.drive(self.ram[addr])
+    if self.oe.value():
+      self.data <<= self.ram[self.addr.value()]
     else:
-      self.data.drive(None)
+      self.data <<= None
 
 
 class Display(Component):
   def __init__(self, n, w):
     super().__init__(n)
-    self.data = Signal(self, w)
+    self.data = Signal(self, 'data', w)
+    self.last = None
 
-  def update(self):
-    print('{{}} {{:0{}b}}'.format(self.data.width()).format(self.name(), self.data.value()))
+  def update(self, signal):
+    if self.last != self.data.value():
+      self.last = self.data.value()
+      print('{{}} {{:0{}b}}'.format(len(self.data)).format(self.name(), self.last))
+
 
 def main():
-  clk = Clock(6)
+  clk = Clock(1)
   counter = Counter(8)
-  disp = Display('status', 8)
-  disp2 = Display('disp_sel', 7)
+  d1 = Display('counter', 8)
+  d2 = Display('shuffle', 8)
   reg = Register('a', 4)
 
-  clk.clk.select(0).connect(counter.clk)
-  counter.out.connect(disp.data)
-  counter.out.select(Select.HIGH, 0, 2, 1, 3, Select.HIGH, Select.LOW).connect(disp2.data)
-  #reg.data.connect(counter.out.select(0,1,2,3))
-  #reg.ie_l.connect(reg.ie_h, counter.out.select(2))
+  counter.clk += clk.clk[0]
+  d1.data += counter.out
+  d2.data += counter.out[(7,6,5,4,3,2,1,0)]
 
-  # todo - either add oe to counter or some sort of bus driver.
-  #sim.connect('regoe', reg.
+  reg.data += counter.out[0:4]
+  reg.ie[0] += reg.ie[1]
+  reg.ie[0] += counter.out[0]
 
-  for c in (clk, counter, disp, disp2, reg,):
+  for c in (clk, counter, d1, d2, reg,):
     c.reset()
 
   try:
     for i in range(16):
       clk.tick()
-      #print(counter.out.value())
   except KeyboardInterrupt:
     pass
 
