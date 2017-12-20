@@ -26,7 +26,8 @@ class Net():
     for p in self._pins:
       if not p.is_hiz():
         if d:
-          raise Exception(f'Multiple drivers for net "{self.name()}"')
+          #print(f'Multiple drivers for net "{self.name()}" -- "{d.fullname()}" and "{p.fullname()}"')
+          return None
         d = p
     return d
 
@@ -271,23 +272,25 @@ class Counter(Component):
 
 
 class Register(Component):
-  def __init__(self, name, width=8):
+  def __init__(self, name, width=8, load_width=8):
     super().__init__(name)
     self.v = 0
     self.data = Signal(self, 'data', width)
-    self.ie = Signal(self, 'ie', 2)
+    self.ie = Signal(self, 'ie', width // load_width)
     self.oe = Signal(self, 'oe', 1)
+    self.state = Signal(self, 'state', width)
 
   def value(self):
     return self.v
 
   def update(self, signal):
-    if self.ie.had_edge(0, 1):
-      #print(f'{self.name()} load low 0x{self.data.value():02x} (was {self.v:02x})')
-      self.v = (self.v & 0xf0) | (self.data.value() & 0x0f)
-    if self.ie.had_edge(1, 1):
-      #print(f'{self.name()} load high 0x{self.data.value():02x} (was {self.v:02x})')
-      self.v = (self.v & 0x0f) | (self.data.value() & 0xf0)
+    load_width = len(self.data) // len(self.ie)
+    mask = (1 << load_width) - 1
+    for i in range(len(self.ie)):
+      if self.ie.had_edge(i, 1):
+        self.v = (self.v & ~mask) | (self.data.value() & mask)
+      mask <<= load_width
+    self.state <<= self.v
     if self.oe.value():
       self.data <<= self.v
     else:
@@ -295,10 +298,10 @@ class Register(Component):
 
 
 class BusConnect(Component):
-  def __init__(self, name):
+  def __init__(self, name, width=8):
     super().__init__(name)
-    self.a = Signal(self, 'a', 8)
-    self.b = Signal(self, 'b', 8)
+    self.a = Signal(self, 'a', width)
+    self.b = Signal(self, 'b', width)
     self.a_to_b = Signal(self, 'a_to_b', 1)
     self.b_to_a = Signal(self, 'b_to_a', 1)
 
@@ -329,6 +332,26 @@ class Rom(Component):
       self.data <<= self.rom[self.addr.value()]
     else:
       self.data <<= None
+
+  class RomWriter():
+    def __init__(self, rom, addr):
+      self.rom = rom
+      self.addr = addr
+
+    def next(self, instr):
+      self.rom.rom[self.addr] = instr
+      a = self.addr
+      self.addr += 1
+      return a
+
+    def __enter__(self):
+      return self
+
+    def __exit__(self, a, b, c):
+      pass
+
+  def write(self, addr):
+    return Rom.RomWriter(self, addr)
 
 
 class Ram(Component):
