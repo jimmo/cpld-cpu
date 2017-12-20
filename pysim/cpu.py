@@ -8,10 +8,13 @@ from sim import Component, Signal, Register, BusConnect, Clock, Ram, Rom, Power
 # 1111rttt  jump r=(E:F, G:H)
 
 
-class Inst:
+class Assembler:
   IMM_REGISTERS = ('a', 'b', 'c', 'd',)
+  IMM16_REGISTERS = ('a:b', 'c:d',)
   REGISTERS = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',)
-  ALU_REGISTERS = ('a', 'c')
+  ALU_REGISTERS = ('a', 'c',)
+  LABEL_REGISTERS = ('a:b', 'c:d',)
+  JMP_REGISTERS = ('c:d', 'g:h',)
 
   PREFIX_IMM = 0
   PREFIX_MOV = 1<<7
@@ -19,44 +22,105 @@ class Inst:
   PREFIX_MEM = 1<<7 | 1<<6 | 1<<5
   PREFIX_JMP = 1<<7 | 1<<6 | 1<<5 | 1<<4
 
-  @classmethod
-  def load(cls, reg, nibble):
+  def __init__(self, rom, addr):
+    self.rom = rom
+    self.addr = addr
+    self.labels = set()
+
+  class Label:
+    def __init__(self):
+      self.addr = 0
+      self.fixups = []
+
+  class Addr:
+    def __init__(self, addr):
+      self.addr = addr
+
+    def label(self, l):
+      l.addr = self.addr
+
+  def write(self, instr):
+    self.rom.rom[self.addr] = instr
+    a = Assembler.Addr(self.addr)
+    self.addr += 1
+    return a
+
+  def __enter__(self):
+    return self
+
+  def __exit__(self, a, b, c):
+    for l in self.labels:
+      for f in l.fixups:
+        f()
+
+  def placeholder(self, n, label, fixup):
+    self.labels.add(label)
+    a = Assembler(self.rom, self.addr)
+    label.fixups.append(lambda: fixup(a))
+    self.addr += n
+    return n
+
+  def load8(self, reg, v):
     reg = reg.lower()
-    if len(reg) != 2 or reg[0] not in Inst.IMM_REGISTERS or reg[1] not in ('l', 'h',):
+    if reg not in Assembler.IMM_REGISTERS:
+      raise ValueError(f'Invalid register for load8: {reg}.')
+    a = self.load(reg + 'h', (v >> 4) & 0xf)
+    self.load(reg + 'l', v & 0xf)
+    return a
+
+  def load16(self, reg, v):
+    reg = reg.lower()
+    if reg not in Assembler.IMM16_REGISTERS:
+      raise ValueError(f'Invalid register for load16: {reg}.')
+    a = self.load(reg[0] + 'h', (v >> 12) & 0xf)
+    self.load(reg[0] + 'l', (v >> 8) & 0xf)
+    self.load(reg[2] + 'h', (v >> 4) & 0xf)
+    self.load(reg[2] + 'l', v & 0xf)
+    return a
+
+  def loadlabel(self, reg, label):
+    reg = reg.lower()
+    if reg not in Assembler.LABEL_REGISTERS:
+      raise ValueError(f'Invalid register for load label: {reg}.')
+    def fixup(a):
+      a.load16(reg, label.addr)
+    return self.placeholder(4, label, fixup)
+
+  def load(self, reg, nibble):
+    reg = reg.lower()
+    if len(reg) != 2 or reg[0] not in Assembler.IMM_REGISTERS or reg[1] not in ('l', 'h',):
       raise ValueError(f'Invalid register for load: {reg}.')
     index = ord(reg[0]) - ord('a')
-    return Inst.PREFIX_IMM | (nibble) | (0b10000 if reg[1] == 'h' else 0) | (index << 5)
+    return self.write(Assembler.PREFIX_IMM | (nibble) | (0b10000 if reg[1] == 'h' else 0) | (index << 5))
 
-  @classmethod
-  def mov(cls, dst, src):
+  def mov(self, dst, src):
     dst = dst.lower()
     src = src.lower()
-    if dst not in Inst.REGISTERS:
+    if dst not in Assembler.REGISTERS:
       raise ValueError(f'Invalid destination register: {dst}')
-    if src not in Inst.REGISTERS:
+    if src not in Assembler.REGISTERS:
       raise ValueError(f'Invalid source register: {src}')
-    return Inst.PREFIX_MOV | ((ord(src) - ord('a'))<<3) | (ord(dst) - ord('a'))
+    return self.write(Assembler.PREFIX_MOV | ((ord(src) - ord('a'))<<3) | (ord(dst) - ord('a')))
 
-  @classmethod
-  def alu(cls, dst, fn):
+  def alu(self, dst, fn):
     dst = dst.lower()
-    if dst not in Inst.ALU_REGISTERS:
+    if dst not in Assembler.ALU_REGISTERS:
       raise ValueError(f'Invalid destination register for ALU: {reg}.')
     if fn > 15:
       raise ValueError(f'Invalid ALU function: {fn}.')
-    return Inst.PREFIX_ALU | (fn << 1) | (0 if dst == 'a' else 1)
+    return self.write(Assembler.PREFIX_ALU | (fn << 1) | (0 if dst == 'a' else 1))
 
-  @classmethod
-  def add(cls, dst):
-    return Inst.alu(dst, 0)
+  def add(self, dst):
+    return self.alu(dst, 0)
 
-  @classmethod
-  def sub(cls, dst):
-    return Inst.alu(dst, 1)
+  def sub(self, dst):
+    return self.alu(dst, 1)
 
-  @classmethod
-  def jmp(cls, dst='e:f'):
-    return Inst.PREFIX_JMP | (1<<3 if dst=='g:h' else 0) | 0
+  def jmp(self, dst='c:d'):
+    dst = dst.lower()
+    if dst not in Assembler.JMP_REGISTERS:
+      raise ValueError(f'Invalid jump register: {dst}.')
+    return self.write(Assembler.PREFIX_JMP | (1<<3 if dst=='g:h' else 0) | 0)
 
 
 class Logic(Component):
@@ -154,7 +218,7 @@ class Decoder(Component):
     self.alu_oe = Signal(self, 'alu_oe', 1)
 
 
-    self.sel_ef = Signal(self, 'sel_ef', 1)
+    self.sel_cd = Signal(self, 'sel_cd', 1)
     self.sel_gh = Signal(self, 'sel_gh', 1)
 
   def reset(self):
@@ -197,7 +261,7 @@ class Decoder(Component):
     t_ie = 0
     t_oe = 0
 
-    sel_ef = 0
+    sel_cd = 0
     sel_gh = 0
 
     # IMM
@@ -248,7 +312,7 @@ class Decoder(Component):
     is_jmp = b7 and b6 and b5 and b4
     self.pc_inc <<= m4 & ~is_jmp  # Not jump
     self.pc_ie <<= m4 & is_jmp
-    sel_ef |= m3 & ~((instr >> 3) & 1)
+    sel_cd |= m3 & ~((instr >> 3) & 1)
     sel_gh |= m3 & ((instr >> 3) & 1)
 
     # Set ie/oe lines.
@@ -277,7 +341,7 @@ class Decoder(Component):
     self.t_ie <<= t_ie
     self.t_oe <<= t_oe
 
-    self.sel_ef <<= sel_ef
+    self.sel_cd <<= sel_cd
     self.sel_gh <<= sel_gh
 
 
@@ -293,7 +357,6 @@ class InstructionRegister(Component):
 
   def update(self, signal):
     if self.ie.had_edge(0, 1):
-      #print('reg ir load 0x{:02x}'.format(self.data.value()))
       self.v = self.data.value()
       self.instr <<= self.v
     if self.oe.value():
@@ -412,7 +475,7 @@ def main():
   ir = InstructionRegister()
   pc_l = ProgramCounter('l')
   pc_h = ProgramCounter('h')
-  sel_ef = BusConnect('sel_ef', width=16)
+  sel_cd = BusConnect('sel_cd', width=16)
   sel_gh = BusConnect('sel_gh', width=16)
   ram = Ram()
   rom = Rom()
@@ -471,51 +534,44 @@ def main():
   logic.b += reg_b.state
 
   # Memory
-  sel_ef.a[0:8] += reg_f.state
-  sel_ef.a[8:16] += reg_e.state
+  sel_cd.a[0:8] += reg_d.state
+  sel_cd.a[8:16] += reg_c.state
   sel_gh.a[0:8] += reg_h.state
   sel_gh.a[8:16] += reg_g.state
-  pc_l.data += sel_ef.b[0:8] + sel_gh.b[0:8]
-  pc_h.data += sel_ef.b[8:16] + sel_gh.b[8:16]
-  sel_ef.a_to_b += dec.sel_ef
+  pc_l.data += sel_cd.b[0:8] + sel_gh.b[0:8]
+  pc_h.data += sel_cd.b[8:16] + sel_gh.b[8:16]
+  sel_cd.a_to_b += dec.sel_cd
   sel_gh.a_to_b += dec.sel_gh
 
-  with rom.write(0) as w:
-    w.next(Inst.load('al', 1))
-    w.next(Inst.load('ah', 2))
-    w.next(Inst.load('bl', 3))
-    w.next(Inst.load('bh', 4))
-    w.next(Inst.load('cl', 5))
-    w.next(Inst.load('ch', 6))
-    w.next(Inst.load('dl', 7))
-    w.next(Inst.load('dh', 8))
+  with Assembler(rom, 0) as a:
+    a.load('al', 1)
+    a.load('ah', 2)
+    a.load('bl', 3)
+    a.load('bh', 4)
+    a.load('cl', 5)
+    a.load('ch', 6)
+    a.load('dl', 7)
+    a.load('dh', 8)
 
-    w.next(Inst.mov('e', 'a'))
-    w.next(Inst.mov('f', 'b'))
-    w.next(Inst.mov('g', 'c'))
-    w.next(Inst.mov('h', 'd'))
+    a.mov('e', 'a')
+    a.mov('f', 'b')
+    a.mov('g', 'c')
+    a.mov('h', 'd')
 
-    w.next(Inst.add('a'))
-    w.next(Inst.add('c'))
-    w.next(Inst.sub('a'))
-    w.next(Inst.sub('c'))
+    a.add('a')
+    a.add('c')
+    a.sub('a')
+    a.sub('c')
 
-    w.next(Inst.load('al', 0))
-    w.next(Inst.load('ah', 0))
-    w.next(Inst.load('bl', 1))
-    w.next(Inst.load('bh', 0))
-    w.next(Inst.load('cl', 0))
-    w.next(Inst.load('ch', 0))
-    w.next(Inst.mov('e', 'c'))
-    w.next(Inst.mov('g', 'c'))
-    w.next(Inst.load('cl', 0xd))
-    w.next(Inst.load('ch', 1))
-    w.next(Inst.mov('f', 'c'))
-    w.next(Inst.load('cl', 0xe))
-    w.next(Inst.mov('h', 'c'))
-    w.next(Inst.add('a'))
-    w.next(Inst.add('a'))
-    w.next(Inst.jmp('g:h'))
+    l1 = Assembler.Label()
+    l2 = Assembler.Label()
+
+    a.load8('a', 0)
+    a.load8('b', 1)
+    a.loadlabel('c:d', l2)
+    a.add('a').label(l1)
+    a.add('a').label(l2)
+    a.jmp('c:d')
 
   print('ROM:')
   for i in range(0, 256, 16):
@@ -526,6 +582,7 @@ def main():
       logic,
       reg_a, reg_b, reg_c, reg_d, reg_e, reg_f, reg_g, reg_h,
       reg_t,
+      sel_cd, sel_gh,
       dec,
       ir,
       pc_l, pc_h,

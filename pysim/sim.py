@@ -333,26 +333,6 @@ class Rom(Component):
     else:
       self.data <<= None
 
-  class RomWriter():
-    def __init__(self, rom, addr):
-      self.rom = rom
-      self.addr = addr
-
-    def next(self, instr):
-      self.rom.rom[self.addr] = instr
-      a = self.addr
-      self.addr += 1
-      return a
-
-    def __enter__(self):
-      return self
-
-    def __exit__(self, a, b, c):
-      pass
-
-  def write(self, addr):
-    return Rom.RomWriter(self, addr)
-
 
 class Ram(Component):
   def __init__(self, addr_width=16, data_width=8):
