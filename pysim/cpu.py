@@ -4,23 +4,28 @@ from sim import Component, Signal, Register, BusConnect, Clock, Ram, Rom, Power
 # 0ddnxxxx  load imm dd=A,B,C,D n=h/l xxxx=data
 # 10sssddd  mov sss to ddd  rrr=A,B,C,D,E,F,G,H
 # 110ffffd  ALU ffff to dest d (A or C)
-# 1110?wtt  r/w mem tt=(C:D, E:F, E:F, G:H) read=(B,B,D,D), write=(A,A,C,C)
-# 1111rttt  jump r=(E:F, G:H)
+# 1110rrwa  r/w mem rr=A,B,E,F a=(C:D, G:H)
+# 1111attt  jump a=(C:D, G:H)
 
 
 class Assembler:
   IMM_REGISTERS = ('a', 'b', 'c', 'd',)
+  MEM_REGISTERS = ('a', 'b', 'e', 'f',)
   IMM16_REGISTERS = ('a:b', 'c:d',)
-  REGISTERS = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',)
+  MOV_REGISTERS = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',)
+  MOV16_REGISTERS = ('a:b', 'c:d', 'e:f', 'g:h',)
   ALU_REGISTERS = ('a', 'c',)
   LABEL_REGISTERS = ('a:b', 'c:d',)
-  JMP_REGISTERS = ('c:d', 'g:h',)
+  ADDR_REGISTERS = ('c:d', 'g:h',)
 
   PREFIX_IMM = 0
   PREFIX_MOV = 1<<7
   PREFIX_ALU = 1<<7 | 1<<6
   PREFIX_MEM = 1<<7 | 1<<6 | 1<<5
   PREFIX_JMP = 1<<7 | 1<<6 | 1<<5 | 1<<4
+
+  MEM_READ = 0
+  MEM_WRITE = 1<<1
 
   def __init__(self, rom, addr):
     self.rom = rom
@@ -32,18 +37,9 @@ class Assembler:
       self.addr = 0
       self.fixups = []
 
-  class Addr:
-    def __init__(self, addr):
-      self.addr = addr
-
-    def label(self, l):
-      l.addr = self.addr
-
   def write(self, instr):
     self.rom.rom[self.addr] = instr
-    a = Assembler.Addr(self.addr)
     self.addr += 1
-    return a
 
   def __enter__(self):
     return self
@@ -53,30 +49,30 @@ class Assembler:
       for f in l.fixups:
         f()
 
+  def label(self, l):
+    l.addr = self.addr
+
   def placeholder(self, n, label, fixup):
     self.labels.add(label)
     a = Assembler(self.rom, self.addr)
     label.fixups.append(lambda: fixup(a))
     self.addr += n
-    return n
 
   def load8(self, reg, v):
     reg = reg.lower()
     if reg not in Assembler.IMM_REGISTERS:
       raise ValueError(f'Invalid register for load8: {reg}.')
-    a = self.load(reg + 'h', (v >> 4) & 0xf)
+    self.load(reg + 'h', (v >> 4) & 0xf)
     self.load(reg + 'l', v & 0xf)
-    return a
 
   def load16(self, reg, v):
     reg = reg.lower()
     if reg not in Assembler.IMM16_REGISTERS:
       raise ValueError(f'Invalid register for load16: {reg}.')
-    a = self.load(reg[0] + 'h', (v >> 12) & 0xf)
+    self.load(reg[0] + 'h', (v >> 12) & 0xf)
     self.load(reg[0] + 'l', (v >> 8) & 0xf)
     self.load(reg[2] + 'h', (v >> 4) & 0xf)
     self.load(reg[2] + 'l', v & 0xf)
-    return a
 
   def loadlabel(self, reg, label):
     reg = reg.lower()
@@ -84,23 +80,33 @@ class Assembler:
       raise ValueError(f'Invalid register for load label: {reg}.')
     def fixup(a):
       a.load16(reg, label.addr)
-    return self.placeholder(4, label, fixup)
+    self.placeholder(4, label, fixup)
 
   def load(self, reg, nibble):
     reg = reg.lower()
     if len(reg) != 2 or reg[0] not in Assembler.IMM_REGISTERS or reg[1] not in ('l', 'h',):
       raise ValueError(f'Invalid register for load: {reg}.')
     index = ord(reg[0]) - ord('a')
-    return self.write(Assembler.PREFIX_IMM | (nibble) | (0b10000 if reg[1] == 'h' else 0) | (index << 5))
+    self.write(Assembler.PREFIX_IMM | (nibble) | (0b10000 if reg[1] == 'h' else 0) | (index << 5))
 
   def mov(self, dst, src):
     dst = dst.lower()
     src = src.lower()
-    if dst not in Assembler.REGISTERS:
+    if dst not in Assembler.MOV_REGISTERS:
       raise ValueError(f'Invalid destination register: {dst}')
-    if src not in Assembler.REGISTERS:
+    if src not in Assembler.MOV_REGISTERS:
       raise ValueError(f'Invalid source register: {src}')
-    return self.write(Assembler.PREFIX_MOV | ((ord(src) - ord('a'))<<3) | (ord(dst) - ord('a')))
+    self.write(Assembler.PREFIX_MOV | ((ord(src) - ord('a'))<<3) | (ord(dst) - ord('a')))
+
+  def mov16(self, dst, src):
+    dst = dst.lower()
+    src = src.lower()
+    if dst not in Assembler.MOV16_REGISTERS:
+      raise ValueError(f'Invalid destination register: {dst}')
+    if src not in Assembler.MOV16_REGISTERS:
+      raise ValueError(f'Invalid source register: {src}')
+    self.mov(dst[0], src[0])
+    self.mov(dst[2], src[2])
 
   def alu(self, dst, fn):
     dst = dst.lower()
@@ -108,19 +114,38 @@ class Assembler:
       raise ValueError(f'Invalid destination register for ALU: {reg}.')
     if fn > 15:
       raise ValueError(f'Invalid ALU function: {fn}.')
-    return self.write(Assembler.PREFIX_ALU | (fn << 1) | (0 if dst == 'a' else 1))
+    self.write(Assembler.PREFIX_ALU | (fn << 1) | (0 if dst == 'a' else 1))
 
   def add(self, dst):
-    return self.alu(dst, 0)
+    self.alu(dst, 0)
 
   def sub(self, dst):
-    return self.alu(dst, 1)
+    self.alu(dst, 1)
 
-  def jmp(self, dst='c:d'):
+  def jmp(self, addr='c:d'):
+    addr = addr.lower()
+    if addr not in Assembler.ADDR_REGISTERS:
+      raise ValueError(f'Invalid jump register: {addr}.')
+    self.write(Assembler.PREFIX_JMP | (Assembler.ADDR_REGISTERS.index(addr) << 3) | 0)
+
+  def rmem(self, dst='a', addr='c:d'):
+    # 1110rrwa  r/w mem rr=A,B,E,F a=(C:D, G:H)
     dst = dst.lower()
-    if dst not in Assembler.JMP_REGISTERS:
-      raise ValueError(f'Invalid jump register: {dst}.')
-    return self.write(Assembler.PREFIX_JMP | (1<<3 if dst=='g:h' else 0) | 0)
+    addr = addr.lower()
+    if dst not in Assembler.MEM_REGISTERS:
+      raise ValueError(f'Invalid mem dst register: {dst}.')
+    if addr not in Assembler.ADDR_REGISTERS:
+      raise ValueError(f'Invalid addr register: {addr}.')
+    self.write(Assembler.PREFIX_MEM | (Assembler.MEM_REGISTERS.index(dst) << 2) | Assembler.MEM_READ | Assembler.ADDR_REGISTERS.index(addr))
+
+  def wmem(self, src='a', addr='c:d'):
+    src = src.lower()
+    addr = addr.lower()
+    if src not in Assembler.MEM_REGISTERS:
+      raise ValueError(f'Invalid mem src register: {dst}.')
+    if addr not in Assembler.ADDR_REGISTERS:
+      raise ValueError(f'Invalid addr register: {addr}.')
+    self.write(Assembler.PREFIX_MEM | (Assembler.MEM_REGISTERS.index(src) << 2) | Assembler.MEM_WRITE | Assembler.ADDR_REGISTERS.index(addr))
 
 
 class Logic(Component):
@@ -217,9 +242,11 @@ class Decoder(Component):
     self.alu_fn = Signal(self, 'alu_fn', 4)
     self.alu_oe = Signal(self, 'alu_oe', 1)
 
-
     self.sel_cd = Signal(self, 'sel_cd', 1)
     self.sel_gh = Signal(self, 'sel_gh', 1)
+
+    self.mem_ie = Signal(self, 'mem_ie', 1)
+    self.mem_oe = Signal(self, 'mem_oe', 1)
 
   def reset(self):
     self.pc_inc <<= 0
@@ -307,13 +334,32 @@ class Decoder(Component):
 
     # MEM
     is_mem = b7 and b6 and b5 and not b4
+    is_mem_read = is_mem & ~((instr >> 1) & 1)
+    is_mem_write = is_mem & ((instr >> 1) & 1)
+    sel_cd |= m3 & is_mem & ~(instr & 1)
+    sel_gh |= m3 & is_mem & (instr & 1)
+    mem_reg = (instr >> 2) & 3
+    a_oe |= m1 & is_mem_write & (mem_reg == 0)
+    b_oe |= m1 & is_mem_write & (mem_reg == 1)
+    e_oe |= m1 & is_mem_write & (mem_reg == 2)
+    f_oe |= m1 & is_mem_write & (mem_reg == 3)
+    a_ie |= m4 & is_mem_read & (mem_reg == 0)
+    b_ie |= m4 & is_mem_read & (mem_reg == 1)
+    e_ie |= m4 & is_mem_read & (mem_reg == 2)
+    f_ie |= m4 & is_mem_read & (mem_reg == 3)
+
+    t_ie |= m2 & is_mem
+    t_oe |= m3 & is_mem
+
+    self.mem_ie <<= m4 & is_mem_write
+    self.mem_oe <<= m1 & is_mem_read
 
     # JMP
     is_jmp = b7 and b6 and b5 and b4
     self.pc_inc <<= m4 & ~is_jmp  # Not jump
     self.pc_ie <<= m4 & is_jmp
-    sel_cd |= m3 & ~((instr >> 3) & 1)
-    sel_gh |= m3 & ((instr >> 3) & 1)
+    sel_cd |= m3 & is_jmp & ~((instr >> 3) & 1)
+    sel_gh |= m3 & is_jmp & ((instr >> 3) & 1)
 
     # Set ie/oe lines.
     self.al_ie <<= a_ie | ((m4 & is_imm & (imm_dest == 0)) & ~is_imm_high)
@@ -382,7 +428,7 @@ class ProgramCounter(Component):
       self.v = 0
     elif self.ie.value():
       self.v = self.data.value()
-      print('Jump')
+      #print('Jump')
     elif self.inc.had_edge(0, 1):
       if self.v == 0xff:
         self.v = 0
@@ -482,7 +528,7 @@ def main():
   clk = Clock(2)
 
   # Register bus
-  reg_a.data += reg_b.data + reg_c.data + reg_d.data + reg_e.data + reg_f.data + reg_g.data + reg_h.data + reg_t.data + logic.out + ir.imm
+  reg_a.data += reg_b.data + reg_c.data + reg_d.data + reg_e.data + reg_f.data + reg_g.data + reg_h.data + reg_t.data + logic.out + ir.imm + ram.data
 
   # Program counter
   pc_l.inc += dec.pc_inc
@@ -538,11 +584,15 @@ def main():
   sel_cd.a[8:16] += reg_c.state
   sel_gh.a[0:8] += reg_h.state
   sel_gh.a[8:16] += reg_g.state
-  pc_l.data += sel_cd.b[0:8] + sel_gh.b[0:8]
-  pc_h.data += sel_cd.b[8:16] + sel_gh.b[8:16]
+  pc_l.data += sel_cd.b[0:8] + sel_gh.b[0:8] + ram.addr[0:8]
+  pc_h.data += sel_cd.b[8:16] + sel_gh.b[8:16] + ram.addr[8:16]
   sel_cd.a_to_b += dec.sel_cd
   sel_gh.a_to_b += dec.sel_gh
 
+  ram.ie += dec.mem_ie
+  ram.oe += dec.mem_oe
+
+  n = 0
   with Assembler(rom, 0) as a:
     a.load('al', 1)
     a.load('ah', 2)
@@ -563,15 +613,36 @@ def main():
     a.sub('a')
     a.sub('c')
 
+    a.load16('c:d', 0x10)
+    a.mov16('g:h', 'c:d')
+    a.load16('c:d', 0x20)
+    a.load8('a', 0x23)
+    a.wmem('a', 'c:d')
+    a.load8('a', 0x45)
+    a.mov('e', 'a')
+    a.wmem('e', 'g:h')
+
     l1 = Assembler.Label()
     l2 = Assembler.Label()
 
     a.load8('a', 0)
     a.load8('b', 1)
+    a.load16('c:d', 0x80)
+    a.mov16('g:h', 'c:d')
     a.loadlabel('c:d', l2)
-    a.add('a').label(l1)
-    a.add('a').label(l2)
+
+    n = a.addr
+    a.label(l2)
+    a.add('a')
+    a.wmem('a', 'g:h')
+    a.mov('e', 'a')
+    a.mov('a', 'h')
+    a.add('a')
+    a.mov('h', 'a')
+    a.mov('a', 'e')
     a.jmp('c:d')
+
+    n = n + (a.addr - n)*32
 
   print('ROM:')
   for i in range(0, 256, 16):
@@ -591,7 +662,7 @@ def main():
     c.reset()
 
   try:
-    for i in range(40):
+    for i in range(n):
       for i in range(3 if i == 0 else 4):
         clk.tick()
       print('PC: 0x{:02x}{:02x} T: 0x{:02x}'.format(pc_h.addr.value(), pc_l.addr.value(), reg_t.data.value()))

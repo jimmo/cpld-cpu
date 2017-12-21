@@ -289,6 +289,7 @@ class Register(Component):
     for i in range(len(self.ie)):
       if self.ie.had_edge(i, 1):
         self.v = (self.v & ~mask) | (self.data.value() & mask)
+        # print(f'update {self.name()} to {self.v:2x}')
       mask <<= load_width
     self.state <<= self.v
     if self.oe.value():
@@ -344,10 +345,12 @@ class Ram(Component):
     self.oe = Signal(self, 'oe', 1)
 
   def update(self, signal):
-    if self.ie.value():
+    if self.ie.had_edge(0, 1):
+      print('update', hex(self.addr.value()), hex(self.data.value()))
       self.ram[self.addr.value()] = self.data.value()
 
     if self.oe.value():
+      print('ram addr', hex(self.addr.value()))
       self.data <<= self.ram[self.addr.value()]
     else:
       self.data <<= None
