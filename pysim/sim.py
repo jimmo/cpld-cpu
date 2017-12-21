@@ -1,18 +1,3 @@
-import sys
-
-DEPTH = 0
-
-def depth(n):
-  global DEPTH
-  DEPTH += n
-
-def debug(msg):
-  print('  '*DEPTH + msg)
-  if DEPTH > 400:
-    print('Depth limit exceeded')
-    sys.exit(1)
-
-
 class Net():
   def __init__(self, pins):
     self._pins = pins
@@ -22,14 +7,11 @@ class Net():
     return '/'.join(p.fullname() for p in self._pins)
 
   def driver(self):
-    d = None
     for p in self._pins:
       if not p.is_hiz():
-        if d:
-          #print(f'Multiple drivers for net "{self.name()}" -- "{d.fullname()}" and "{p.fullname()}"')
-          return None
-        d = p
-    return d
+        return p
+    #print(f'Multiple drivers for net "{self.name()}" -- "{d.fullname()}" and "{p.fullname()}"')
+    return None
 
   def update(self):
     d = self.driver()
@@ -76,8 +58,10 @@ class Pin():
     return self._value
 
   def update(self, v):
-    if v != self._value:
-      self._edge = v
+    # Called when hi-z and something else on this net is driving this pin.
+    if v == self._value:
+      return
+    self._edge = v
     self._value = v
     self._signal.update()
 
@@ -123,6 +107,7 @@ class SignalView():
   def __init__(self, signal, pins):
     self._signal = signal
     self._pins = pins
+    self._max = 2**len(self._pins)
 
   def name(self):
     if self == self._signal._view:
@@ -132,21 +117,21 @@ class SignalView():
 
   def __ilshift__(self, v):
     if v is None:
-      for i in range(len(self._pins)):
-        self._pins[i] <<= None
+      for p in self._pins:
+        p <<= None
     else:
       v = int(v)
       if v < 0:
         raise Exception('invalid value -- underflow')
-      elif v >= 2**len(self._pins):
+      elif v >= self._max:
         raise Exception('invalid value -- overflow')
-      for i in range(len(self._pins)):
-        self._pins[i] <<= (v & 1)
+      for p in self._pins:
+        p <<= (v & 1)
         v >>= 1
     return self
 
   def __iadd__(self, other):
-    print('connect', self.name(), other.name())
+    #print('connect', self.name(), other.name())
     if len(self._pins) != len(other._pins):
       raise Exception('Mismatched signal widths: {} and {}'.format(self.name(), other.name()))
     for pa, pb in zip(self._pins, other._pins):
@@ -165,9 +150,11 @@ class Signal():
     self._pins = []
     self._name = name
     self._component = component
+    self._notify = False
     for i in range(width):
       self._pins.append(Pin('{}_{}'.format(name, i), self))
     self._view = SignalView(self, self._pins)
+    self._last_drive = None
 
   def name(self):
     if len(self) == 1:
@@ -176,18 +163,24 @@ class Signal():
       return '{}:{}[0..{}]'.format(self._component.name(), self._name, len(self)-1)
 
   def update(self):
-    self._component.update(signal=self)
+    if self._notify:
+      self._component.update(signal=self)
 
   def had_edge(self, i, v):
     return self._pins[i].had_edge(v)
 
   def value(self):
     v = 0
-    for i in range(len(self)):
+    for i in range(len(self._pins)):
       v |= (self._pins[i].value() << i)
     return v
 
   def __ilshift__(self, v):
+    # Slightly questionable optimization -- repeated drives of the same signal are ignored.
+    if v == self._last_drive:
+      return self
+    self._last_drive = v
+
     self._view <<= v
     return self
 
@@ -214,6 +207,12 @@ class Signal():
     return len(self._pins)
 
 
+class NotifySignal(Signal):
+  def __init__(self, component, name, width):
+    super().__init__(component, name, width)
+    self._notify = True
+
+
 class Component():
   def __init__(self, name):
     self._name = name
@@ -227,6 +226,13 @@ class Component():
   def reset(self):
     pass
 
+  def info(self):
+    n = 0
+    for s in self.__dict__.values():
+      if isinstance(s, Signal):
+        n += len(s)
+    print(f'{self.name()}: {n} pins')
+
 
 class Clock(Component):
   def __init__(self, width=1):
@@ -235,7 +241,7 @@ class Clock(Component):
     self.clk = Signal(self, 'clk', width)
 
   def tick(self):
-    print('tick')
+    #print('tick')
     self.value = (self.value + 1) % (1 << len(self.clk))
     self.clk <<= self.value
 
@@ -258,7 +264,7 @@ class Counter(Component):
   def __init__(self, w):
     super().__init__('counter')
     self.v = 0
-    self.clk = Signal(self, 'clk', 1)
+    self.clk = NotifySignal(self, 'clk', 1)
     self.out = Signal(self, 'out', w)
 
   def reset(self):
@@ -272,12 +278,35 @@ class Counter(Component):
 
 
 class Register(Component):
-  def __init__(self, name, width=8, load_width=8):
+  def __init__(self, name, width=8):
     super().__init__(name)
     self.v = 0
     self.data = Signal(self, 'data', width)
-    self.ie = Signal(self, 'ie', width // load_width)
-    self.oe = Signal(self, 'oe', 1)
+    self.ie = NotifySignal(self, 'ie', 1)
+    self.oe = NotifySignal(self, 'oe', 1)
+    self.state = Signal(self, 'state', width)
+
+  def value(self):
+    return self.v
+
+  def update(self, signal):
+    if self.ie.had_edge(0, 1):
+      self.v = self.data.value()
+    self.state <<= self.v
+    if self.oe.value():
+      self.data <<= self.v
+    else:
+      self.data <<= None
+
+
+class SplitRegister(Component):
+  def __init__(self, name, width=8, load_width=8):
+    super().__init__(name)
+    load_width = min(width, load_width)
+    self.v = 0
+    self.data = Signal(self, 'data', width)
+    self.ie = NotifySignal(self, 'ie', width // load_width)
+    self.oe = NotifySignal(self, 'oe', 1)
     self.state = Signal(self, 'state', width)
 
   def value(self):
@@ -289,7 +318,6 @@ class Register(Component):
     for i in range(len(self.ie)):
       if self.ie.had_edge(i, 1):
         self.v = (self.v & ~mask) | (self.data.value() & mask)
-        # print(f'update {self.name()} to {self.v:2x}')
       mask <<= load_width
     self.state <<= self.v
     if self.oe.value():
@@ -301,10 +329,10 @@ class Register(Component):
 class BusConnect(Component):
   def __init__(self, name, width=8):
     super().__init__(name)
-    self.a = Signal(self, 'a', width)
-    self.b = Signal(self, 'b', width)
-    self.a_to_b = Signal(self, 'a_to_b', 1)
-    self.b_to_a = Signal(self, 'b_to_a', 1)
+    self.a = NotifySignal(self, 'a', width)
+    self.b = NotifySignal(self, 'b', width)
+    self.a_to_b = NotifySignal(self, 'a_to_b', 1)
+    self.b_to_a = NotifySignal(self, 'b_to_a', 1)
 
   def update(self, signal):
     if self.a_to_b.value():
@@ -324,9 +352,9 @@ class Rom(Component):
   def __init__(self, addr_width=16, data_width=8):
     super().__init__('rom')
     self.rom = [0] * (2**addr_width)
-    self.addr = Signal(self, 'addr', addr_width)
+    self.addr = NotifySignal(self, 'addr', addr_width)
     self.data = Signal(self, 'data', data_width)
-    self.oe = Signal(self, 'oe', 1)
+    self.oe = NotifySignal(self, 'oe', 1)
 
   def update(self, signal):
     if self.oe.value():
@@ -339,18 +367,18 @@ class Ram(Component):
   def __init__(self, addr_width=16, data_width=8):
     super().__init__('ram')
     self.ram = [0] * (2**addr_width)
-    self.addr = Signal(self, 'addr', addr_width)
+    self.addr = NotifySignal(self, 'addr', addr_width)
     self.data = Signal(self, 'data', data_width)
-    self.ie = Signal(self, 'ie', 1)
-    self.oe = Signal(self, 'oe', 1)
+    self.ie = NotifySignal(self, 'ie', 1)
+    self.oe = NotifySignal(self, 'oe', 1)
 
   def update(self, signal):
     if self.ie.had_edge(0, 1):
-      print('update', hex(self.addr.value()), hex(self.data.value()))
+      #print('update', hex(self.addr.value()), hex(self.data.value()))
       self.ram[self.addr.value()] = self.data.value()
 
     if self.oe.value():
-      print('ram addr', hex(self.addr.value()))
+      #print('ram addr', hex(self.addr.value()))
       self.data <<= self.ram[self.addr.value()]
     else:
       self.data <<= None
@@ -359,7 +387,7 @@ class Ram(Component):
 class Display(Component):
   def __init__(self, n, w):
     super().__init__(n)
-    self.data = Signal(self, 'data', w)
+    self.data = NotifySignal(self, 'data', w)
     self.last = None
 
   def update(self, signal):
@@ -380,7 +408,7 @@ def main():
   d2.data += counter.out[(7,6,5,4,3,2,1,0)]
 
   reg.data += counter.out[0:4]
-  reg.ie[0] += reg.ie[1] + counter.out[0]
+  reg.ie += counter.out[0]
 
   for c in (clk, counter, d1, d2, reg,):
     c.reset()

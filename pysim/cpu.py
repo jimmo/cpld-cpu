@@ -1,202 +1,81 @@
 import sys
-from sim import Component, Signal, Register, BusConnect, Clock, Ram, Rom, Power
-
-# 0ddnxxxx  load imm dd=A,B,C,D n=h/l xxxx=data
-# 10sssddd  mov sss to ddd  rrr=A,B,C,D,E,F,G,H
-# 110ffffd  ALU ffff to dest d (A or C)
-# 1110rrwa  r/w mem rr=A,B,E,F a=(C:D, G:H)
-# 1111attt  jump a=(C:D, G:H)
-
-
-class Assembler:
-  IMM_REGISTERS = ('a', 'b', 'c', 'd',)
-  MEM_REGISTERS = ('a', 'b', 'e', 'f',)
-  IMM16_REGISTERS = ('a:b', 'c:d',)
-  MOV_REGISTERS = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',)
-  MOV16_REGISTERS = ('a:b', 'c:d', 'e:f', 'g:h',)
-  ALU_REGISTERS = ('a', 'c',)
-  LABEL_REGISTERS = ('a:b', 'c:d',)
-  ADDR_REGISTERS = ('c:d', 'g:h',)
-
-  PREFIX_IMM = 0
-  PREFIX_MOV = 1<<7
-  PREFIX_ALU = 1<<7 | 1<<6
-  PREFIX_MEM = 1<<7 | 1<<6 | 1<<5
-  PREFIX_JMP = 1<<7 | 1<<6 | 1<<5 | 1<<4
-
-  MEM_READ = 0
-  MEM_WRITE = 1<<1
-
-  def __init__(self, rom, addr):
-    self.rom = rom
-    self.addr = addr
-    self.labels = set()
-
-  class Label:
-    def __init__(self):
-      self.addr = 0
-      self.fixups = []
-
-  def write(self, instr):
-    self.rom.rom[self.addr] = instr
-    self.addr += 1
-
-  def __enter__(self):
-    return self
-
-  def __exit__(self, a, b, c):
-    for l in self.labels:
-      for f in l.fixups:
-        f()
-
-  def label(self, l):
-    l.addr = self.addr
-
-  def placeholder(self, n, label, fixup):
-    self.labels.add(label)
-    a = Assembler(self.rom, self.addr)
-    label.fixups.append(lambda: fixup(a))
-    self.addr += n
-
-  def load8(self, reg, v):
-    reg = reg.lower()
-    if reg not in Assembler.IMM_REGISTERS:
-      raise ValueError(f'Invalid register for load8: {reg}.')
-    self.load(reg + 'h', (v >> 4) & 0xf)
-    self.load(reg + 'l', v & 0xf)
-
-  def load16(self, reg, v):
-    reg = reg.lower()
-    if reg not in Assembler.IMM16_REGISTERS:
-      raise ValueError(f'Invalid register for load16: {reg}.')
-    self.load(reg[0] + 'h', (v >> 12) & 0xf)
-    self.load(reg[0] + 'l', (v >> 8) & 0xf)
-    self.load(reg[2] + 'h', (v >> 4) & 0xf)
-    self.load(reg[2] + 'l', v & 0xf)
-
-  def loadlabel(self, reg, label):
-    reg = reg.lower()
-    if reg not in Assembler.LABEL_REGISTERS:
-      raise ValueError(f'Invalid register for load label: {reg}.')
-    def fixup(a):
-      a.load16(reg, label.addr)
-    self.placeholder(4, label, fixup)
-
-  def load(self, reg, nibble):
-    reg = reg.lower()
-    if len(reg) != 2 or reg[0] not in Assembler.IMM_REGISTERS or reg[1] not in ('l', 'h',):
-      raise ValueError(f'Invalid register for load: {reg}.')
-    index = ord(reg[0]) - ord('a')
-    self.write(Assembler.PREFIX_IMM | (nibble) | (0b10000 if reg[1] == 'h' else 0) | (index << 5))
-
-  def mov(self, dst, src):
-    dst = dst.lower()
-    src = src.lower()
-    if dst not in Assembler.MOV_REGISTERS:
-      raise ValueError(f'Invalid destination register: {dst}')
-    if src not in Assembler.MOV_REGISTERS:
-      raise ValueError(f'Invalid source register: {src}')
-    self.write(Assembler.PREFIX_MOV | ((ord(src) - ord('a'))<<3) | (ord(dst) - ord('a')))
-
-  def mov16(self, dst, src):
-    dst = dst.lower()
-    src = src.lower()
-    if dst not in Assembler.MOV16_REGISTERS:
-      raise ValueError(f'Invalid destination register: {dst}')
-    if src not in Assembler.MOV16_REGISTERS:
-      raise ValueError(f'Invalid source register: {src}')
-    self.mov(dst[0], src[0])
-    self.mov(dst[2], src[2])
-
-  def alu(self, dst, fn):
-    dst = dst.lower()
-    if dst not in Assembler.ALU_REGISTERS:
-      raise ValueError(f'Invalid destination register for ALU: {reg}.')
-    if fn > 15:
-      raise ValueError(f'Invalid ALU function: {fn}.')
-    self.write(Assembler.PREFIX_ALU | (fn << 1) | (0 if dst == 'a' else 1))
-
-  def add(self, dst):
-    self.alu(dst, 0)
-
-  def sub(self, dst):
-    self.alu(dst, 1)
-
-  def jmp(self, addr='c:d'):
-    addr = addr.lower()
-    if addr not in Assembler.ADDR_REGISTERS:
-      raise ValueError(f'Invalid jump register: {addr}.')
-    self.write(Assembler.PREFIX_JMP | (Assembler.ADDR_REGISTERS.index(addr) << 3) | 0)
-
-  def rmem(self, dst='a', addr='c:d'):
-    # 1110rrwa  r/w mem rr=A,B,E,F a=(C:D, G:H)
-    dst = dst.lower()
-    addr = addr.lower()
-    if dst not in Assembler.MEM_REGISTERS:
-      raise ValueError(f'Invalid mem dst register: {dst}.')
-    if addr not in Assembler.ADDR_REGISTERS:
-      raise ValueError(f'Invalid addr register: {addr}.')
-    self.write(Assembler.PREFIX_MEM | (Assembler.MEM_REGISTERS.index(dst) << 2) | Assembler.MEM_READ | Assembler.ADDR_REGISTERS.index(addr))
-
-  def wmem(self, src='a', addr='c:d'):
-    src = src.lower()
-    addr = addr.lower()
-    if src not in Assembler.MEM_REGISTERS:
-      raise ValueError(f'Invalid mem src register: {dst}.')
-    if addr not in Assembler.ADDR_REGISTERS:
-      raise ValueError(f'Invalid addr register: {addr}.')
-    self.write(Assembler.PREFIX_MEM | (Assembler.MEM_REGISTERS.index(src) << 2) | Assembler.MEM_WRITE | Assembler.ADDR_REGISTERS.index(addr))
+from sim import Component, Signal, NotifySignal, Register, SplitRegister, BusConnect, Clock, Ram, Rom, Power
+from asm import Assembler
 
 
 class Logic(Component):
   def __init__(self):
     super().__init__('logic')
-    self.a = Signal(self, 'a', 8)
-    self.b = Signal(self, 'b', 8)
-    self.fn = Signal(self, 'fn', 4)
+    self.a = NotifySignal(self, 'a', 8)
+    self.b = NotifySignal(self, 'b', 8)
+    self.fn = NotifySignal(self, 'fn', 4)
     self.out = Signal(self, 'out', 8)
     self.flags = Signal(self, 'flags', 4)
-    self.oe = Signal(self, 'oe', 1)
+    self.oe = NotifySignal(self, 'oe', 1)
 
   def update(self, signal):
     if self.oe.value():
       a = self.a.value()
       b = self.b.value()
+      c = 0
+      v = 0
+      n = 0
+      z = 0
       o = 0
       fn = self.fn.value()
+
       if fn == 0:
-        o = a + b
-      elif fn == 1:
-        o = a - b
-      elif fn == 2:
-        o = a > b
-      elif fn == 3:
-        o = a < b
-      elif fn == 4:
-        o = a == b
-      elif fn == 5:
-        o = a & b
-      elif fn == 6:
-        o = a | b
-      elif fn == 7:
-        o = a ^ b
-      elif fn == 8:
+        # not, cznv
         o = ~a
-      elif fn == 9:
-        o = a == 0
-      elif fn == 10:
+      elif fn == 1:
+        # xor, znv
+        o = a ^ b
+      elif fn == 2:
+        # or, znv
+        o = a | b
+      elif fn == 3:
+        # and, znv
+        o = a & b
+      elif fn == 4:
+        # add, cznv
+        o = a + b + c
+      elif fn == 5:
+        # sub, cznv
+        o = a - b - c
+      elif fn == 6:
+        # cmp, cznv
+        #a - b - c
+        pass
+      elif fn == 7:
+        # shl, cznv
+        o = a << 1
+      elif fn == 8:
+        # shr, cznv
         o = a >> 1
+      elif fn == 9:
+        # inc, znv
+        o = a + 1
+      elif fn == 10:
+        # dec, znv
+        o = a - 1
       elif fn == 11:
-        o = b << 1
+        # neg, cznv
+        o = -a
       elif fn == 12:
-        o = a  #
+        # cca, c
+        c = 0
       elif fn == 13:
-        o = a  #
+        # sca, c
+        c = 1
       elif fn == 14:
-        o = a  #
+        # rol, c=a[7], znv
+        o = (a << 1) | c
       elif fn == 15:
-        o = a  #
-      self.out <<= (o % 0x100)
+        # ror, c=a[0], znv
+        o = (a >> 1) | (c << 7)
+
+      self.out <<= (o & 0xff)
+      self.flags <<= (c<<3) | (v<<2) | (n<<1) | z
     else:
       self.out <<= None
       self.flags <<= None
@@ -205,8 +84,8 @@ class Logic(Component):
 class Decoder(Component):
   def __init__(self):
     super().__init__('decoder')
-    self.instr = Signal(self, 'instr', 8)
-    self.clk = Signal(self, 'clk', 2)
+    self.instr = NotifySignal(self, 'instr', 8)
+    self.clk = NotifySignal(self, 'clk', 2)
 
     self.al_ie = Signal(self, 'al_ie', 1)
     self.ah_ie = Signal(self, 'ah_ie', 1)
@@ -252,10 +131,11 @@ class Decoder(Component):
     self.pc_inc <<= 0
 
   def update(self, signal):
-    m1 = self.clk.value() <= 1
-    m2 = self.clk.value() == 1
-    m3 = self.clk.value() >= 2
-    m4 = self.clk.value() == 3
+    clk = self.clk.value()
+    m1 = clk <= 1
+    m2 = clk == 1
+    m3 = clk >= 2
+    m4 = clk == 3
     #print('m1' if m1 else '', 'm2' if m2 else '', 'm3' if m3 else '', 'm4' if m4 else '')
 
     self.ir_ie <<= m1
@@ -301,24 +181,26 @@ class Decoder(Component):
     is_mov = b7 and not b6
     mov_src = ((instr >> 3) & 7)
     mov_dst = (instr & 7)
+    mov_oe = m1 & is_mov
+    mov_ie = m4 & is_mov
 
-    a_oe |= m1 & is_mov & (mov_src == 0)
-    b_oe |= m1 & is_mov & (mov_src == 1)
-    c_oe |= m1 & is_mov & (mov_src == 2)
-    d_oe |= m1 & is_mov & (mov_src == 3)
-    e_oe |= m1 & is_mov & (mov_src == 4)
-    f_oe |= m1 & is_mov & (mov_src == 5)
-    g_oe |= m1 & is_mov & (mov_src == 6)
-    h_oe |= m1 & is_mov & (mov_src == 7)
+    a_oe |= mov_oe & (mov_src == 0)
+    b_oe |= mov_oe & (mov_src == 1)
+    c_oe |= mov_oe & (mov_src == 2)
+    d_oe |= mov_oe & (mov_src == 3)
+    e_oe |= mov_oe & (mov_src == 4)
+    f_oe |= mov_oe & (mov_src == 5)
+    g_oe |= mov_oe & (mov_src == 6)
+    h_oe |= mov_oe & (mov_src == 7)
 
-    a_ie |= m4 & is_mov & (mov_dst == 0)
-    b_ie |= m4 & is_mov & (mov_dst == 1)
-    c_ie |= m4 & is_mov & (mov_dst == 2)
-    d_ie |= m4 & is_mov & (mov_dst == 3)
-    e_ie |= m4 & is_mov & (mov_dst == 4)
-    f_ie |= m4 & is_mov & (mov_dst == 5)
-    g_ie |= m4 & is_mov & (mov_dst == 6)
-    h_ie |= m4 & is_mov & (mov_dst == 7)
+    a_ie |= mov_ie & (mov_dst == 0)
+    b_ie |= mov_ie & (mov_dst == 1)
+    c_ie |= mov_ie & (mov_dst == 2)
+    d_ie |= mov_ie & (mov_dst == 3)
+    e_ie |= mov_ie & (mov_dst == 4)
+    f_ie |= mov_ie & (mov_dst == 5)
+    g_ie |= mov_ie & (mov_dst == 6)
+    h_ie |= mov_ie & (mov_dst == 7)
 
     t_ie |= m2 & is_mov
     t_oe |= m3 & is_mov
@@ -339,14 +221,17 @@ class Decoder(Component):
     sel_cd |= m3 & is_mem & ~(instr & 1)
     sel_gh |= m3 & is_mem & (instr & 1)
     mem_reg = (instr >> 2) & 3
-    a_oe |= m1 & is_mem_write & (mem_reg == 0)
-    b_oe |= m1 & is_mem_write & (mem_reg == 1)
-    e_oe |= m1 & is_mem_write & (mem_reg == 2)
-    f_oe |= m1 & is_mem_write & (mem_reg == 3)
-    a_ie |= m4 & is_mem_read & (mem_reg == 0)
-    b_ie |= m4 & is_mem_read & (mem_reg == 1)
-    e_ie |= m4 & is_mem_read & (mem_reg == 2)
-    f_ie |= m4 & is_mem_read & (mem_reg == 3)
+    mem_oe = m1 & is_mem_write
+    mem_ie = m4 & is_mem_read
+
+    a_oe |= mem_oe & (mem_reg == 0)
+    b_oe |= mem_oe & (mem_reg == 1)
+    e_oe |= mem_oe & (mem_reg == 2)
+    f_oe |= mem_oe & (mem_reg == 3)
+    a_ie |= mem_ie & (mem_reg == 0)
+    b_ie |= mem_ie & (mem_reg == 1)
+    e_ie |= mem_ie & (mem_reg == 2)
+    f_ie |= mem_ie & (mem_reg == 3)
 
     t_ie |= m2 & is_mem
     t_oe |= m3 & is_mem
@@ -356,20 +241,22 @@ class Decoder(Component):
 
     # JMP
     is_jmp = b7 and b6 and b5 and b4
-    self.pc_inc <<= m4 & ~is_jmp  # Not jump
-    self.pc_ie <<= m4 & is_jmp
+    self.pc_inc <<= m4 & ~is_jmp  # Increment if not jump
+    self.pc_ie <<= m4 & is_jmp    # Load PC if jump
     sel_cd |= m3 & is_jmp & ~((instr >> 3) & 1)
     sel_gh |= m3 & is_jmp & ((instr >> 3) & 1)
 
     # Set ie/oe lines.
-    self.al_ie <<= a_ie | ((m4 & is_imm & (imm_dest == 0)) & ~is_imm_high)
-    self.ah_ie <<= a_ie | ((m4 & is_imm & (imm_dest == 0)) & is_imm_high)
-    self.bl_ie <<= b_ie | ((m4 & is_imm & (imm_dest == 1)) & ~is_imm_high)
-    self.bh_ie <<= b_ie | ((m4 & is_imm & (imm_dest == 1)) & is_imm_high)
-    self.cl_ie <<= c_ie | ((m4 & is_imm & (imm_dest == 2)) & ~is_imm_high)
-    self.ch_ie <<= c_ie | ((m4 & is_imm & (imm_dest == 2)) & is_imm_high)
-    self.dl_ie <<= d_ie | ((m4 & is_imm & (imm_dest == 3)) & ~is_imm_high)
-    self.dh_ie <<= d_ie | ((m4 & is_imm & (imm_dest == 3)) & is_imm_high)
+    imm_ie_l = m4 & is_imm & ~is_imm_high
+    imm_ie_h = m4 & is_imm & is_imm_high
+    self.al_ie <<= a_ie | (imm_ie_l & (imm_dest == 0))
+    self.ah_ie <<= a_ie | (imm_ie_h & (imm_dest == 0))
+    self.bl_ie <<= b_ie | (imm_ie_l & (imm_dest == 1))
+    self.bh_ie <<= b_ie | (imm_ie_h & (imm_dest == 1))
+    self.cl_ie <<= c_ie | (imm_ie_l & (imm_dest == 2))
+    self.ch_ie <<= c_ie | (imm_ie_h & (imm_dest == 2))
+    self.dl_ie <<= d_ie | (imm_ie_l & (imm_dest == 3))
+    self.dh_ie <<= d_ie | (imm_ie_h & (imm_dest == 3))
     self.e_ie <<= e_ie
     self.f_ie <<= f_ie
     self.g_ie <<= g_ie
@@ -398,8 +285,8 @@ class InstructionRegister(Component):
     self.data = Signal(self, 'data', 8)
     self.instr = Signal(self, 'instr', 8)
     self.imm = Signal(self, 'imm', 8)
-    self.ie = Signal(self, 'ie', 1)
-    self.oe = Signal(self, 'oe', 1)
+    self.ie = NotifySignal(self, 'ie', 1)
+    self.oe = NotifySignal(self, 'oe', 1)
 
   def update(self, signal):
     if self.ie.had_edge(0, 1):
@@ -407,7 +294,7 @@ class InstructionRegister(Component):
       self.instr <<= self.v
     if self.oe.value():
       imm = (self.v & 0xf)
-      self.imm <<= (imm | imm << 4)
+      self.imm <<= (imm | (imm << 4))
     else:
       self.imm <<= None
 
@@ -418,9 +305,9 @@ class ProgramCounter(Component):
     self.v = 0
     self.addr = Signal(self, 'addr', 8)
     self.data = Signal(self, 'data', 8)
-    self.rst = Signal(self, 'rst', 1)
-    self.inc = Signal(self, 'inc', 1)
-    self.ie = Signal(self, 'ie', 1)
+    self.rst = NotifySignal(self, 'rst', 1)
+    self.inc = NotifySignal(self, 'inc', 1)
+    self.ie = NotifySignal(self, 'ie', 1)
     self.co = Signal(self, 'co', 1)
 
   def update(self, signal):
@@ -439,79 +326,13 @@ class ProgramCounter(Component):
     self.addr <<= self.v
 
 
-# class BranchFlags(Component):
-#   def __init__(self):
-#     super().__init__('branch flags')
-#     self.oe_skip = Signal(self, 1)
-#     self.flags = Signal(self, 4)
-#     self.mode = Signal(self, 4)
-#     self.ie_skip = Signal(self, 1)
-#     self.skip = Signal(self, 1)
-
-#   def update(self):
-#     pass
-
-# class IoPort(Component):
-#   def __init__(self):
-#     super().__init__('io port')
-#     self.mode = Signal(self, 1)
-#     self.ie = Signal(self, 1)
-#     self.oe = Signal(self, 1)
-#     self.data = Signal(self, 8)
-#     self.inp = Signal(self, 8)
-#     self.out = Signal(self, 8)
-
-#   def update(self):
-#     pass
-
-# class MemControl(Component):
-#   def __init__(self):
-#     super().__init__('mem ctrl')
-#     self.addr_l = Signal(self, 8)
-#     self.addr_h = Signal(self, 8)
-#     self.ie = Signal(self, 1)
-#     self.oe = Signal(self, 1)
-#     self.ie_ram = Signal(self, 1)
-#     self.ie_video = Signal(self, 1)
-#     self.ie_io = Signal(self, 1)
-#     self.oe_ram = Signal(self, 1)
-#     self.oe_io = Signal(self, 1)
-#     self.io_mode = Signal(self, 1)
-
-#   def update(self):
-#     self.io_mode.drive(self.addr_l.v & 1)
-#     if self.ie.v:
-#       if self.addr_h.v == 0 and self.addr_l.v < 2:
-#         self.ie_io.drive(1)
-#         self.ie_ram.drive(0)
-#       else:
-#         self.ie_io.drive(0)
-#         self.ie_ram.drive(1)
-#     else:
-#       self.ie_io.drive(0)
-#       self.ie_ram.drive(0)
-
-#     if self.oe.v:
-#       if self.addr_h.v == 0 and self.addr_l.v < 2:
-#         self.oe_io.drive(1)
-#         self.oe_ram.drive(0)
-#       else:
-#         self.oe_io.drive(0)
-#         self.oe_ram.drive(1)
-#     else:
-#       self.oe_io.drive(0)
-#       self.oe_ram.drive(0)
-
-
-
-
 def main():
   power = Power()
   logic = Logic()
-  reg_a = Register('reg_a', load_width=4)
-  reg_b = Register('reg_b', load_width=4)
-  reg_c = Register('reg_c', load_width=4)
-  reg_d = Register('reg_d', load_width=4)
+  reg_a = SplitRegister('reg_a', load_width=4)
+  reg_b = SplitRegister('reg_b', load_width=4)
+  reg_c = SplitRegister('reg_c', load_width=4)
+  reg_d = SplitRegister('reg_d', load_width=4)
   reg_e = Register('reg_e')
   reg_f = Register('reg_f')
   reg_g = Register('reg_g')
@@ -626,23 +447,22 @@ def main():
     l2 = Assembler.Label()
 
     a.load8('a', 0)
-    a.load8('b', 1)
     a.load16('c:d', 0x80)
     a.mov16('g:h', 'c:d')
     a.loadlabel('c:d', l2)
 
     n = a.addr
     a.label(l2)
-    a.add('a')
+    a.inc('a')
     a.wmem('a', 'g:h')
     a.mov('e', 'a')
     a.mov('a', 'h')
-    a.add('a')
+    a.inc('a')
     a.mov('h', 'a')
     a.mov('a', 'e')
     a.jmp('c:d')
 
-    n = n + (a.addr - n)*32
+    n = n + (a.addr - n)*16
 
   print('ROM:')
   for i in range(0, 256, 16):
@@ -659,6 +479,7 @@ def main():
       pc_l, pc_h,
       ram, rom,
       clk):
+    c.info()
     c.reset()
 
   try:
