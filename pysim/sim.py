@@ -231,6 +231,7 @@ class Component():
     for s in self.__dict__.values():
       if isinstance(s, Signal):
         n += len(s)
+    # 34 on a XC9572XL
     print(f'{self.name()}: {n} pins')
 
 

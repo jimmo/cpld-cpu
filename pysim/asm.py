@@ -5,6 +5,55 @@
 # 1111attt  jump a=(C:D, G:H)
 
 
+import collections
+from lark import Lark, Transformer
+
+l = Lark(open('asm.g').read())
+
+class AssemblerTransformer(Transformer):
+  def __init__(self, assembler):
+    self.assembler = assembler
+    self.labels = collections.defaultdict(Assembler.Label)
+
+  def number(self, token):
+    if token.type != 'NUMBER':
+      raise ValueError(f'Invalid number token type {token.type} "{token}"')
+    if token.startswith('0x'):
+      return int(token, 16)
+    if token.startswith('0o'):
+      return int(token, 8)
+    return int(token, 10)
+
+  def op(self, m):
+    if m[0].type == 'LABEL':
+      self.assembler.label(self.labels[m[0]])
+      m = m[1:]
+
+    if m[0].type == 'OP_LOAD':
+      self.assembler.load(m[1], self.number(m[2]))
+    elif m[0].type == 'OP_LOAD8':
+      self.assembler.load8(m[1], self.number(m[2]))
+    elif m[0].type == 'OP_LOAD16':
+      if m[2].type == 'LABEL':
+        self.assembler.loadlabel(m[1], self.labels[m[2]])
+      else:
+        self.assembler.load16(m[1], self.number(m[2]))
+    elif m[0].type == 'OP_MOV':
+      self.assembler.mov(m[1], m[2])
+    elif m[0].type == 'OP_MOV16':
+      self.assembler.mov16(m[1], m[2])
+    elif m[0].type == 'OP_ALU':
+      getattr(self.assembler, m[0])(m[1])
+    elif m[0].type == 'OP_RMEM':
+      self.assembler.rmem(m[1], m[2])
+    elif m[0].type == 'OP_WMEM':
+      self.assembler.wmem(m[1], m[2])
+    elif m[0].type == 'OP_JMP':
+      self.assembler.jmp(m[1])
+    else:
+      raise ValueError(f'Unknown op: {m}')
+
+
 class Assembler:
   IMM_REGISTERS = ('a', 'b', 'c', 'd',)
   MEM_REGISTERS = ('a', 'b', 'e', 'f',)
@@ -31,7 +80,7 @@ class Assembler:
 
   class Label:
     def __init__(self):
-      self.addr = 0
+      self.addr = None
       self.fixups = []
 
   def write(self, instr):
@@ -47,6 +96,8 @@ class Assembler:
         f()
 
   def label(self, l):
+    if l.addr is not None:
+      raise ValueError('Label redefinition')
     l.addr = self.addr
 
   def placeholder(self, n, label, fixup):
@@ -141,7 +192,7 @@ class Assembler:
       raise ValueError(f'Invalid addr register: {addr}.')
     self.write(Assembler.PREFIX_MEM | (Assembler.MEM_REGISTERS.index(dst) << 2) | Assembler.MEM_READ | Assembler.ADDR_REGISTERS.index(addr))
 
-  def wmem(self, src='a', addr='c:d'):
+  def wmem(self, addr='c:d', src='a'):
     src = src.lower()
     addr = addr.lower()
     if src not in Assembler.MEM_REGISTERS:
@@ -149,3 +200,8 @@ class Assembler:
     if addr not in Assembler.ADDR_REGISTERS:
       raise ValueError(f'Invalid addr register: {addr}.')
     self.write(Assembler.PREFIX_MEM | (Assembler.MEM_REGISTERS.index(src) << 2) | Assembler.MEM_WRITE | Assembler.ADDR_REGISTERS.index(addr))
+
+  def parse(self, path):
+    with open(path) as f:
+      ast = l.parse(f.read())
+      AssemblerTransformer(self).transform(ast)

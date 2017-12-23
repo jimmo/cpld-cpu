@@ -415,54 +415,9 @@ def main():
 
   n = 0
   with Assembler(rom, 0) as a:
-    a.load('al', 1)
-    a.load('ah', 2)
-    a.load('bl', 3)
-    a.load('bh', 4)
-    a.load('cl', 5)
-    a.load('ch', 6)
-    a.load('dl', 7)
-    a.load('dh', 8)
-
-    a.mov('e', 'a')
-    a.mov('f', 'b')
-    a.mov('g', 'c')
-    a.mov('h', 'd')
-
-    a.add('a')
-    a.add('c')
-    a.sub('a')
-    a.sub('c')
-
-    a.load16('c:d', 0x10)
-    a.mov16('g:h', 'c:d')
-    a.load16('c:d', 0x20)
-    a.load8('a', 0x23)
-    a.wmem('a', 'c:d')
-    a.load8('a', 0x45)
-    a.mov('e', 'a')
-    a.wmem('e', 'g:h')
-
-    l1 = Assembler.Label()
-    l2 = Assembler.Label()
-
-    a.load8('a', 0)
-    a.load16('c:d', 0x80)
-    a.mov16('g:h', 'c:d')
-    a.loadlabel('c:d', l2)
-
-    n = a.addr
-    a.label(l2)
-    a.inc('a')
-    a.wmem('a', 'g:h')
-    a.mov('e', 'a')
-    a.mov('a', 'h')
-    a.inc('a')
-    a.mov('h', 'a')
-    a.mov('a', 'e')
-    a.jmp('c:d')
-
-    n = n + (a.addr - n)*16
+    a.parse('test.s')
+    while a.addr < 0x100:
+      a.mov('a', 'a')
 
   print('ROM:')
   for i in range(0, 256, 16):
@@ -483,11 +438,13 @@ def main():
     c.reset()
 
   try:
-    for i in range(n):
+    for i in range(0x1000):
       for i in range(3 if i == 0 else 4):
         clk.tick()
       print('PC: 0x{:02x}{:02x} T: 0x{:02x}'.format(pc_h.addr.value(), pc_l.addr.value(), reg_t.data.value()))
       print('A: 0x{:02x} B: 0x{:02x} C: 0x{:02x} D: 0x{:02x} E: 0x{:02x} F: 0x{:02x} G: 0x{:02x} H: 0x{:02x}'.format(reg_a.value(), reg_b.value(), reg_c.value(), reg_d.value(), reg_e.value(), reg_f.value(), reg_g.value(), reg_h.value()))
+      if ram.ram[0xff] != 0:
+        break
   except KeyboardInterrupt:
     pass
 
