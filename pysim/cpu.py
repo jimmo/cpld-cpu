@@ -10,17 +10,24 @@ class Logic(Component):
     self.b = NotifySignal(self, 'b', 8)
     self.fn = NotifySignal(self, 'fn', 4)
     self.out = Signal(self, 'out', 8)
-    self.flags = Signal(self, 'flags', 4)
+    self.fi = NotifySignal(self, 'fi', 4)
+    self.fo = Signal(self, 'fo', 4)
     self.oe = NotifySignal(self, 'oe', 1)
+
+    # c = carry
+    # z = zero
+    # n = negative
+    # v = overflow
 
   def update(self, signal):
     if self.oe.value():
       a = self.a.value()
       b = self.b.value()
-      c = 0
-      v = 0
-      n = 0
-      z = 0
+      flags = self.fi.value()
+      c = (flags >> 3) & 1
+      v = (flags >> 2) & 1
+      n = (flags >> 1) & 1
+      z = (flags >> 0) & 1
       o = 0
       fn = self.fn.value()
 
@@ -44,8 +51,8 @@ class Logic(Component):
         o = a - b - c
       elif fn == 6:
         # cmp, cznv
-        #a - b - c
-        pass
+        # a - b - c?
+        o = a
       elif fn == 7:
         # shl, cznv
         o = a << 1
@@ -62,11 +69,17 @@ class Logic(Component):
         # neg, cznv
         o = -a
       elif fn == 12:
-        # cca, c
+        # clf, cznv
         c = 0
+        z = 0
+        n = 0
+        v = 0
       elif fn == 13:
-        # sca, c
-        c = 1
+        # inv, cvnz
+        c = 1-c
+        z = 1-z
+        n = 1-n
+        v = 1-v
       elif fn == 14:
         # rol, c=a[7], znv
         o = (a << 1) | c
@@ -75,10 +88,10 @@ class Logic(Component):
         o = (a >> 1) | (c << 7)
 
       self.out <<= (o & 0xff)
-      self.flags <<= (c<<3) | (v<<2) | (n<<1) | z
+      self.fo <<= (c<<3) | (v<<2) | (n<<1) | z
     else:
       self.out <<= None
-      self.flags <<= None
+      self.fo <<= None
 
 
 class Decoder(Component):
@@ -299,6 +312,27 @@ class InstructionRegister(Component):
       self.imm <<= None
 
 
+class FlagsRegister(Component):
+  def __init__(self, name, width=4):
+    super().__init__(name)
+    self.v = 0
+    self.di = NotifySignal(self, 'di', width)
+    self.do = Signal(self, 'do', width)
+    self.ie = NotifySignal(self, 'ie', 1)
+    self.oe = NotifySignal(self, 'oe', 1)
+
+  def value(self):
+    return self.v
+
+  def update(self, signal):
+    if self.ie.had_edge(0, 1):
+      self.v = self.di.value()
+    if self.oe.value():
+      self.do <<= self.v
+    else:
+      self.do <<= None
+
+
 class ProgramCounter(Component):
   def __init__(self, n):
     super().__init__('pc ' + n)
@@ -337,7 +371,8 @@ def main():
   reg_f = Register('reg_f')
   reg_g = Register('reg_g')
   reg_h = Register('reg_h')
-  reg_t = Register('reg_t')
+  reg_tmp = Register('reg_tmp')
+  reg_flags = FlagsRegister('reg_flags')
   dec = Decoder()
   ir = InstructionRegister()
   pc_l = ProgramCounter('l')
@@ -349,7 +384,7 @@ def main():
   clk = Clock(2)
 
   # Register bus
-  reg_a.data += reg_b.data + reg_c.data + reg_d.data + reg_e.data + reg_f.data + reg_g.data + reg_h.data + reg_t.data + logic.out + ir.imm + ram.data
+  reg_a.data += reg_b.data + reg_c.data + reg_d.data + reg_e.data + reg_f.data + reg_g.data + reg_h.data + reg_tmp.data + logic.out + ir.imm + ram.data
 
   # Program counter
   pc_l.inc += dec.pc_inc
@@ -382,7 +417,7 @@ def main():
   reg_f.ie += dec.f_ie
   reg_g.ie += dec.g_ie
   reg_h.ie += dec.h_ie
-  reg_t.ie += dec.t_ie
+  reg_tmp.ie += dec.t_ie
 
   reg_a.oe += dec.a_oe
   reg_b.oe += dec.b_oe
@@ -392,13 +427,15 @@ def main():
   reg_f.oe += dec.f_oe
   reg_g.oe += dec.g_oe
   reg_h.oe += dec.h_oe
-  reg_t.oe += dec.t_oe
+  reg_tmp.oe += dec.t_oe
 
   # Logic
   logic.fn += dec.alu_fn
   logic.oe += dec.alu_oe
   logic.a += reg_a.state
   logic.b += reg_b.state
+  logic.fo += reg_flags.di
+  logic.fi += reg_flags.do
 
   # Memory
   sel_cd.a[0:8] += reg_d.state
@@ -427,7 +464,7 @@ def main():
       power,
       logic,
       reg_a, reg_b, reg_c, reg_d, reg_e, reg_f, reg_g, reg_h,
-      reg_t,
+      reg_tmp, reg_flags,
       sel_cd, sel_gh,
       dec,
       ir,
@@ -441,7 +478,7 @@ def main():
     for i in range(0x1000):
       for i in range(3 if i == 0 else 4):
         clk.tick()
-      print('PC: 0x{:02x}{:02x} T: 0x{:02x}'.format(pc_h.addr.value(), pc_l.addr.value(), reg_t.data.value()))
+      print('PC: 0x{:02x}{:02x} T: 0x{:02x} F: 0x{:02x}'.format(pc_h.addr.value(), pc_l.addr.value(), reg_tmp.value(), reg_flags.value()))
       print('A: 0x{:02x} B: 0x{:02x} C: 0x{:02x} D: 0x{:02x} E: 0x{:02x} F: 0x{:02x} G: 0x{:02x} H: 0x{:02x}'.format(reg_a.value(), reg_b.value(), reg_c.value(), reg_d.value(), reg_e.value(), reg_f.value(), reg_g.value(), reg_h.value()))
       if ram.ram[0xff] != 0:
         break
