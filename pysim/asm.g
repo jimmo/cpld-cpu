@@ -8,7 +8,7 @@ HEX_NUMBER: /0x[\da-f]*l?/i
 OCT_NUMBER: /0o?[0-7]*l?/i
 NUMBER: DEC_NUMBER | HEX_NUMBER | OCT_NUMBER
 
-OP_ALU: "add"|"sub"|"inc"|"dec"
+OP_ALU: "not"|"xor"|"or"|"and"|"add"|"sub"|"cmp"|"shl"|"shr"|"inc"|"dec"|"neg"|"clf"|"inv"|"rol"|"ror"
 OP_LOAD: "load"
 OP_LOAD8: "load"
 OP_LOAD16: "load"
@@ -16,7 +16,7 @@ OP_MOV: "mov"
 OP_MOV16: "mov"
 OP_RMEM: "rmem"
 OP_WMEM: "wmem"
-OP_JMP: "jmp"
+OP_JMP: "jmp"|"jz"|"je"|"jnz"|"jne"|"jn"|"jp"|"jls"|"jges"|"jc"|"jlu"|"jnc"|"jgeu"|"jo"|"jno"
 
 REG_ALU: "a"|"c"
 REG_LOAD: "al"|"ah"|"bl"|"bh"|"cl"|"ch"|"dl"|"dh"

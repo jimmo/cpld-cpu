@@ -7,6 +7,7 @@
 
 import collections
 from lark import Lark, Transformer
+from lark.lexer import UnexpectedInput
 
 l = Lark(open('asm.g').read())
 
@@ -43,13 +44,13 @@ class AssemblerTransformer(Transformer):
     elif m[0].type == 'OP_MOV16':
       self.assembler.mov16(m[1], m[2])
     elif m[0].type == 'OP_ALU':
-      getattr(self.assembler, m[0])(m[1])
+      getattr(self.assembler, 'alu_' + m[0])(m[1])
     elif m[0].type == 'OP_RMEM':
       self.assembler.rmem(m[1], m[2])
     elif m[0].type == 'OP_WMEM':
       self.assembler.wmem(m[1], m[2])
     elif m[0].type == 'OP_JMP':
-      self.assembler.jmp(m[1])
+      getattr(self.assembler, 'jmp_' + m[0])(m[1])
     else:
       raise ValueError(f'Unknown op: {m}')
 
@@ -92,6 +93,8 @@ class Assembler:
 
   def __exit__(self, a, b, c):
     for l in self.labels:
+      if l.addr is None:
+        raise ValueError(f'Undefined label')
       for f in l.fixups:
         f()
 
@@ -164,23 +167,111 @@ class Assembler:
       raise ValueError(f'Invalid ALU function: {fn}.')
     self.write(Assembler.PREFIX_ALU | (fn << 1) | (0 if dst == 'a' else 1))
 
-  def add(self, dst):
+  def alu_not(self, dst):
+    self.alu(dst, 0)
+
+  def alu_xor(self, dst):
+    self.alu(dst, 1)
+
+  def alu_or(self, dst):
+    self.alu(dst, 2)
+
+  def alu_and(self, dst):
+    self.alu(dst, 3)
+
+  def alu_add(self, dst):
     self.alu(dst, 4)
 
-  def sub(self, dst):
+  def alu_sub(self, dst):
     self.alu(dst, 5)
 
-  def inc(self, dst):
+  def alu_cmp(self, dst):
+    self.alu(dst, 6)
+
+  def alu_shl(self, dst):
+    self.alu(dst, 7)
+
+  def alu_shr(self, dst):
+    self.alu(dst, 8)
+
+  def alu_inc(self, dst):
     self.alu(dst, 9)
 
-  def dec(self, dst):
+  def alu_dec(self, dst):
     self.alu(dst, 10)
 
-  def jmp(self, addr='c:d'):
+  def alu_neg(self, dst):
+    self.alu(dst, 11)
+
+  def alu_clf(self, dst):
+    self.alu(dst, 12)
+
+  def alu_inv(self, dst):
+    self.alu(dst, 13)
+
+  def alu_rol(self, dst):
+    self.alu(dst, 14)
+
+  def alu_ror(self, dst):
+    self.alu(dst, 15)
+
+  def jmp(self, addr='c:d', t=0):
     addr = addr.lower()
     if addr not in Assembler.ADDR_REGISTERS:
       raise ValueError(f'Invalid jump register: {addr}.')
-    self.write(Assembler.PREFIX_JMP | (Assembler.ADDR_REGISTERS.index(addr) << 3) | 0)
+    self.write(Assembler.PREFIX_JMP | (Assembler.ADDR_REGISTERS.index(addr) << 3) | t)
+
+  def jmp_jmp(self, addr):
+    self.jmp(addr, 0)
+
+  def jmp_jz(self, addr):
+    self.jmp(addr, 1)
+
+  def jmp_je(self, addr):
+    self.jmp(addr, 1)
+
+  def jmp_jnz(self, addr):
+    self.alu_inv('a')
+    self.jmp(addr, 1)
+
+  def jmp_jne(self, addr):
+    self.alu_inv('a')
+    self.jmp(addr, 1)
+
+  def jmp_jn(self, addr):
+    self.jmp(addr, 2)
+
+  def jmp_jp(self, addr):
+    self.alu_inv('a')
+    self.jmp(addr, 2)
+
+  def jmp_jls(self, addr):
+    self.jmp(addr, 3)
+
+  def jmp_jges(self, addr):
+    self.alu_inv('a')
+    self.jmp(addr, 3)
+
+  def jmp_jc(self, addr):
+    self.jmp(addr, 4)
+
+  def jmp_jlu(self, addr):
+    self.jmp(addr, 4)
+
+  def jmp_jnc(self, addr):
+    self.alu_inv('a')
+    self.jmp(addr, 4)
+
+  def jmp_jgeu(self, addr):
+    self.alu_inv('a')
+    self.jmp(addr, 4)
+
+  def jmp_jo(self, addr):
+    self.jmp(addr, 5)
+
+  def jmp_jno(self, addr):
+    self.alu_inv('a')
+    self.jmp(addr, 5)
 
   def rmem(self, dst='a', addr='c:d'):
     # 1110rrwa  r/w mem rr=A,B,E,F a=(C:D, G:H)
@@ -203,5 +294,13 @@ class Assembler:
 
   def parse(self, path):
     with open(path) as f:
-      ast = l.parse(f.read())
+      contents = f.read()
+      try:
+        ast = l.parse(contents)
+      except UnexpectedInput as e:
+        print(f'{path}:{e.line}:{e.column}: unexpected input.')
+        print('  ' + contents.split('\n')[e.line-1])
+        print('  ' + ' ' * e.column + '^')
+        return False
       AssemblerTransformer(self).transform(ast)
+      return True
