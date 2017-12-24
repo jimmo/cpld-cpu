@@ -45,6 +45,8 @@ class AssemblerTransformer(Transformer):
       self.assembler.mov16(m[1], m[2])
     elif m[0].type == 'OP_ALU':
       getattr(self.assembler, 'alu_' + m[0])(m[1])
+    elif m[0].type == 'OP_ALU_NOP':
+      getattr(self.assembler, 'alu_' + m[0])()
     elif m[0].type == 'OP_RMEM':
       self.assembler.rmem(m[1], m[2])
     elif m[0].type == 'OP_WMEM':
@@ -185,8 +187,8 @@ class Assembler:
   def alu_sub(self, dst):
     self.alu(dst, 5)
 
-  def alu_cmp(self, dst):
-    self.alu(dst, 6)
+  def alu_cmp(self):
+    self.alu('a', 6)
 
   def alu_shl(self, dst):
     self.alu(dst, 7)
@@ -203,11 +205,11 @@ class Assembler:
   def alu_neg(self, dst):
     self.alu(dst, 11)
 
-  def alu_clf(self, dst):
-    self.alu(dst, 12)
+  def alu_clf(self):
+    self.alu('a', 12)
 
-  def alu_inv(self, dst):
-    self.alu(dst, 13)
+  def alu_inv(self):
+    self.alu('a', 13)
 
   def alu_rol(self, dst):
     self.alu(dst, 14)

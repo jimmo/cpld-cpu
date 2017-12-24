@@ -499,7 +499,7 @@ def main():
     c.reset()
 
   try:
-    for i in range(0x10):
+    for i in range(0x400):
       for i in range(3 if i == 0 else 4):
         clk.tick()
       print('PC: 0x{:02x}{:02x} T: 0x{:02x} F: 0x{:02x} (0x{:02x})'.format(pc_h.addr.value(), pc_l.addr.value(), reg_tmp.value(), reg_flags.value(), reg_flags_tmp.value()))
