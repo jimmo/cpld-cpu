@@ -101,7 +101,7 @@ class Logic(Component):
         c = of > 0xff
         z = of == 0
         v = 0  # TODO: signed
-        n = 0  # TODO: signed
+        n = of < 0  # TODO: signed
 
       self.out <<= (o & 0xff)
       self.fo <<= (c<<3) | (v<<2) | (n<<1) | (z<<0)
@@ -476,8 +476,7 @@ def main():
   with Assembler(rom, 0) as a:
     if not a.parse(sys.argv[1]):
       return
-    while a.addr < 0x100:
-      a.mov('a', 'a')
+    a.hlt()
 
   print('ROM:')
   for i in range(0, 256, 16):
@@ -508,8 +507,8 @@ def main():
 
       cycles += 1
 
-      print('PC: 0x{:02x}{:02x} T: 0x{:02x} F: 0x{:02x} (0x{:02x})'.format(pc_h.addr.value(), pc_l.addr.value(), reg_tmp.value(), reg_flags.value(), reg_flags_tmp.value()))
-      print('A: 0x{:02x} B: 0x{:02x} C: 0x{:02x} D: 0x{:02x} E: 0x{:02x} F: 0x{:02x} G: 0x{:02x} H: 0x{:02x}'.format(reg_a.value(), reg_b.value(), reg_c.value(), reg_d.value(), reg_e.value(), reg_f.value(), reg_g.value(), reg_h.value()))
+      #print('PC: 0x{:02x}{:02x} T: 0x{:02x} F: 0x{:02x} (0x{:02x})'.format(pc_h.addr.value(), pc_l.addr.value(), reg_tmp.value(), reg_flags.value(), reg_flags_tmp.value()))
+      #print('A: 0x{:02x} B: 0x{:02x} C: 0x{:02x} D: 0x{:02x} E: 0x{:02x} F: 0x{:02x} G: 0x{:02x} H: 0x{:02x}'.format(reg_a.value(), reg_b.value(), reg_c.value(), reg_d.value(), reg_e.value(), reg_f.value(), reg_g.value(), reg_h.value()))
       #print('RAM:')
       #for i in range(0, 256, 16):
       #  print('{:02x}: {}'.format(i, ' '.join('{:02x}'.format(b) for b in ram.ram[i:i+16])))

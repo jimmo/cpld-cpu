@@ -203,8 +203,8 @@ class CompilerTransformer(Transformer):
     '==': 'je',
     '!=': 'jne',
     '>': 'jxx',
-    '<': 'jxx',
-    '>=': 'jxx',
+    '<': 'jn',
+    '>=': 'jp',
     '<=': 'jxx',
   }
 

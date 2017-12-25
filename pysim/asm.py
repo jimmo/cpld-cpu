@@ -240,25 +240,25 @@ class Assembler:
     self.jmp(addr, 1)
 
   def jmp_jnz(self, addr):
-    self.alu_inv('a')
+    self.alu_inv()
     self.jmp(addr, 1)
 
   def jmp_jne(self, addr):
-    self.alu_inv('a')
+    self.alu_inv()
     self.jmp(addr, 1)
 
   def jmp_jn(self, addr):
     self.jmp(addr, 2)
 
   def jmp_jp(self, addr):
-    self.alu_inv('a')
+    self.alu_inv()
     self.jmp(addr, 2)
 
   def jmp_jls(self, addr):
     self.jmp(addr, 3)
 
   def jmp_jges(self, addr):
-    self.alu_inv('a')
+    self.alu_inv()
     self.jmp(addr, 3)
 
   def jmp_jc(self, addr):
@@ -268,18 +268,18 @@ class Assembler:
     self.jmp(addr, 4)
 
   def jmp_jnc(self, addr):
-    self.alu_inv('a')
+    self.alu_inv()
     self.jmp(addr, 4)
 
   def jmp_jgeu(self, addr):
-    self.alu_inv('a')
+    self.alu_inv()
     self.jmp(addr, 4)
 
   def jmp_jo(self, addr):
     self.jmp(addr, 5)
 
   def jmp_jno(self, addr):
-    self.alu_inv('a')
+    self.alu_inv()
     self.jmp(addr, 5)
 
   def rmem(self, dst='a', addr='c:d'):

@@ -14,7 +14,7 @@ NUMBER: DEC_NUMBER | HEX_NUMBER | OCT_NUMBER | CHR_NUMBER
 TYPE: "i8"|"i16"|"u8"|"u16"
 
 BIN_OP: "+"|"-"|"&"|"|"|"^"
-BIN_CMP: "=="|"!="|"<"|">"|"<="|">="
+BIN_CMP: "=="|"!="|"<="|">="|"<"|">"
 
 statement: TYPE ID "=" expr -> new_assign
     | ID "=" expr -> assign

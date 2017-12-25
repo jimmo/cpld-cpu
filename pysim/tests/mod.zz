@@ -1,0 +1,21 @@
+u8 a = 0
+u8 b = 0
+u8 c = 0
+
+goto main
+
+mod:
+c = a
+mod_loop:
+if c < b goto mod_done
+c = c - b
+goto mod_loop
+mod_done:
+ret
+
+main:
+a = 27
+b = 5
+call mod
+
+hlt
