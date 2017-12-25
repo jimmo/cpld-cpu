@@ -53,6 +53,8 @@ class AssemblerTransformer(Transformer):
       self.assembler.wmem(m[1], m[2])
     elif m[0].type == 'OP_JMP':
       getattr(self.assembler, 'jmp_' + m[0])(m[1])
+    elif m[0].type == 'OP_HLT':
+      self.assembler.hlt()
     else:
       raise ValueError(f'Unknown op: {m}')
 
@@ -293,6 +295,12 @@ class Assembler:
     if addr not in Assembler.ADDR_REGISTERS:
       raise ValueError(f'Invalid addr register: {addr}.')
     self.write(Assembler.PREFIX_MEM | (Assembler.MEM_REGISTERS.index(src) << 2) | Assembler.MEM_WRITE | Assembler.ADDR_REGISTERS.index(addr))
+
+  def hlt(self):
+    l = Assembler.Label()
+    self.loadlabel('c:d', l)
+    self.label(l)
+    self.jmp('c:d')
 
   def parse(self, path):
     with open(path) as f:

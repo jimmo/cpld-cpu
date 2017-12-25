@@ -261,20 +261,20 @@ class Decoder(Component):
     is_mem = b7 and b6 and b5 and not b4
     is_mem_read = is_mem & ~((instr >> 1) & 1)
     is_mem_write = is_mem & ((instr >> 1) & 1)
-    sel_cd |= m3 & is_mem & ~(instr & 1)
-    sel_gh |= m3 & is_mem & (instr & 1)
+    sel_cd |= is_mem & ~(instr & 1)
+    sel_gh |= is_mem & (instr & 1)
     mem_reg = (instr >> 2) & 3
-    mem_oe = m1 & is_mem_write
-    mem_ie = m4 & is_mem_read
+    mem_reg_oe = m1 & is_mem_write
+    mem_reg_ie = m4 & is_mem_read
 
-    a_oe |= mem_oe & (mem_reg == 0)
-    b_oe |= mem_oe & (mem_reg == 1)
-    e_oe |= mem_oe & (mem_reg == 2)
-    f_oe |= mem_oe & (mem_reg == 3)
-    a_ie |= mem_ie & (mem_reg == 0)
-    b_ie |= mem_ie & (mem_reg == 1)
-    e_ie |= mem_ie & (mem_reg == 2)
-    f_ie |= mem_ie & (mem_reg == 3)
+    a_oe |= mem_reg_oe & (mem_reg == 0)
+    b_oe |= mem_reg_oe & (mem_reg == 1)
+    e_oe |= mem_reg_oe & (mem_reg == 2)
+    f_oe |= mem_reg_oe & (mem_reg == 3)
+    a_ie |= mem_reg_ie & (mem_reg == 0)
+    b_ie |= mem_reg_ie & (mem_reg == 1)
+    e_ie |= mem_reg_ie & (mem_reg == 2)
+    f_ie |= mem_reg_ie & (mem_reg == 3)
 
     t_ie |= m2 & is_mem
     t_oe |= m3 & is_mem
@@ -498,14 +498,25 @@ def main():
     c.info()
     c.reset()
 
+  last_pc = None
+  first_op = True
+
   try:
-    for i in range(0x400):
-      for i in range(3 if i == 0 else 4):
+    while True:
+      for i in range(3 if first_op else 4):
         clk.tick()
+      first_op = False
+
       print('PC: 0x{:02x}{:02x} T: 0x{:02x} F: 0x{:02x} (0x{:02x})'.format(pc_h.addr.value(), pc_l.addr.value(), reg_tmp.value(), reg_flags.value(), reg_flags_tmp.value()))
       print('A: 0x{:02x} B: 0x{:02x} C: 0x{:02x} D: 0x{:02x} E: 0x{:02x} F: 0x{:02x} G: 0x{:02x} H: 0x{:02x}'.format(reg_a.value(), reg_b.value(), reg_c.value(), reg_d.value(), reg_e.value(), reg_f.value(), reg_g.value(), reg_h.value()))
-      if ram.ram[0xff] != 0:
+      #print('RAM:')
+      #for i in range(0, 256, 16):
+      #  print('{:02x}: {}'.format(i, ' '.join('{:02x}'.format(b) for b in ram.ram[i:i+16])))
+
+      pc = (pc_h.addr.value() << 8) | pc_l.addr.value()
+      if pc == last_pc:
         break
+      last_pc = pc
   except KeyboardInterrupt:
     pass
 

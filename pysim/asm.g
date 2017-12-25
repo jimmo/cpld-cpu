@@ -18,6 +18,7 @@ OP_MOV16: "mov"
 OP_RMEM: "rmem"
 OP_WMEM: "wmem"
 OP_JMP: "jmp"|"jz"|"je"|"jnz"|"jne"|"jn"|"jp"|"jls"|"jges"|"jc"|"jlu"|"jnc"|"jgeu"|"jo"|"jno"
+OP_HLT: "hlt"
 
 REG_ALU: "a"|"c"
 REG_LOAD: "al"|"ah"|"bl"|"bh"|"cl"|"ch"|"dl"|"dh"
@@ -26,7 +27,7 @@ REG_LOAD16: "a:b"|"b:c"|"c:d"
 REG_MOV: "a"|"b"|"c"|"d"|"e"|"f"|"g"|"h"
 REG_MOV16: "a:b"|"b:c"|"c:d"|"d:e"|"e:f"|"f:g"|"g:h"
 REG_ADDR: "c:d"|"g:h"
-REG_MEM: "a"|"e"
+REG_MEM: "a"|"b"|"e"|"f"
 
 op: [LABEL ":"] (OP_ALU REG_ALU
         | OP_ALU_NOP
@@ -37,7 +38,8 @@ op: [LABEL ":"] (OP_ALU REG_ALU
         | OP_MOV16 REG_MOV16 "," REG_MOV16
         | OP_RMEM REG_MEM "," REG_ADDR
         | OP_WMEM REG_ADDR "," REG_MEM
-        | OP_JMP REG_ADDR)
+        | OP_JMP REG_ADDR
+        | OP_HLT)
 
 
 %import common.WS

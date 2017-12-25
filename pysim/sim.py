@@ -242,8 +242,8 @@ class Clock(Component):
     self.clk = Signal(self, 'clk', width)
 
   def tick(self):
-    #print('tick')
     self.value = (self.value + 1) % (1 << len(self.clk))
+    #print('tick', self.value)
     self.clk <<= self.value
 
   def reset(self):
@@ -398,11 +398,11 @@ class Ram(Component):
 
   def update(self, signal):
     if self.ie.had_edge(0, 1):
-      #print('update', hex(self.addr.value()), hex(self.data.value()))
+      #print('write ram addr', hex(self.addr.value()), 'value', hex(self.data.value()))
       self.ram[self.addr.value()] = self.data.value()
 
     if self.oe.value():
-      #print('ram addr', hex(self.addr.value()))
+      #print('read ram addr', hex(self.addr.value()))
       self.data <<= self.ram[self.addr.value()]
     else:
       self.data <<= None
