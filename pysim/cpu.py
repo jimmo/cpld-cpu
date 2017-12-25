@@ -47,10 +47,10 @@ class Logic(Component):
         o = a & b
       elif fn == 4:
         # add, cznv
-        o = a + b + c
+        o = a + b# + c
       elif fn == 5:
         # sub, cznv
-        o = a - b - c
+        o = a - b# - c
       elif fn == 6:
         # cmp, cznv
         # a - b - c?
@@ -499,13 +499,14 @@ def main():
     c.reset()
 
   last_pc = None
-  first_op = True
+  cycles = 0
 
   try:
     while True:
-      for i in range(3 if first_op else 4):
+      for i in range(3 if cycles == 0 else 4):
         clk.tick()
-      first_op = False
+
+      cycles += 1
 
       print('PC: 0x{:02x}{:02x} T: 0x{:02x} F: 0x{:02x} (0x{:02x})'.format(pc_h.addr.value(), pc_l.addr.value(), reg_tmp.value(), reg_flags.value(), reg_flags_tmp.value()))
       print('A: 0x{:02x} B: 0x{:02x} C: 0x{:02x} D: 0x{:02x} E: 0x{:02x} F: 0x{:02x} G: 0x{:02x} H: 0x{:02x}'.format(reg_a.value(), reg_b.value(), reg_c.value(), reg_d.value(), reg_e.value(), reg_f.value(), reg_g.value(), reg_h.value()))
@@ -520,9 +521,13 @@ def main():
   except KeyboardInterrupt:
     pass
 
+  print(f'Ran for {cycles} cycles.')
+
   print('RAM:')
-  for i in range(0, 256, 16):
-    print('{:02x}: {}'.format(i, ' '.join('{:02x}'.format(b) for b in ram.ram[i:i+16])))
+  for i in range(0, 0x100, 16):
+    print('{:04x}: {}'.format(i, ' '.join('{:02x}'.format(b) for b in ram.ram[i:i+16])))
+  for i in range(0x10000-64, 0x10000, 16):
+    print('{:04x}: {}'.format(i, ' '.join('{:02x}'.format(b) for b in ram.ram[i:i+16])))
 
 if __name__ == '__main__':
   main()

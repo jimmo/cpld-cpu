@@ -1,14 +1,4 @@
-u8 a = 0
-u16 p = 0x0020
-u8 n = 0x10
-
-loop:
-if n == 0 goto done
-[p] = a
-a = a + 1
-p = p + 1
-n = n - 1
-goto loop
-
-done:
+u8 a = 0xaa
+u8 b = 0xbb
+u8 c = 0xcc
 hlt

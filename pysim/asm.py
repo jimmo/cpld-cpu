@@ -27,7 +27,9 @@ class AssemblerTransformer(Transformer):
 
   def op(self, m):
     if m[0].type == 'LABEL':
-      self.assembler.label(self.labels[m[0]])
+      l = self.labels[m[0]]
+      l.name = m[0]
+      self.assembler.label(l)
       m = m[1:]
 
     if m[0].type == 'OP_LOAD':
@@ -36,7 +38,9 @@ class AssemblerTransformer(Transformer):
       self.assembler.load8(m[1], self.number(m[2]))
     elif m[0].type == 'OP_LOAD16':
       if m[2].type == 'LABEL':
-        self.assembler.loadlabel(m[1], self.labels[m[2]])
+        l = self.labels[m[2]]
+        l.name = m[2]
+        self.assembler.loadlabel(m[1], l)
       else:
         self.assembler.load16(m[1], self.number(m[2]))
     elif m[0].type == 'OP_MOV':
@@ -86,6 +90,7 @@ class Assembler:
   class Label:
     def __init__(self):
       self.addr = None
+      self.name = None
       self.fixups = []
 
   def write(self, instr):
@@ -98,7 +103,7 @@ class Assembler:
   def __exit__(self, a, b, c):
     for l in self.labels:
       if l.addr is None:
-        raise ValueError(f'Undefined label')
+        raise ValueError(f'Undefined label "{l.name}"')
       for f in l.fixups:
         f()
 

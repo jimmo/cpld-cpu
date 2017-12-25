@@ -23,7 +23,14 @@ class Variable():
 class CompilerTransformer(Transformer):
   def __init__(self):
     self.vars = {}
-    self.next_var = 16
+    self.next_var = 0
+    self.call_n = 0
+
+    # Init call stack pointer.
+    print(f'  load c:d, 0xffef')
+    print(f'  load a, 0')
+    print(f'  wmem c:d, a')
+
 
   def var(self, n):
     if n not in self.vars:
@@ -66,13 +73,13 @@ class CompilerTransformer(Transformer):
       if expr.data == 'bin_op':
         self.eval(expr.children[2])
         print(f'  # save {self.format_expr(expr.children[2])}')
-        print(f'  load c:d, 0x{n:04x}')
+        print(f'  load c:d, 0x{0xffff-n:04x}')
         print(f'  wmem c:d, a')
 
         self.eval(expr.children[0], n+1)
 
         print(f'  # restore {self.format_expr(expr.children[2])}')
-        print(f'  load c:d, 0x{n:04x}')
+        print(f'  load c:d, 0x{0xffff-n:04x}')
         print(f'  rmem b, c:d')
 
         op = CompilerTransformer.ALU_OPS[expr.children[1]]
@@ -104,7 +111,7 @@ class CompilerTransformer(Transformer):
         print(f'  mov a, b')
 
         print(f'  # save {self.format_expr(expr.children[2])}')
-        print(f'  load c:d, 0x{n:04x}')
+        print(f'  load c:d, 0x{0xffff-n:04x}')
         print(f'  wmem c:d, a')
 
         self.eval16(expr.children[0], n+1)
@@ -113,7 +120,7 @@ class CompilerTransformer(Transformer):
         print(f'  mov a, b')
 
         print(f'  # restore {self.format_expr(expr.children[2])}')
-        print(f'  load c:d, 0x{n:04x}')
+        print(f'  load c:d, 0x{0xffff-n:04x}')
         print(f'  rmem b, c:d')
 
         op = CompilerTransformer.ALU_OPS[expr.children[1]]
@@ -220,6 +227,70 @@ class CompilerTransformer(Transformer):
 
   def label(self, m):
     print(m[0] + ':')
+
+  def call(self, m):
+    n = f'_call_{self.call_n}'
+    self.call_n += 1
+
+    print(f'  # call {m[0]}')
+
+    # Point c:d at the next location
+    print(f'  load c:d, 0xffef')
+    print(f'  rmem b, c:d')
+    print(f'  load a, 0xed')
+    print(f'  sub a')
+    print(f'  mov d, a')
+
+    # Stash this label in c:d
+    print(f'  load a:b, {n}')
+    print(f'  wmem c:d, a')
+    print(f'  mov a, d')
+    print(f'  inc a')
+    print(f'  mov d, a')
+    print(f'  wmem c:d, b')
+
+    # Update stack pointer
+    print(f'  load c:d, 0xffef')
+    print(f'  rmem a, c:d')
+    print(f'  load b, 2')
+    print(f'  add a')
+    print(f'  wmem c:d, a')
+
+    # Jump to call target
+    print(f'  load c:d, {m[0]}')
+    print(f'  jmp c:d')
+    print(f'{n}:')
+    print()
+
+  def ret(self, m):
+    print(f'  # ret')
+
+    # Point c:d at the current location
+    print(f'  load c:d, 0xffef')
+    print(f'  rmem b, c:d')
+    print(f'  load a, 0xef')
+    print(f'  sub a')
+    print(f'  mov d, a')
+
+    # Get return target
+    print(f'  rmem b, c:d')
+    print(f'  mov a, d')
+    print(f'  inc a')
+    print(f'  mov d, a')
+    print(f'  mov a, b')
+    print(f'  rmem b, c:d')
+    print(f'  mov g:h, a:b')
+
+    # Update stack pointer
+    print(f'  load c:d, 0xffef')
+    print(f'  rmem a, c:d')
+    print(f'  load b, 2')
+    print(f'  sub a')
+    print(f'  wmem c:d, a')
+
+    # Jump to target
+    print(f'  jmp g:h')
+    print()
 
 
 class Compiler():

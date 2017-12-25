@@ -1,0 +1,30 @@
+u8 a = 0
+u8 b = 0
+u8 c = 0
+
+goto main
+
+mul:
+c = 0
+u8 t = b
+mul_loop:
+if b == 0 goto mul_done
+c = c + a
+b = b - 1
+goto mul_loop
+mul_done:
+b = t
+ret
+
+foo:
+a = 3
+b = 17
+call mul
+u8 d = c
+ret
+
+main:
+call foo
+u8 e = 0xaa
+
+hlt

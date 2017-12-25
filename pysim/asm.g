@@ -1,7 +1,7 @@
 start: op+
 
-LABEL_CHAR: "a".."z"|"_"
-LABEL: LABEL_CHAR+
+LABEL_CHAR: "a".."z"|"0".."9"|"_"
+LABEL: ("a".."z"|"_") LABEL_CHAR+
 
 DEC_NUMBER: /[1-9]\d*l?/i
 HEX_NUMBER: /0x[\da-f]*l?/i

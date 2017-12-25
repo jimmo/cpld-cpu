@@ -22,6 +22,8 @@ statement: TYPE ID "=" expr -> new_assign
     | "if" (ID | DEREF_ID | NUMBER) BIN_CMP (ID | DEREF_ID | NUMBER) "goto" ID -> goto
     | "goto" ID -> goto
     | ID ":" -> label
+    | "call" ID -> call
+    | "ret" -> ret
     | "hlt" -> hlt
 
 ?expr: "(" expr ")"
