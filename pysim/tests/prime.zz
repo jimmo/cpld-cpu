@@ -37,7 +37,7 @@ ret
 
 
 main:
-a = 71 # 143
+a = 29 # 143
 call is_prime
 
 hlt

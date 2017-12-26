@@ -1,5 +1,5 @@
 import sys
-from sim import Component, Signal, NotifySignal, Register, SplitRegister, BusConnect, Clock, Ram, Rom, Power
+from sim import Component, Signal, NotifySignal, Net, Register, SplitRegister, BusConnect, Clock, Ram, Rom, Power
 from asm import Assembler
 
 
@@ -113,8 +113,8 @@ class Logic(Component):
 class Decoder(Component):
   def __init__(self):
     super().__init__('decoder')
-    self.instr = NotifySignal(self, 'instr', 8)
-    self.flags = NotifySignal(self, 'flags', 4)
+    self.instr = Signal(self, 'instr', 8)
+    self.flags = Signal(self, 'flags', 4)
     self.clk = NotifySignal(self, 'clk', 2)
 
     self.al_ie = Signal(self, 'al_ie', 1)
@@ -472,6 +472,8 @@ def main():
   ram.ie += dec.mem_ie
   ram.oe += dec.mem_oe
 
+  print('Loading ROM...')
+
   n = 0
   with Assembler(rom, 0) as a:
     if not a.parse(sys.argv[1]):
@@ -520,7 +522,7 @@ def main():
   except KeyboardInterrupt:
     pass
 
-  print(f'Ran for {cycles} cycles.')
+  print(f'Ran for {cycles} cycles and {Net.net_updates} net updates.')
 
   print('RAM:')
   for i in range(0, 0x100, 16):

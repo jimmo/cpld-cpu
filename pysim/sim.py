@@ -1,4 +1,6 @@
 class Net():
+  net_updates = 0
+
   def __init__(self, pins):
     self._pins = pins
     self._pull = None
@@ -19,6 +21,7 @@ class Net():
     if not d and not v:
       return
       #raise Exception(f'Floating net with no pull-up/down "{self.name()}"')
+    Net.net_updates += 1
     if d:
       v = d.value()
     for p in self._pins:
@@ -298,29 +301,6 @@ class Register(Component):
       self.data <<= self.v
     else:
       self.data <<= None
-
-
-# class FlagsRegister(Component):
-#   def __init__(self, name, width=4):
-#     super().__init__(name)
-#     self.v = 0
-#     self.di = NotifySignal(self, 'di', width)
-#     self.do = Signal(self, 'do', width)
-#     self.state = Signal(self, 'state', width)
-#     self.ie = NotifySignal(self, 'ie', 1)
-#     self.oe = NotifySignal(self, 'oe', 1)
-
-#   def value(self):
-#     return self.v
-
-#   def update(self, signal):
-#     if self.ie.had_edge(0, 1):
-#       self.v = self.di.value()
-#     self.state <<= self.v
-#     if self.oe.value():
-#       self.do <<= self.v
-#     else:
-#       self.do <<= None
 
 
 class SplitRegister(Component):

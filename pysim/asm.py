@@ -6,17 +6,21 @@
 
 
 import collections
-from lark import Lark, Transformer
+from lark import Lark
 from lark.lexer import UnexpectedInput
 
-l = Lark(open('asm.g').read())
+l = Lark(open('asm.g').read(), parser='earley', lexer='auto')
 
-class AssemblerTransformer(Transformer):
+class AssemblerTransformer():
   def __init__(self, assembler):
     self.assembler = assembler
     self.labels = collections.defaultdict(Assembler.Label)
 
-  def number(self, token):
+  def transform(self, ast):
+    for op in ast.children:
+      self.op(op.children)
+
+  def parse_number(self, token):
     if token.type != 'NUMBER':
       raise ValueError(f'Invalid number token type {token.type} "{token}"')
     if token.startswith('0x'):
@@ -33,16 +37,16 @@ class AssemblerTransformer(Transformer):
       m = m[1:]
 
     if m[0].type == 'OP_LOAD':
-      self.assembler.load(m[1], self.number(m[2]))
+      self.assembler.load(m[1], self.parse_number(m[2]))
     elif m[0].type == 'OP_LOAD8':
-      self.assembler.load8(m[1], self.number(m[2]))
+      self.assembler.load8(m[1], self.parse_number(m[2]))
     elif m[0].type == 'OP_LOAD16':
       if m[2].type == 'LABEL':
         l = self.labels[m[2]]
         l.name = m[2]
         self.assembler.loadlabel(m[1], l)
       else:
-        self.assembler.load16(m[1], self.number(m[2]))
+        self.assembler.load16(m[1], self.parse_number(m[2]))
     elif m[0].type == 'OP_MOV':
       self.assembler.mov(m[1], m[2])
     elif m[0].type == 'OP_MOV16':
