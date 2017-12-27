@@ -1,3 +1,7 @@
+# Represents a set of connected pins with optional pull up/down.
+# Not used directly - when pins connect they create/merge nets.
+# When a pin changes state (e.g. into hi-z mode or driving high/low) it calls update
+# which will update all connected pins.
 class Net():
   net_updates = 0
 
@@ -8,37 +12,52 @@ class Net():
   def name(self):
     return '/'.join(p.fullname() for p in self._pins)
 
+  # Gets a driving pin on this net.
   def driver(self):
     for p in self._pins:
       if not p.is_hiz():
+        # Always return the first one. It's not uncommon for there to be multiple drivers
+        # while updates propogate, but it should stabilize.
         return p
-    #print(f'Multiple drivers for net "{self.name()}" -- "{d.fullname()}" and "{p.fullname()}"')
     return None
 
+  # Called by a pin that is changing state.
   def update(self):
     d = self.driver()
+
+    # Will be None or 0/1.
     v = self._pull
+
+    # If there's no driver and no pull up/down (i.e. the net is floating), then there's
+    # nothing to propogate.
+    # TODO: this would be worth adding a warning for.
     if not d and not v:
       return
-      #raise Exception(f'Floating net with no pull-up/down "{self.name()}"')
+
     Net.net_updates += 1
     if d:
       v = d.value()
+
+    # Update all hi-z pins to match the state of the driving pin on this net.
     for p in self._pins:
       if p.is_hiz():
         p.update(v)
 
+  # Add a pin to this net.
   def append(self, p):
     if p in self._pins:
       raise Exception(f'Pin "{p.fullname()}" already in net "{self.name()}"')
     p._net = self
     self._pins.append(p)
 
+  # Merge this net with another (i.e. they share a pin in common).
   def merge(self, n):
     for p in n._pins:
       self.append(p)
 
 
+# Represents a single wire of a signal (conceptually a single pin of an IC).
+# Pins can be wired together into Nets.
 class Pin():
   def __init__(self, name, signal):
     self._name = name
@@ -106,6 +125,9 @@ class Pin():
     return self.__iadd__(other)
 
 
+# Represents a subset of pins of a signal.
+# Typically a Signal's default SignalView will be used which contains all pins.
+# A SignalView is useful when individual lines from a bus need to be accessed.
 class SignalView():
   def __init__(self, signal, pins):
     self._signal = signal
@@ -148,6 +170,8 @@ class SignalView():
     return len(self._pins)
 
 
+# Represents a collection of pins on a component.
+# i.e. an 8-bit parallel input would be a signal containing 8 pins.
 class Signal():
   def __init__(self, component, name, width):
     self._pins = []
@@ -210,6 +234,7 @@ class Signal():
     return len(self._pins)
 
 
+# A special case of Signal that notifies the parent component when updated.
 class NotifySignal(Signal):
   def __init__(self, component, name, width):
     super().__init__(component, name, width)
