@@ -425,6 +425,23 @@ class Display(Component):
       print('{{}} {{:0{}b}}'.format(len(self.data)).format(self.name(), self.last))
 
 
+class Adder(Component):
+  def __init__(self, w):
+    super().__init__('adder')
+    self.a = NotifySignal(self, 'a', w)
+    self.b = NotifySignal(self, 'b', w)
+    self.out = Signal(self, 'out', w)
+    self.c = Signal(self, 'c', 1)
+
+  def update(self, signal):
+    out = self.a.value() + self.b.value()
+    if out >= 2**len(self.a):
+      self.c <<= 1
+    else:
+      self.c <<= 0
+    self.out <<= (out % (2**len(self.a)))
+
+
 def main():
   clk = Clock(1)
   counter = Counter(8)
