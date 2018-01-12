@@ -20,7 +20,7 @@ def main():
     c.reset()
 
   # should be 1100 (12)
-  print('0b{:04b} (0x{:02x})'.format(adder.out.value(), adder.out.value()))
+  print(f'0b{adder.out.value():04b} (0x{adder.out.value():02x})')
 
 
 if __name__ == '__main__':

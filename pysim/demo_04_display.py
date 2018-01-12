@@ -19,7 +19,7 @@ def main():
 
   try:
     for i in range(16):
-      # print('0b{:04b} 0x{:02x} -- 0x{:02x}'.format(clk.clk.value(), clk.clk.value(), counter.out.value()))
+      # print(f'0b{clk.clk.value():04b} 0x{clk.clk.value():02x} -- 0x{counter.out.value():02x}')
       clk.tick()
   except KeyboardInterrupt:
     pass
