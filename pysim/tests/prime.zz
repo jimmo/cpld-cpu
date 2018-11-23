@@ -15,6 +15,17 @@ mod_done:
 ret
 
 
+mul:
+c = 0
+mul_loop:
+if b == 0 goto mul_done
+c = c + a
+b = b - 1
+goto mul_loop
+mul_done:
+ret
+
+
 is_prime:
 b = 2
 call mod
@@ -37,7 +48,12 @@ ret
 
 
 main:
-a = 29 # 143
+a = 7
+b = 11
+call mul
+a = c
+#a = 17 * 31
+#a = 29 # 143
 call is_prime
 
 hlt

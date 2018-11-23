@@ -1,8 +1,7 @@
 import collections
 import sys
 
-from lark import Lark, Transformer, Tree
-from lark.lexer import UnexpectedInput
+from lark import Lark, Transformer, Tree, UnexpectedInput
 
 from asm import Assembler
 

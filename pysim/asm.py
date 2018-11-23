@@ -6,8 +6,7 @@
 
 
 import collections
-from lark import Lark
-from lark.lexer import UnexpectedInput
+from lark import Lark, UnexpectedInput
 
 l = Lark(open('asm.g').read(), parser='earley', lexer='auto')
 
