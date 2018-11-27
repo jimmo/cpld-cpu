@@ -8,7 +8,7 @@
 import collections
 from lark import Lark, UnexpectedInput
 
-l = Lark(open('asm.g').read(), parser='earley', lexer='auto')
+l = Lark(open('v1/asm.g').read(), parser='earley', lexer='auto')
 
 class AssemblerTransformer():
   def __init__(self, assembler):
@@ -85,8 +85,8 @@ class Assembler:
   MEM_READ = 0
   MEM_WRITE = 1<<1
 
-  def __init__(self, rom, addr):
-    self.rom = rom
+  def __init__(self, data, addr):
+    self.data = data
     self.addr = addr
     self.labels = set()
 
@@ -97,7 +97,7 @@ class Assembler:
       self.fixups = []
 
   def write(self, instr):
-    self.rom.rom[self.addr] = instr
+    self.data[self.addr] = instr
     self.addr += 1
 
   def __enter__(self):
@@ -117,7 +117,7 @@ class Assembler:
 
   def placeholder(self, n, label, fixup):
     self.labels.add(label)
-    a = Assembler(self.rom, self.addr)
+    a = Assembler(self.data, self.addr)
     label.fixups.append(lambda: fixup(a))
     self.addr += n
 

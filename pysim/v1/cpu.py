@@ -1,6 +1,6 @@
 import sys
 from sim import Component, Signal, NotifySignal, Net, Register, SplitRegister, BusConnect, Clock, Ram, Rom, Power
-from asm import Assembler
+from v1.asm import Assembler
 
 
 class Logic(Component):
@@ -475,7 +475,7 @@ def main():
   print('Loading ROM...')
 
   n = 0
-  with Assembler(rom, 0) as a:
+  with Assembler(rom.rom, 0) as a:
     if not a.parse(sys.argv[1]):
       return
     a.hlt()

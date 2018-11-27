@@ -147,9 +147,9 @@ class SignalView():
     else:
       v = int(v)
       if v < 0:
-        raise Exception('invalid value -- underflow')
+        raise Exception('invalid value -- {} < 0 for {}'.format(v, self.name()))
       elif v >= self._max:
-        raise Exception('invalid value -- overflow')
+        raise Exception('invalid value -- {} > {} for {}'.format(v, self._max, self.name()))
       for p in self._pins:
         p <<= (v & 1)
         v >>= 1
@@ -403,7 +403,7 @@ class Ram(Component):
 
   def update(self, signal):
     if self.ie.had_edge(0, 1):
-      #print('write ram addr', hex(self.addr.value()), 'value', hex(self.data.value()))
+      # print('write ram addr', hex(self.addr.value()), 'value', hex(self.data.value()))
       self.ram[self.addr.value()] = self.data.value()
 
     if self.oe.value():
