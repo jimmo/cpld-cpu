@@ -1,7 +1,7 @@
 import collections
 from lark import Lark, UnexpectedInput
 
-l = Lark(open('tinycpu/asm.g').read(), parser='earley', lexer='auto')
+l = Lark(open('indexcpu/asm.g').read(), parser='earley', lexer='auto')
 
 class AssemblerTransformer():
   def __init__(self, assembler):
@@ -33,23 +33,43 @@ class AssemblerTransformer():
       self.assembler.add(self.assembler.create_label(m[1]))
     elif m[0].type == 'OP_STA':
       self.assembler.sta(self.assembler.create_label(m[1]))
-    elif m[0].type == 'OP_JCC':
-      self.assembler.jcc(self.assembler.create_label(m[1]))
     elif m[0].type == 'OP_CLR':
       self.assembler.nor(self.assembler.create_label('allone'))
     elif m[0].type == 'OP_LDA':
       self.assembler.lda(self.assembler.create_label(m[1]))
     elif m[0].type == 'OP_NOT':
       self.assembler.nor(self.assembler.create_label('zero'))
+    elif m[0].type == 'OP_SUB':
+      self.assembler.nor(self.assembler.create_label('zero'))
+      self.assembler.add(self.assembler.create_label(m[1]))
+      self.assembler.nor(self.assembler.create_label('zero'))
+    elif m[0].type == 'OP_NORX':
+      self.assembler.norx(self.assembler.create_label(m[1]))
+    elif m[0].type == 'OP_ADDX':
+      self.assembler.addx(self.assembler.create_label(m[1]))
+    elif m[0].type == 'OP_STX':
+      self.assembler.stx(self.assembler.create_label(m[1]))
+    elif m[0].type == 'OP_CLRX':
+      self.assembler.norx(self.assembler.create_label('allone'))
+    elif m[0].type == 'OP_LDX':
+      self.assembler.ldx(self.assembler.create_label(m[1]))
+    elif m[0].type == 'OP_NOTX':
+      self.assembler.norx(self.assembler.create_label('zero'))
+    elif m[0].type == 'OP_SUBX':
+      self.assembler.norx(self.assembler.create_label('zero'))
+      self.assembler.addx(self.assembler.create_label(m[1]))
+      self.assembler.norx(self.assembler.create_label('zero'))
+    elif m[0].type == 'OP_JCC':
+      self.assembler.jcc(self.assembler.create_label(m[1]))
+    elif m[0].type == 'OP_JNZ':
+      self.assembler.jnz(self.assembler.create_label(m[1]))
     elif m[0].type == 'OP_JMP':
       self.assembler.jcc(self.assembler.create_label(m[1]))
       self.assembler.jcc(self.assembler.create_label(m[1]))
     elif m[0].type == 'OP_JCS':
       self.assembler.jcs(self.assembler.create_label(m[1]))
-    elif m[0].type == 'OP_SUB':
-      self.assembler.nor(self.assembler.create_label('zero'))
-      self.assembler.add(self.assembler.create_label(m[1]))
-      self.assembler.nor(self.assembler.create_label('zero'))
+    elif m[0].type == 'OP_JZ':
+      self.assembler.jz(self.assembler.create_label(m[1]))
     elif m[0].type == 'OP_HLT':
       self.assembler.hlt()
     elif m[0].type == 'OP_OUT':
@@ -62,12 +82,17 @@ class AssemblerTransformer():
       raise ValueError(f'Unknown op: {m}')
 
 class Assembler:
-  PREFIX_NOR = 0b00000000
-  PREFIX_ADD = 0b01000000
-  PREFIX_STA = 0b10000000
-  PREFIX_JCC = 0b11000000
+  PREFIX_NOR =  0b00000000
+  PREFIX_ADD =  0b00100000
+  PREFIX_STA =  0b01000000
+  PREFIX_JCC =  0b01100000
+  PREFIX_NORX = 0b10000000
+  PREFIX_ADDX = 0b10100000
+  PREFIX_STX = 0b11000000
+  PREFIX_JNZ =  0b11100000
 
   def __init__(self, data, addr):
+    print(len(data))
     self.data = data
     self.addr = addr
     self.labels = set()
@@ -93,7 +118,7 @@ class Assembler:
     return self
 
   def __exit__(self, a, b, c):
-    self.addr = 59
+    self.addr = 2**5 - 5
     self.label(self.create_label('display'))
     self.dcb(0)
     self.label(self.create_label('trigger'))
@@ -135,22 +160,53 @@ class Assembler:
     self.placeholder(label)
     self.write(Assembler.PREFIX_STA)
   
+  def lda(self, label):
+    print('  lda {}'.format(label.name))
+    self.nor(self.create_label('allone'))
+    self.add(label)
+    
+  def norx(self, label):
+    print('norx {}'.format(label.name))
+    self.placeholder(label)
+    self.write(Assembler.PREFIX_NORX)
+  
+  def addx(self, label):
+    print('addx {}'.format(label.name))
+    self.placeholder(label)
+    self.write(Assembler.PREFIX_ADDX)
+  
+  def stx(self, label):
+    print('stx {}'.format(label.name))
+    self.placeholder(label)
+    self.write(Assembler.PREFIX_STX)
+  
+  def ldx(self, label):
+    print('  ldx {}'.format(label.name))
+    self.norx(self.create_label('allone'))
+    self.addx(label)
+
   def jcc(self, label):
     print('jcc {}'.format(label.name))
     self.placeholder(label)
     self.write(Assembler.PREFIX_JCC)
 
-  def lda(self, label):
-    self.nor(self.create_label('allone'))
-    self.add(label)
-
   def jcs(self, label):
-    print('jcs {}'.format(label.name))
+    print('  jcs {}'.format(label.name))
     self.write(Assembler.PREFIX_JCC | (self.addr + 2))
     self.jcc(label)
   
+  def jnz(self, label):
+    print('jnz {}'.format(label.name))
+    self.placeholder(label)
+    self.write(Assembler.PREFIX_JNZ)
+
+  def jz(self, label):
+    print('  jz {}'.format(label.name))
+    self.write(Assembler.PREFIX_JNZ | (self.addr + 2))
+    self.jnz(label)
+  
   def hlt(self):
-    print('hlt')
+    print('  hlt')
     self.write(Assembler.PREFIX_JCC | self.addr)
     self.write(Assembler.PREFIX_JCC | self.addr)
 

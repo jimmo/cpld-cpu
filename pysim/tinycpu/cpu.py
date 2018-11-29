@@ -1,5 +1,5 @@
 import sys
-from sim import Component, Signal, NotifySignal, Net, Register, SplitRegister, BusConnect, Clock, Ram, Rom, Power
+from sim import Component, Signal, NotifySignal, Net, Register, SplitRegister, BusConnect, Clock, Ram, Rom, Power, MemDisplay
 from tinycpu.asm import Assembler
 
 # Implements https://github.com/cpldcpu/MCPU
@@ -14,6 +14,8 @@ from tinycpu.asm import Assembler
 # zero      --> 0x00
 # one       --> 0x01
 # allone    --> 0xff
+# _tmp1     --> 0x..
+# _tmp2     --> 0x..
 
 # Derived ops
 # clr       --> nor allone
@@ -21,13 +23,45 @@ from tinycpu.asm import Assembler
 # not       --> nor zero
 # jmp dest  --> jcc dest, jcc dest
 # jcs dest  --> jcc *+2, jcc dest
-# sub addr  --> not, add addr, add one
+# sub addr  --> not, add addr, not
 
 # More derived ops
 # shl addr  --> lda addr, add addr
 
+# More logic ops: https://en.wikipedia.org/wiki/NOR_logic
+# or addr   --> nor addr, not
+# and addr  --> not, sta _tmp1, lda addr, not, nor _tmp1
+# nand addr --> and addr, not
+# xnor addr --> sta _tmp1, nor addr, sta _tmp2, nor _tmp1, sta _tmp1, lda _tmp2, nor addr, nor _tmp1
+# xor addr  --> sta _tmp1, not, nor addr, sta _tmp2, lda addr, not, nor _tmp1, nor _tmp2
+
 # xxdd dddd  (6-bit addressing --> 64 bytes RAM)
 
+# Clock | States | ie | oe
+
+# Fetch
+#  0    |  000   | 0  | 1
+#  /
+#  1    |  000   | 0  | 0
+
+# Store Acc
+#  0    |  001   | 1  | 0
+#  /
+#  1    |  001   | 0  | 0
+
+# Add
+#  0    |  010   | 0  | 1
+#  /
+#  1    |  010   | 0  | 0
+
+# Nor
+#  0    |  011   | 0  | 1
+#  /
+#  1    |  011   | 0  | 0
+
+# Branch not taken
+#  0    |  101   | 0  | 0
+#  1    |  101   | 0  | 0
 
 class Decoder(Component):
   def __init__(self):
@@ -58,9 +92,16 @@ class Decoder(Component):
 
       # ALU / Data Path
       if self.states == 0b010:
+        # print('  add a {} + {}'.format(self.acc, self.data.value()))
         self.acc = ((self.acc & 0xff) + self.data.value()) & 0x1ff
+        # print('    = {}'.format(self.acc))
       elif self.states == 0b011:
-        self.acc = ~((self.acc & 0xff) | self.data.value()) & 0xff
+        # print('  nor a {} + {}'.format(self.acc, self.data.value()))
+        carry = self.acc & 0b100000000
+        value = self.acc & 0xff
+        nor = (~(value | self.data.value())) & 0xff
+        self.acc = carry | nor
+        # print('    = {}'.format(self.acc))
       elif self.states == 0b101:
         # Clear carry
         self.acc = self.acc & 0xff
@@ -79,23 +120,6 @@ class Decoder(Component):
     self.oe <<= 0 if (clk == 1 or self.states == 0b001 or self.states == 0b101) else 1
     self.ie <<= 0 if (clk == 1 or self.states != 0b001) else 1
 
-    
-class MemDisplay(Component):
-  def __init__(self, addr_width=16, data_width=8, data_addr=0, trigger_addr=0):
-    super().__init__('mem display')
-    self.data_addr = data_addr
-    self.trigger_addr = trigger_addr
-    self.v = 0
-    self.addr = NotifySignal(self, 'addr', addr_width)
-    self.data = Signal(self, 'data', data_width)
-    self.ie = NotifySignal(self, 'ie', 1)
-
-  def update(self, signal):
-    if self.ie.had_edge(0, 1):
-      if self.addr.value() == self.data_addr:
-        self.v = self.data.value()
-      if self.addr.value() == self.trigger_addr and self.data.value() == 1:
-        print(self.v)
 
 
 def main():
@@ -121,9 +145,7 @@ def main():
       return
     asm.hlt()
 
-  print('RAM:')
-  for i in range(0, 64, 16):
-    print('{:02x}: {}'.format(i, ' '.join('{:02x}'.format(b) for b in ram.ram[i:i+16])))
+  ram.stdout()
 
   for c in (
       power,
@@ -143,10 +165,6 @@ def main():
 
       cycles += 1
 
-      # print('RAM:')
-      # for i in range(0, 64, 16):
-      #   print('{:02x}: {}'.format(i, ' '.join('{:02x}'.format(b) for b in ram.ram[i:i+16])))
-
       if dec.pc == last_pc:
         hlt += 1
       else:
@@ -159,9 +177,7 @@ def main():
 
   print(f'Ran for {cycles} cycles and {Net.net_updates} net updates.')
 
-  print('RAM:')
-  for i in range(0, 64, 16):
-    print('{:04x}: {}'.format(i, ' '.join('{:02x}'.format(b) for b in ram.ram[i:i+16])))
+  ram.stdout()
 
 if __name__ == '__main__':
   main()

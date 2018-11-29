@@ -1,8 +1,9 @@
         lda count
-cloop:  add one
+cloop:  out
+        add one
         jcc cloop
 
-done:   jcc done
+        hlt
 
 count:  dcb 250
         

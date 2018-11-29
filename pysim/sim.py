@@ -410,7 +410,13 @@ class Ram(Component):
       #print('read ram addr', hex(self.addr.value()))
       self.data <<= self.ram[self.addr.value()]
     else:
+      self.data <<= 0
       self.data <<= None
+
+  def stdout(self):
+    print('RAM:')
+    for i in range(0, len(self.ram), 16):
+      print('{:02x}: {}'.format(i, ' '.join('{:02x}'.format(b) for b in self.ram[i:i+16])))
 
 
 class Display(Component):
@@ -425,6 +431,26 @@ class Display(Component):
       print('{{}} {{:0{}b}}'.format(len(self.data)).format(self.name(), self.last))
 
 
+class MemDisplay(Component):
+  def __init__(self, addr_width=16, data_width=8, data_addr=0, trigger_addr=0):
+    super().__init__('mem display')
+    self.data_addr = data_addr
+    self.trigger_addr = trigger_addr
+    self.v = 0
+    self.addr = NotifySignal(self, 'addr', addr_width)
+    self.data = Signal(self, 'data', data_width)
+    self.ie = NotifySignal(self, 'ie', 1)
+    self.trigger = 0
+
+  def update(self, signal):
+    if self.ie.had_edge(0, 1):
+      if self.addr.value() == self.data_addr:
+        self.v = self.data.value()
+      if self.addr.value() == self.trigger_addr and self.data.value() != self.trigger:
+        print(self.v)
+        self.trigger = self.data.value()
+
+        
 class Adder(Component):
   def __init__(self, w):
     super().__init__('adder')
