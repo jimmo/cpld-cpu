@@ -1,7 +1,7 @@
 import collections
 from lark import Lark, UnexpectedInput
 
-l = Lark(open('tinycpu/asm.g').read(), parser='earley', lexer='auto')
+l = Lark(open('mcpu/asm.g').read(), parser='earley', lexer='auto')
 
 class AssemblerTransformer():
   def __init__(self, assembler):

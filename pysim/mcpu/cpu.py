@@ -1,6 +1,6 @@
 import sys
 from sim import Component, Signal, NotifySignal, Net, Register, SplitRegister, BusConnect, Clock, Ram, Rom, Power, MemDisplay
-from tinycpu.asm import Assembler
+from mcpu.asm import Assembler
 
 # Implements https://github.com/cpldcpu/MCPU
 

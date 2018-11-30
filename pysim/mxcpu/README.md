@@ -1,4 +1,4 @@
-This is an extension of tinycpu to add an index register, used by `add`, `nor` and `sta`, as well as a 'jnz' conditional jump. The index register can be accessed via the `norx`, `addx` and `stx` instructions, as well as equivalent macro instructions for the accumulator.
+This is an extension of mcpu to add an index register, used by `add`, `nor` and `sta`, as well as adding a 'jnz' conditional jump. The index register can be accessed via the `norx`, `addx` and `stx` instructions, as well as equivalent macro instructions for the accumulator.
 
 Having an index register allows working with arrays without needing self-modifying code.
 
