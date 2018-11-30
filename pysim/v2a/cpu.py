@@ -86,13 +86,14 @@ class Decoder(Component):
   def __init__(self):
     super().__init__('decoder')
     self.clk = NotifySignal(self, 'clk', 1)
-    self.addr = Signal(self, 'addr', 5)
+    self.addr = Signal(self, 'addr', 13)
     self.data = Signal(self, 'data', 8)
     self.ie = Signal(self, 'ie', 1)
     self.oe = Signal(self, 'oe', 1)
     self.acc = 0
     self.x = 0
     self.adreg = 0
+    self.hi5 = 0
     self.pc = 0
     self.state = 0
     self.op = 0
@@ -105,11 +106,15 @@ class Decoder(Component):
 
   def update(self, signal):
     if self.clk.had_edge(0, 1):
-      # print('clock')
+      # print('clock {}'.format(self.state))
       if self.state == 0:
-        self.pc = self.adreg + 1
-        self.adreg = self.data.value()
-      else:
+        self.pc = self.adreg + 2
+        self.adreg = self.adreg + 1
+        self.op = (self.data.value() >> 5) & 0b111
+        self.hi5 = self.data.value() & 0x1f
+      elif self.state == 1:
+        self.adreg = (self.hi5 << 8) | self.data.value()
+      elif self.state == 2:
         self.adreg = self.pc
 
         # ALU / Data Path
@@ -134,50 +139,68 @@ class Decoder(Component):
           nor = (~(value | self.data.value())) & 0xff
           self.x = carry | nor
         elif (self.op & Decoder.MASK_OP) == Decoder.OP_J:
-          # Clear carry
+          # Clear carry on all non-taken jumps.
           # print('  j not taken')
           self.acc = self.acc & 0xff
         elif (self.op & Decoder.MASK_OP) == Decoder.OP_ST:
           # print('  sta / stx')
           pass
         else:
-          print('  unknown state')
+          print('  unknown op')
+      else:
+        print('unknown state')
 
       # State machine
-      if self.state != 0:
-        self.state = 0
-      elif ((self.data.value() >> 5) & Decoder.MASK_OP) == Decoder.OP_J:
-        # print('  maybe jump {} {}'.format(self.acc >> 8, self.acc))
-        if (self.data.value() >> 5) & Decoder.MASK_REG == Decoder.REG_A and (self.acc & 0b100000000):
-          # print('  jcc not taken')
-          self.op = 0b011
-          self.state = 1
-        elif (self.data.value() >> 5) & Decoder.MASK_REG == Decoder.REG_X and not self.acc:
-          # print('  jnz not taken')
-          self.op = 0b111
-          self.state = 1
-        else:
-          # print('  branch taken')
-          pass
-      else:
-        # print('  going to state {:03b}'.format((self.data.value() >> 5) & 0b111))
-        self.op = (self.data.value() >> 5) & 0b111
+      if self.state == 0:
+        # print('get next byte')
         self.state = 1
-        if  (self.data.value() >> 5) & Decoder.MASK_REG == 0:
-          # print('offset by x', self.x)
-          self.adreg += self.x
+      elif self.state == 2:
+        self.state = 0
+      elif self.state == 1:
+        if (self.op & Decoder.MASK_OP) == Decoder.OP_J:
+          # print('  maybe jump {} {}'.format(self.acc >> 8, self.acc))
+          if self.op & Decoder.MASK_REG == Decoder.REG_A and (self.acc & 0b100000000):
+            # print('  jcc not taken')
+            self.state = 2
+          elif self.op & Decoder.MASK_REG == Decoder.REG_X and (self.acc & 0xff) == 0:
+            # print('  jnz not taken')
+            self.state = 2
+          else:
+            # print('  branch taken')
+            self.state = 0
+        else:
+          self.state = 2
+          # print('  going to state={} op={:03b}'.format(self.state, self.op))
+          if self.op & Decoder.MASK_REG == 0:
+            # print('offset by x', self.x)
+            self.adreg += self.x
+      else:
+        print('unknown state')
 
     clk = self.clk.value()
-    self.addr <<= self.adreg & 0x1f
-    if self.state == 1 and self.op == Decoder.REG_A | Decoder.OP_ST:
+    # print('addr: {:04x}'.format(self.adreg & 0x1fff))
+    self.addr <<= self.adreg & 0x1fff
+
+    if self.state == 2 and self.op == Decoder.REG_A | Decoder.OP_ST:
       self.data <<= self.acc & 0xff
-    elif self.state == 1 and self.op == Decoder.REG_X | Decoder.OP_ST:
+    elif self.state == 2 and self.op == Decoder.REG_X | Decoder.OP_ST:
       self.data <<= self.x & 0xff
     else:
       self.data <<= None
-    self.oe <<= 0 if (clk == 1 or (self.state == 1 and (self.op & Decoder.MASK_OP) == Decoder.OP_ST)) else 1
-    self.ie <<= 0 if (clk == 1 or (self.state == 1 and (self.op & Decoder.MASK_OP) != Decoder.OP_ST)) else 1
+      
+    if clk == 1:
+      self.oe <<= 0
+      self.ie <<= 0
+    else:
+      if self.state == 2 and (self.op & Decoder.MASK_OP) == Decoder.OP_ST:
+        self.oe <<= 0
+      else:
+        self.oe <<= 1
 
+      if self.state == 2 and (self.op & Decoder.MASK_OP) == Decoder.OP_ST:
+        self.ie <<= 1
+      else:
+        self.ie <<= 0
 
 
 def main():
@@ -185,8 +208,8 @@ def main():
 
   dec = Decoder()
   
-  ram = Ram(addr_width=5)
-  out = MemDisplay(addr_width=5, data_addr=2**5-5, trigger_addr=2**5-4)
+  ram = Ram(addr_width=13)
+  out = MemDisplay(addr_width=13, data_addr=2**12-5, trigger_addr=2**12-4)
   clk = Clock(1)
 
   dec.clk += clk.clk
@@ -228,7 +251,7 @@ def main():
       else:
         hlt = 0
       last_pc = dec.pc
-      if hlt > 4:
+      if hlt > 10:# or cycles > 60:
         break
   except KeyboardInterrupt:
     pass

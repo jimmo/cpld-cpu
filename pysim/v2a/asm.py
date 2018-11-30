@@ -82,14 +82,14 @@ class AssemblerTransformer():
       raise ValueError(f'Unknown op: {m}')
 
 class Assembler:
-  PREFIX_NOR =  0b00000000
-  PREFIX_ADD =  0b00100000
-  PREFIX_STA =  0b01000000
-  PREFIX_JCC =  0b01100000
-  PREFIX_NORX = 0b10000000
-  PREFIX_ADDX = 0b10100000
-  PREFIX_STX = 0b11000000
-  PREFIX_JNZ =  0b11100000
+  PREFIX_NOR =  0b00000000_00000000
+  PREFIX_ADD =  0b00100000_00000000
+  PREFIX_STA =  0b01000000_00000000
+  PREFIX_JCC =  0b01100000_00000000
+  PREFIX_NORX = 0b10000000_00000000
+  PREFIX_ADDX = 0b10100000_00000000
+  PREFIX_STX = 0b11000000_00000000
+  PREFIX_JNZ =  0b11100000_00000000
 
   def __init__(self, data, addr):
     print(len(data))
@@ -111,14 +111,15 @@ class Assembler:
       self.fixups = []
 
   def write(self, instr):
-    self.data[self.addr] = instr
-    self.addr += 1
+    self.data[self.addr] = instr >> 8
+    self.data[self.addr+1] = instr & 0xff
+    self.addr += 2
 
   def __enter__(self):
     return self
 
   def __exit__(self, a, b, c):
-    self.addr = 2**5 - 5
+    self.addr = 2**12 - 5
     self.label(self.create_label('display'))
     self.dcb(0)
     self.label(self.create_label('trigger'))
@@ -134,7 +135,8 @@ class Assembler:
       if l.addr is None:
         raise ValueError(f'Undefined label "{l.name}"')
       for f in l.fixups:
-        self.data[f] |= l.addr
+        self.data[f] |= (l.addr >> 8) & 0x1f
+        self.data[f+1] |= l.addr & 0xff
 
   def label(self, l):
     if l.addr is not None:
@@ -192,7 +194,7 @@ class Assembler:
 
   def jcs(self, label):
     print('  jcs {}'.format(label.name))
-    self.write(Assembler.PREFIX_JCC | (self.addr + 2))
+    self.write(Assembler.PREFIX_JCC | (self.addr + 4))
     self.jcc(label)
   
   def jnz(self, label):
@@ -202,8 +204,8 @@ class Assembler:
 
   def jz(self, label):
     print('  jz {}'.format(label.name))
-    self.write(Assembler.PREFIX_JNZ | (self.addr + 2))
-    self.jnz(label)
+    self.write(Assembler.PREFIX_JNZ | (self.addr + 4))
+    self.jcc(label)
   
   def hlt(self):
     print('  hlt')
@@ -212,7 +214,8 @@ class Assembler:
 
   def dcb(self, v):
     print('dcb 0x{:02x} (at 0x{:02x})'.format(v, self.addr))
-    self.write(v)
+    self.data[self.addr] = v & 0xff
+    self.addr += 1
 
   def parse(self, path):
     with open(path) as f:

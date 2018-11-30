@@ -407,7 +407,7 @@ class Ram(Component):
       self.ram[self.addr.value()] = self.data.value()
 
     if self.oe.value():
-      #print('read ram addr', hex(self.addr.value()))
+      # print('read ram addr', hex(self.addr.value()))
       self.data <<= self.ram[self.addr.value()]
     else:
       self.data <<= 0
@@ -415,8 +415,15 @@ class Ram(Component):
 
   def stdout(self):
     print('RAM:')
+    skip = False
     for i in range(0, len(self.ram), 16):
-      print('{:02x}: {}'.format(i, ' '.join('{:02x}'.format(b) for b in self.ram[i:i+16])))
+      if sum(self.ram[i:i+16]) == 0:
+        if not skip:
+          print('      ...')
+        skip = True
+        continue
+      skip = False
+      print('{:04x}: {}'.format(i, ' '.join('{:02x}'.format(b) for b in self.ram[i:i+16])))
 
 
 class Display(Component):

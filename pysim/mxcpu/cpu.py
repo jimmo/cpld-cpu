@@ -142,7 +142,7 @@ class Decoder(Component):
         if not (self.data.value() & 0b10000000) and (self.acc & 0b100000000):
           # print('  jcc not taken')
           self.states = 0b1101
-        elif (self.data.value() & 0b10000000) and not self.acc:
+        elif (self.data.value() & 0b10000000) and (self.acc & 0xff) == 0:
           # print('  jnz not taken')
           self.states = 0b1101
         else:

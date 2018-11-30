@@ -13,7 +13,7 @@ loop:   sub one
 
 hlt
 
-count:  dcb 11
+count:  dcb 255
 offset: dcb 0
 result: dcb 0
         # And 10 more uninitialized bytes.
