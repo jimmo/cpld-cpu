@@ -1,5 +1,5 @@
 import sys
-from sim import Component, Signal, NotifySignal, Net, Register, SplitRegister, BusConnect, Clock, Ram, Rom, Power, MemDisplay
+from sim import Component, Signal, NotifySignal, Net, Register, SplitRegister, BusConnect, Clock, Ram, Rom, Power, MemDisplay, PagedRamController
 from v2a.asm import Assembler
 
 # Based originally on https://github.com/cpldcpu/MCPU
@@ -208,15 +208,21 @@ def main():
 
   dec = Decoder()
   
-  ram = Ram(addr_width=13)
-  out = MemDisplay(addr_width=13, data_addr=2**12-5, trigger_addr=2**12-4)
+  ram = Ram(addr_width=20)
+  paged_ram = PagedRamController(addr_width=13, num_pages=2, reg_base_addr=2**12-7)
+  out = MemDisplay(addr_width=12, data_addr=2**12-5, trigger_addr=2**12-4)
   clk = Clock(1)
 
   dec.clk += clk.clk
-  ram.addr += dec.addr + out.addr
-  ram.data += dec.data + out.data
+
+  paged_ram.in_addr[0:12] += ram.addr[0:12] + dec.addr[0:12] + out.addr
+  paged_ram.in_addr[12] += dec.addr[12]
+  ram.addr[12:20] += paged_ram.out_addr
+  
+  ram.data += dec.data + out.data + paged_ram.data
+  
   ram.oe += dec.oe
-  ram.ie += dec.ie + out.ie
+  ram.ie += dec.ie + out.ie + paged_ram.ie
 
   print('Loading RAM...')
 
@@ -224,7 +230,6 @@ def main():
   with Assembler(ram.ram, 0) as asm:
     if not asm.parse(sys.argv[1]):
       return
-    asm.hlt()
 
   ram.stdout()
 

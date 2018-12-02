@@ -1,4 +1,4 @@
-start: op+
+start: statement+
 
 LABEL_CHAR: "a".."z"|"0".."9"|"_"
 LABEL: ("a".."z"|"_") LABEL_CHAR+
@@ -7,6 +7,9 @@ DEC_NUMBER: /[1-9]\d*l?/i
 HEX_NUMBER: /0x[\da-f]*l?/i
 OCT_NUMBER: /0o?[0-7]*l?/i
 NUMBER: DEC_NUMBER | HEX_NUMBER | OCT_NUMBER
+
+CMD_ORG: "org"
+CMD_PAGE: "page"
 
 OP_DCB: "dcb"
 
@@ -35,6 +38,11 @@ OP_JZ: "jz"
 OP_HLT: "hlt"
 
 OP_OUT: "out"
+
+statement: cmd | op
+
+cmd: (CMD_ORG NUMBER
+        | CMD_PAGE LABEL NUMBER)
 
 op: [LABEL ":"] (OP_DCB NUMBER
         | OP_NOR LABEL

@@ -1,3 +1,5 @@
+import math
+
 # Represents a set of connected pins with optional pull up/down.
 # Not used directly - when pins connect they create/merge nets.
 # When a pin changes state (e.g. into hi-z mode or driving high/low) it calls update
@@ -418,14 +420,41 @@ class Ram(Component):
     skip = False
     for i in range(0, len(self.ram), 16):
       if sum(self.ram[i:i+16]) == 0:
-        if not skip:
-          print('      ...')
         skip = True
         continue
+      if skip:
+        print('      ...')
       skip = False
       print('{:04x}: {}'.format(i, ' '.join('{:02x}'.format(b) for b in self.ram[i:i+16])))
 
 
+class PagedRamController(Component):
+  def __init__(self, addr_width=13, num_pages=2, reg_base_addr=None, data_width=8):
+    super().__init__('pageed-ram')
+    self.addr_width = addr_width
+    self.page_width = int(math.log2(num_pages))
+    self.page_size = 2**(addr_width - self.page_width)
+    if reg_base_addr is None:
+      self.reg_base_addr = self.page_size - num_pages
+    else:
+      self.reg_base_addr = reg_base_addr
+    self.num_pages = num_pages
+    self.in_addr = NotifySignal(self, 'in_addr', addr_width)
+    self.out_addr = Signal(self, 'out_addr', data_width)
+    self.data = Signal(self, 'data', data_width)
+    self.ie = NotifySignal(self, 'ie', 1)
+    self.pages = [0] * num_pages
+
+  def update(self, signal):
+    if self.ie.had_edge(0, 1):
+      page = self.in_addr.value() - self.reg_base_addr
+      if page >= 0 and page < self.num_pages:
+        print('Page {} = {:02x}'.format(page, self.data.value()))
+        self.pages[page] = self.data.value()
+
+    self.out_addr <<= self.pages[self.in_addr.value() >> (self.addr_width - self.page_width)]
+
+        
 class Display(Component):
   def __init__(self, n, w):
     super().__init__(n)

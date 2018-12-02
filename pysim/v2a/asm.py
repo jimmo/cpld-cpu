@@ -8,8 +8,15 @@ class AssemblerTransformer():
     self.assembler = assembler
 
   def transform(self, ast):
-    for op in ast.children:
-      self.op(op.children)
+    for statement in ast.children:
+      if statement.data == 'statement':
+        statement = statement.children[0]
+        if statement.data == 'cmd':
+          self.cmd(statement.children)
+        elif statement.data == 'op':
+          self.op(statement.children)
+        else:
+          raise ValueError('Unknown statment', statement)
 
   def parse_number(self, token):
     if token.type != 'NUMBER':
@@ -20,6 +27,14 @@ class AssemblerTransformer():
       return int(token, 8)
     return int(token, 10)
 
+  def cmd(self, m):
+    if m[0].type == 'CMD_ORG':
+      self.assembler.org(self.parse_number(m[1]))
+    elif m[0].type == 'CMD_PAGE':
+      self.assembler.page(m[1], self.parse_number(m[2]))
+    else:
+      raise ValueError(f'Unknown command: {m}')
+  
   def op(self, m):
     if m[0].type == 'LABEL':
       self.assembler.label(self.assembler.create_label(m[0]))
@@ -93,129 +108,180 @@ class Assembler:
 
   def __init__(self, data, addr):
     print(len(data))
-    self.data = data
-    self.addr = addr
-    self.labels = set()
-    self.labels_by_name = collections.defaultdict(Assembler.Label)
+    self._data = data
+    self._offset = 0
+    self._page = None
+    self._pages = []
+    self._labels = set()
+    self._labels_by_name = collections.defaultdict(Assembler.Label)
 
   def create_label(self, name):
-    l = self.labels_by_name[name]
-    l.name = name
-    self.labels.add(l)
+    l = self._labels_by_name[name]
+    l._name = name
+    self._labels.add(l)
     return l
 
   class Label:
     def __init__(self):
-      self.addr = None
-      self.name = None
-      self.fixups = []
+      self._offset = None
+      self._page = None
+      self._name = None
+      self._fixups = []
+      self._special = False
 
-  def write(self, instr):
-    self.data[self.addr] = instr >> 8
-    self.data[self.addr+1] = instr & 0xff
-    self.addr += 2
+    def addr(self):
+      return self._offset | (self._page._target << 12)
+
+  class Page:
+    def __init__(self):
+      self._name = None
+      self._num = None
+      self._target = None
+
+    def linear(self, offset=0):
+      return self._num * 0x1000 + offset
+
+  def write_instr(self, instr):
+    self._data[self._page.linear(self._offset)] = instr >> 8
+    self._data[self._page.linear(self._offset+1)] = instr & 0xff
+    self._offset += 2
+
+  def write_byte(self, b):
+    self._data[self._page.linear(self._offset)] = b & 0xff
+    self._offset += 1
 
   def __enter__(self):
+    self.page('default', 0)
     return self
 
   def __exit__(self, a, b, c):
-    self.addr = 2**12 - 5
-    self.label(self.create_label('display'))
-    self.dcb(0)
-    self.label(self.create_label('trigger'))
-    self.dcb(0)
-    self.label(self.create_label('zero'))
-    self.dcb(0)
-    self.label(self.create_label('allone'))
-    self.dcb(0xff)
-    self.label(self.create_label('one'))
-    self.dcb(1)
+    for l in self._labels:
+      print(l._name)
+      if l._offset is None:
+        raise ValueError(f'Undefined label "{l._name}"')
+      for page, offset, is_jump in l._fixups:
+        if is_jump:
+          if page._target == l._page._target and page._num != l._page._num:
+            raise ValueError(f'Same-target jump to {l._name}')
+        else:
+          if page._target == l._page._target and page._num != l._page._num and not l._special:
+            raise ValueError(f'Referecing label {l._name} from a different page in the same bank')
+        linear = page.linear(offset)
+        addr = l.addr()
+        self._data[linear] |= (addr >> 8) & 0x1f
+        self._data[linear+1] |= addr & 0xff
+
+  def org(self, addr):
+    self._offset = addr
+
+  def page(self, name, target):
+    self._page = Assembler.Page()
+    self._page._name = name
+    self._page._num = len(self._pages)
+    self._page._target = target
+    self._pages.append(self._page)
+
+    if target == 0:
+      num_reserved = 2 + 2 + 3
+      self._offset = 2**12 - num_reserved
+      self.label(self.create_label('bank0'), True)
+      self.dcb(0)
+      self.label(self.create_label('bank1'), True)
+      self.dcb(0)
+      self.label(self.create_label('display'), True)
+      self.dcb(0)
+      self.label(self.create_label('trigger'), True)
+      self.dcb(0)
+      self.label(self.create_label('zero'), True)
+      self.dcb(0)
+      self.label(self.create_label('allone'), True)
+      self.dcb(0xff)
+      self.label(self.create_label('one'), True)
+      self.dcb(1)
     
-    for l in self.labels:
-      if l.addr is None:
-        raise ValueError(f'Undefined label "{l.name}"')
-      for f in l.fixups:
-        self.data[f] |= (l.addr >> 8) & 0x1f
-        self.data[f+1] |= l.addr & 0xff
+    self._offset = 0
+        
+  def label(self, l, special=False):
+    if special and self._page._num != 0:
+      return
+    if l._offset is not None:
+      raise ValueError(f'Label redefinition: {l._name}')
+    l._page = self._page
+    l._offset = self._offset
+    l._special = special
 
-  def label(self, l):
-    if l.addr is not None:
-      raise ValueError('Label redefinition')
-    l.addr = self.addr
-
-  def placeholder(self, label):
-    self.labels.add(label)
-    label.fixups.append(self.addr)
+  def placeholder(self, label, is_jump=False):
+    self._labels.add(label)
+    label._fixups.append((self._page, self._offset, is_jump))
 
   def nor(self, label):
-    print('nor {}'.format(label.name))
+    print('nor {}'.format(label._name))
     self.placeholder(label)
-    self.write(Assembler.PREFIX_NOR)
+    self.write_instr(Assembler.PREFIX_NOR)
   
   def add(self, label):
-    print('add {}'.format(label.name))
+    print('add {}'.format(label._name))
     self.placeholder(label)
-    self.write(Assembler.PREFIX_ADD)
+    self.write_instr(Assembler.PREFIX_ADD)
   
   def sta(self, label):
-    print('sta {}'.format(label.name))
+    print('sta {}'.format(label._name))
     self.placeholder(label)
-    self.write(Assembler.PREFIX_STA)
+    self.write_instr(Assembler.PREFIX_STA)
   
   def lda(self, label):
-    print('  lda {}'.format(label.name))
+    print('  lda {}'.format(label._name))
     self.nor(self.create_label('allone'))
     self.add(label)
     
   def norx(self, label):
-    print('norx {}'.format(label.name))
+    print('norx {}'.format(label._name))
     self.placeholder(label)
-    self.write(Assembler.PREFIX_NORX)
+    self.write_instr(Assembler.PREFIX_NORX)
   
   def addx(self, label):
-    print('addx {}'.format(label.name))
+    print('addx {}'.format(label._name))
     self.placeholder(label)
-    self.write(Assembler.PREFIX_ADDX)
+    self.write_instr(Assembler.PREFIX_ADDX)
   
   def stx(self, label):
-    print('stx {}'.format(label.name))
+    print('stx {}'.format(label._name))
     self.placeholder(label)
-    self.write(Assembler.PREFIX_STX)
+    self.write_instr(Assembler.PREFIX_STX)
   
   def ldx(self, label):
-    print('  ldx {}'.format(label.name))
+    print('  ldx {}'.format(label._name))
     self.norx(self.create_label('allone'))
     self.addx(label)
 
   def jcc(self, label):
-    print('jcc {}'.format(label.name))
-    self.placeholder(label)
-    self.write(Assembler.PREFIX_JCC)
+    print('jcc {}'.format(label._name))
+    self.placeholder(label, is_jump=True)
+    self.write_instr(Assembler.PREFIX_JCC)
 
   def jcs(self, label):
-    print('  jcs {}'.format(label.name))
-    self.write(Assembler.PREFIX_JCC | (self.addr + 4))
+    print('  jcs {}'.format(label._name))
+    self.write_instr(Assembler.PREFIX_JCC | (self._page._target << 12) | (self._offset + 4))
     self.jcc(label)
   
   def jnz(self, label):
-    print('jnz {}'.format(label.name))
-    self.placeholder(label)
-    self.write(Assembler.PREFIX_JNZ)
+    print('jnz {}'.format(label._name))
+    self.placeholder(label, is_jump=True)
+    self.write_instr(Assembler.PREFIX_JNZ)
 
   def jz(self, label):
-    print('  jz {}'.format(label.name))
-    self.write(Assembler.PREFIX_JNZ | (self.addr + 4))
+    print('  jz {}'.format(label._name))
+    self.write_instr(Assembler.PREFIX_JNZ | (self._page._target << 12) | (self._offset + 4))
     self.jcc(label)
   
   def hlt(self):
     print('  hlt')
-    self.write(Assembler.PREFIX_JCC | self.addr)
-    self.write(Assembler.PREFIX_JCC | self.addr)
+    self.write_instr(Assembler.PREFIX_JCC | (self._page._target << 12) | self._offset)
+    self.write_instr(Assembler.PREFIX_JCC | (self._page._target << 12) | self._offset)
 
   def dcb(self, v):
-    print('dcb 0x{:02x} (at 0x{:02x})'.format(v, self.addr))
-    self.data[self.addr] = v & 0xff
-    self.addr += 1
+    print('dcb 0x{:02x} (at 0x{:02x})'.format(v, self._offset))
+    self.write_byte(v)
 
   def parse(self, path):
     with open(path) as f:
