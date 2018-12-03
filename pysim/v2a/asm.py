@@ -3,6 +3,8 @@ from lark import Lark, UnexpectedInput
 
 l = Lark(open('v2a/asm.g').read(), parser='earley', lexer='auto')
 
+PAGE_SIZE = 0x1000
+
 class AssemblerTransformer():
   def __init__(self, assembler):
     self.assembler = assembler
@@ -158,7 +160,7 @@ class Assembler:
       self._consts = {}
 
     def linear(self, offset=0):
-      return self._num * 0x1000 + offset
+      return self._num * PAGE_SIZE + offset
 
   def write_instr(self, instr):
     self._data[self._page.linear(self._offset)] = instr >> 8
@@ -219,8 +221,10 @@ class Assembler:
       self.reserve('display', 0, register=True)
       self.reserve('bank1', 0, register=True)
       self.reserve('bank0', 0, register=True)
-      self.reserve('tmp1', 0, register=True)
-      self.reserve('tmp2', 0, register=True)
+      self.reserve('_tmp1', 0, register=True)
+      self.reserve('_tmp2', 0, register=True)
+      self.reserve('_sp', 0, register=True)
+      self.reserve('_stack', [0]*32, register=True)
     
     self._offset = 0
 
@@ -234,12 +238,15 @@ class Assembler:
     return l
 
   def reserve(self, name, value, register=False):
+    if isinstance(value, int):
+      value = [value]
     prev_offset = self._offset
-    self._offset = 0x1000 - 1 - self._page._nreserved
-    self._page._nreserved += 1
+    self._offset = PAGE_SIZE - len(value) - self._page._nreserved
+    self._page._nreserved += len(value)
     self.label(self.create_label(name), register)
     offset = self._offset
-    self.dcb(value)
+    for x in value:
+      self.dcb(x)
     self._offset = prev_offset
     return offset
         
@@ -329,12 +336,12 @@ class Assembler:
     self._indent += 1
     label_name = '_page_{}_{}'.format(self._page._num, name)
     offset = self.reserve(label_name, 0)
-    self.sta(self.create_label('tmp1'))
+    self.sta(self.create_label('_tmp1'))
     self.lda(self.create_label(label_name))
     self._page._fixups.append((name, offset, self._offset,))
     self.dcb(0)  # Replace with `sta bankN`
     self.dcb(0)
-    self.lda(self.create_label('tmp1'))
+    self.lda(self.create_label('_tmp1'))
     self._indent -= 1
   
   def hlt(self):

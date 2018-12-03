@@ -430,7 +430,7 @@ class Ram(Component):
 
 class PagedRamController(Component):
   def __init__(self, addr_width=13, num_pages=2, reg_base_addr=None, data_width=8):
-    super().__init__('pageed-ram')
+    super().__init__('paged-ram')
     self.addr_width = addr_width
     self.page_width = int(math.log2(num_pages))
     self.page_size = 2**(addr_width - self.page_width)

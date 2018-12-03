@@ -237,6 +237,7 @@ def main():
       power,
       dec,
       ram,
+      paged_ram,
       clk):
     c.info()
     c.reset()
