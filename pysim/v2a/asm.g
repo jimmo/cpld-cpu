@@ -35,6 +35,8 @@ OP_JMP: "jmp"
 OP_JCS: "jcs"
 OP_JZ: "jz"
 
+OP_LDPG: "ldpg"
+
 OP_HLT: "hlt"
 
 OP_OUT: "out"
@@ -44,27 +46,30 @@ statement: cmd | op
 cmd: (CMD_ORG NUMBER
         | CMD_PAGE LABEL NUMBER)
 
+_value: LABEL | NUMBER
+
 op: [LABEL ":"] (OP_DCB NUMBER
-        | OP_NOR LABEL
-        | OP_ADD LABEL
-        | OP_STA LABEL
-        | OP_NORX LABEL
-        | OP_ADDX LABEL
-        | OP_STX LABEL
+        | OP_NOR _value
+        | OP_ADD _value
+        | OP_STA _value
+        | OP_NORX _value
+        | OP_ADDX _value
+        | OP_STX _value
         | OP_JCC LABEL
         | OP_JNZ LABEL
         | OP_CLR
-        | OP_LDA LABEL
+        | OP_LDA _value
         | OP_NOT
-        | OP_SUB LABEL
+        | OP_SUB _value
         | OP_CLRX
-        | OP_LDX LABEL
+        | OP_LDX _value
         | OP_NOTX
-        | OP_SUBX LABEL
+        | OP_SUBX _value
         | OP_JMP LABEL
         | OP_JCS LABEL
         | OP_JZ LABEL
         | OP_HLT
+        | OP_LDPG LABEL
         | OP_OUT)
 
 

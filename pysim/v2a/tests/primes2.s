@@ -1,7 +1,7 @@
-        lda two
+        lda 2
         out
 
-start:  lda two
+start:  lda 2
         sta subs
 
 loop:   lda number
@@ -16,12 +16,12 @@ inner:  sub subs
         # If non-zero (i.e. there was a remainder), this will set carry.
         jz noprime
 
-        # 'add' two to subs (or one if 2)
+        # 'add' 2 to subs (or one if 2)
         lda subs
-        sub two
+        sub 2
         jz inc23
         lda subs
-        add two
+        add 2
         jmp inc
 inc23:  lda subs
         add one
@@ -41,11 +41,9 @@ inc:    sta subs
 
         # Found a dividend, test the next odd number.
 noprime:        lda number
-        add two
+        add 2
         sta number
         jmp start
 
-two:    dcb 2
 subs:   dcb 0
 number: dcb 3
-wut:    dcb 80
