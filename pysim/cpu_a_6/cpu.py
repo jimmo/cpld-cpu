@@ -1,6 +1,6 @@
 import sys
 from sim import Component, Signal, NotifySignal, Net, Register, SplitRegister, BusConnect, Clock, Ram, Rom, Power, MemDisplay
-from mcpu.asm import Assembler
+from .asm import Assembler
 
 # Implements https://github.com/cpldcpu/MCPU
 
@@ -37,39 +37,13 @@ from mcpu.asm import Assembler
 
 # xxdd dddd  (6-bit addressing --> 64 bytes RAM)
 
-# Clock | States | ie | oe
-
-# Fetch
-#  0    |  000   | 0  | 1
-#  /
-#  1    |  000   | 0  | 0
-
-# Store Acc
-#  0    |  001   | 1  | 0
-#  /
-#  1    |  001   | 0  | 0
-
-# Add
-#  0    |  010   | 0  | 1
-#  /
-#  1    |  010   | 0  | 0
-
-# Nor
-#  0    |  011   | 0  | 1
-#  /
-#  1    |  011   | 0  | 0
-
-# Branch not taken
-#  0    |  101   | 0  | 0
-#  1    |  101   | 0  | 0
-
 class Decoder(Component):
   def __init__(self):
     super().__init__('decoder')
     self.clk = NotifySignal(self, 'clk', 1)
     self.addr = Signal(self, 'addr', 6)
     self.data = Signal(self, 'data', 8)
-    self.ie = Signal(self, 'ie', 1)
+    self.we = Signal(self, 'we', 1)
     self.oe = Signal(self, 'oe', 1)
     self.acc = 0
     self.adreg = 0
@@ -80,7 +54,7 @@ class Decoder(Component):
     self.addr <<= 0
     self.data <<= None
     self.oe <<= 1
-    self.ie <<= 0
+    self.we <<= 0
 
   def update(self, signal):
     if self.clk.had_edge(0, 1):
@@ -118,13 +92,11 @@ class Decoder(Component):
     self.addr <<= self.adreg & 0x3f
     self.data <<= None if self.states != 0b001 else self.acc & 0xff
     self.oe <<= 0 if (clk == 1 or self.states == 0b001 or self.states == 0b101) else 1
-    self.ie <<= 0 if (clk == 1 or self.states != 0b001) else 1
+    self.we <<= 0 if (clk == 1 or self.states != 0b001) else 1
 
 
 
 def main():
-  power = Power()
-
   dec = Decoder()
   
   ram = Ram(addr_width=6)
@@ -135,7 +107,7 @@ def main():
   ram.addr += dec.addr + out.addr
   ram.data += dec.data + out.data
   ram.oe += dec.oe
-  ram.ie += dec.ie + out.ie
+  ram.we += dec.we + out.we
 
   print('Loading RAM...')
 
@@ -148,7 +120,6 @@ def main():
   ram.stdout()
 
   for c in (
-      power,
       dec,
       ram,
       clk):

@@ -5,7 +5,7 @@ from lark import Lark, Transformer, Tree, UnexpectedInput
 
 from asm import Assembler
 
-l = Lark(open('zz.g').read())
+l = Lark(open('cpu_ah_16/zz.g').read())
 
 
 class Variable():

@@ -1,7 +1,7 @@
 import collections
 from lark import Lark, UnexpectedInput
 
-l = Lark(open('v2a/asm.g').read(), parser='earley', lexer='auto')
+l = Lark(open('cpu_ax_13/asm.g').read(), parser='earley', lexer='auto')
 
 PAGE_SIZE = 0x1000
 
@@ -53,8 +53,10 @@ class AssemblerTransformer():
     if len(m) == 2 and m[0].type != 'OP_LDPG':
       if m[1].type == 'NUMBER':
         label = self.assembler.const(self.parse_number(m[1]))
-      else:
+      elif m[1].type == 'LABEL':
         label = self.assembler.create_label(m[1])
+      elif m[1].type == 'LOCATION':
+        label = self.assembler.const(self.assembler._offset)
     
     if m[0].type == 'OP_NOR':
       self.assembler.nor(label)
@@ -219,6 +221,7 @@ class Assembler:
       self.reserve('zero', 0, register=True)
       self.reserve('trigger', 0, register=True)
       self.reserve('display', 0, register=True)
+      self.reserve('rng', 0, register=True)
       self.reserve('bank1', 0, register=True)
       self.reserve('bank0', 0, register=True)
       self.reserve('_tmp1', 0, register=True)
@@ -231,7 +234,7 @@ class Assembler:
   def const(self, value):
     if value in self._page._consts:
       return self._page._consts[value]
-    name = '_const_{}_{}'.format(self._page._num, value)
+    name = '_const_{}_{:x}'.format(self._page._num, value)
     l = self.create_label(name)
     self.reserve(name, value)
     self._page._consts[value] = l
@@ -259,6 +262,10 @@ class Assembler:
     l._page = self._page
     l._offset = self._offset
     l._register = register
+
+    l1 = self.create_label(l._name + '_')
+    l1._page = self._page
+    l1._offset = self._offset + 1
 
   def placeholder(self, label, is_jump=False):
     label._fixups.append((self._page, self._offset, is_jump))

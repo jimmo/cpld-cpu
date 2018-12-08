@@ -1,6 +1,7 @@
         lda count
 
 loop:   sub one
+        out
 
         # Store to result+offset
         ldx offset
@@ -13,7 +14,8 @@ loop:   sub one
 
 hlt
 
-count:  dcb 11
+count:  dcb 20
 offset: dcb 0
+        dcb 0xaa
 result: dcb 0
         # And 10 more uninitialized bytes.

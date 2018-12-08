@@ -1,77 +1,7 @@
 import sys
 from sim import Component, Signal, NotifySignal, Net, Register, SplitRegister, BusConnect, Clock, Ram, Rom, Power, MemDisplay, PagedRamController
-from v2a.asm import Assembler
+from .asm import Assembler
 
-# Based originally on https://github.com/cpldcpu/MCPU
-
-# Built-in ops
-# nor addr  --> A = not (A | *(addr + X))  (+CZ)
-# add addr  --> A = A + *(addr + X)        (+CZ)
-# sta       --> *(addr + X) = A            ()
-# norx addr  --> X = not (X | *addr)       (+CZ)
-# addx addr  --> A = A + *addr             (+CZ)
-# stx       --> *(addr + X) = A            ()
-# jcc addr  --> PC = addr                  (-CZ)
-# jnz addr  --> PC = addr                  (-CZ)
-
-# Reserved data in RAM
-# zero      --> 0x00
-# one       --> 0x01
-# allone    --> 0xff
-# _tmp1     --> 0x..
-# _tmp2     --> 0x..
-
-# Derived ops
-# clr       --> nor allone
-# lda addr  --> clr, add addr
-# not       --> nor zero
-# sub addr  --> not, add addr, not
-# clrx       --> norx allone
-# ldx addr  --> clrx, addx addr
-# notx       --> norx zero
-# subx addr  --> notx, addx addr, notx
-# jmp dest  --> jcc dest, jcc dest
-# jcs dest  --> jcc *+2, jcc dest
-# jz dest  --> jnz *+2, jnz dest
-
-# More derived ops
-# shl addr  --> lda addr, add addr
-
-# More logic ops: https://en.wikipedia.org/wiki/NOR_logic
-# or addr   --> nor addr, not
-# and addr  --> not, sta _tmp1, lda addr, not, nor _tmp1
-# nand addr --> and addr, not
-# xnor addr --> sta _tmp1, nor addr, sta _tmp2, nor _tmp1, sta _tmp1, lda _tmp2, nor addr, nor _tmp1
-# xor addr  --> sta _tmp1, not, nor addr, sta _tmp2, lda addr, not, nor _tmp1, nor _tmp2
-
-# xxxd dddd  dddd dddd  (13-bit addressing --> 8kiB addressable space)
-# RAM is divided into two pages, the second one uses the page register (memory mapped in the first page) to give 256*4kiB=1MiB addressable RAM.
-
-# Clock | States | ie | oe
-
-# Fetch
-#  0    |  000   | 0  | 1
-#  /
-#  1    |  000   | 0  | 0
-
-# Store Acc
-#  0    |  001   | 1  | 0
-#  /
-#  1    |  001   | 0  | 0
-
-# Add
-#  0    |  010   | 0  | 1
-#  /
-#  1    |  010   | 0  | 0
-
-# Nor
-#  0    |  011   | 0  | 1
-#  /
-#  1    |  011   | 0  | 0
-
-# Branch not taken
-#  0    |  101   | 0  | 0
-#  1    |  101   | 0  | 0
 
 class Decoder(Component):
   MASK_OP = 0b011
@@ -88,7 +18,7 @@ class Decoder(Component):
     self.clk = NotifySignal(self, 'clk', 1)
     self.addr = Signal(self, 'addr', 13)
     self.data = Signal(self, 'data', 8)
-    self.ie = Signal(self, 'ie', 1)
+    self.we = Signal(self, 'we', 1)
     self.oe = Signal(self, 'oe', 1)
     self.acc = 0
     self.x = 0
@@ -102,7 +32,7 @@ class Decoder(Component):
     self.addr <<= 0
     self.data <<= None
     self.oe <<= 1
-    self.ie <<= 0
+    self.we <<= 0
 
   def update(self, signal):
     if self.clk.had_edge(0, 1):
@@ -190,7 +120,7 @@ class Decoder(Component):
       
     if clk == 1:
       self.oe <<= 0
-      self.ie <<= 0
+      self.we <<= 0
     else:
       if self.state == 2 and (self.op & Decoder.MASK_OP) == Decoder.OP_ST:
         self.oe <<= 0
@@ -198,14 +128,12 @@ class Decoder(Component):
         self.oe <<= 1
 
       if self.state == 2 and (self.op & Decoder.MASK_OP) == Decoder.OP_ST:
-        self.ie <<= 1
+        self.we <<= 1
       else:
-        self.ie <<= 0
+        self.we <<= 0
 
 
 def main():
-  power = Power()
-
   dec = Decoder()
   
   ram = Ram(addr_width=20)
@@ -222,7 +150,7 @@ def main():
   ram.data += dec.data + out.data + paged_ram.data
   
   ram.oe += dec.oe
-  ram.ie += dec.ie + out.ie + paged_ram.ie
+  ram.we += dec.we + out.we + paged_ram.we
 
   print('Loading RAM...')
 
@@ -234,7 +162,6 @@ def main():
   ram.stdout()
 
   for c in (
-      power,
       dec,
       ram,
       paged_ram,

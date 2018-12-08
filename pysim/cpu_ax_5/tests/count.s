@@ -3,10 +3,10 @@ up:     out
         add one
         jcc up
 
-        lda start2
-down:   out
-        sub one
-        jnz down
+#         lda start2
+# down:   out
+#         sub one
+#         jnz down
 
         hlt
         

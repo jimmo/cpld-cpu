@@ -1,6 +1,6 @@
 import sys
 from sim import Component, Signal, NotifySignal, Net, Register, SplitRegister, BusConnect, Clock, Ram, Rom, Power
-from v1.asm import Assembler
+from .asm import Assembler
 
 
 class Logic(Component):
@@ -333,11 +333,11 @@ class InstructionRegister(Component):
     self.data = Signal(self, 'data', 8)
     self.instr = Signal(self, 'instr', 8)
     self.imm = Signal(self, 'imm', 8)
-    self.ie = NotifySignal(self, 'ie', 1)
+    self.we = NotifySignal(self, 'we', 1)
     self.oe = NotifySignal(self, 'oe', 1)
 
   def update(self, signal):
-    if self.ie.had_edge(0, 1):
+    if self.we.had_edge(0, 1):
       self.v = self.data.value()
       self.instr <<= self.v
     if self.oe.value():
@@ -355,13 +355,13 @@ class ProgramCounter(Component):
     self.data = Signal(self, 'data', 8)
     self.rst = NotifySignal(self, 'rst', 1)
     self.inc = NotifySignal(self, 'inc', 1)
-    self.ie = NotifySignal(self, 'ie', 1)
+    self.we = NotifySignal(self, 'we', 1)
     self.co = Signal(self, 'co', 1)
 
   def update(self, signal):
     if self.rst.value() == 1:
       self.v = 0
-    elif self.ie.value():
+    elif self.we.value():
       self.v = self.data.value()
       #print('Jump')
     elif self.inc.had_edge(0, 1):
@@ -406,15 +406,15 @@ def main():
   # Program counter
   pc_l.inc += dec.pc_inc
   pc_h.inc += pc_l.co
-  pc_l.ie += dec.pc_ie
-  pc_h.ie += dec.pc_ie
+  pc_l.we += dec.pc_ie
+  pc_h.we += dec.pc_ie
 
   # Instruction
   rom.oe += power.high
   rom.addr[0:8] += pc_l.addr
   rom.addr[8:16] += pc_h.addr
   ir.data += rom.data
-  ir.ie += dec.ir_ie
+  ir.we += dec.ir_ie
   ir.oe += dec.ir_oe
 
   # Decoder
@@ -422,19 +422,19 @@ def main():
   dec.clk += clk.clk
 
   # Register enable
-  reg_a.ie[0] += dec.al_ie
-  reg_a.ie[1] += dec.ah_ie
-  reg_b.ie[0] += dec.bl_ie
-  reg_b.ie[1] += dec.bh_ie
-  reg_c.ie[0] += dec.cl_ie
-  reg_c.ie[1] += dec.ch_ie
-  reg_d.ie[0] += dec.dl_ie
-  reg_d.ie[1] += dec.dh_ie
-  reg_e.ie += dec.e_ie
-  reg_f.ie += dec.f_ie
-  reg_g.ie += dec.g_ie
-  reg_h.ie += dec.h_ie
-  reg_tmp.ie += dec.t_ie
+  reg_a.we[0] += dec.al_ie
+  reg_a.we[1] += dec.ah_ie
+  reg_b.we[0] += dec.bl_ie
+  reg_b.we[1] += dec.bh_ie
+  reg_c.we[0] += dec.cl_ie
+  reg_c.we[1] += dec.ch_ie
+  reg_d.we[0] += dec.dl_ie
+  reg_d.we[1] += dec.dh_ie
+  reg_e.we += dec.e_ie
+  reg_f.we += dec.f_ie
+  reg_g.we += dec.g_ie
+  reg_h.we += dec.h_ie
+  reg_tmp.we += dec.t_ie
 
   reg_a.oe += dec.a_oe
   reg_b.oe += dec.b_oe
@@ -454,10 +454,10 @@ def main():
 
   # Flags
   reg_flags.data += reg_flags_tmp.state
-  reg_flags.ie += dec.flags_ie
+  reg_flags.we += dec.flags_ie
   reg_flags.state += dec.flags + logic.fi
   reg_flags_tmp.data += logic.fo
-  reg_flags_tmp.ie += dec.flags_tmp_ie
+  reg_flags_tmp.we += dec.flags_tmp_ie
 
   # Memory
   sel_cd.a[0:8] += reg_d.state
@@ -469,7 +469,7 @@ def main():
   sel_cd.a_to_b += dec.sel_cd
   sel_gh.a_to_b += dec.sel_gh
 
-  ram.ie += dec.mem_ie
+  ram.we += dec.mem_ie
   ram.oe += dec.mem_oe
 
   print('Loading ROM...')

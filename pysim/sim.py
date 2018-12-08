@@ -1,4 +1,25 @@
 import math
+import random
+
+warn_messages = set()
+
+def warn(msg, dedup=False, **kwargs):
+  if dedup and msg in warn_messages:
+    return
+  warn_messages.add(msg)
+  print(msg, **kwargs)
+
+def debug(msg, **kwargs):
+  #print(msg, **kwargs)
+  pass
+
+def trace(msg, **kwargs):
+  #print(msg, **kwargs)
+  pass
+
+
+all_nets = []
+  
 
 # Represents a set of connected pins with optional pull up/down.
 # Not used directly - when pins connect they create/merge nets.
@@ -10,18 +31,30 @@ class Net():
   def __init__(self, pins):
     self._pins = pins
     self._pull = None
+    all_nets.append(self)
 
   def name(self):
     return '/'.join(p.fullname() for p in self._pins)
 
   # Gets a driving pin on this net.
   def driver(self):
+    d = None
     for p in self._pins:
       if not p.is_hiz():
         # Always return the first one. It's not uncommon for there to be multiple drivers
         # while updates propogate, but it should stabilize.
-        return p
-    return None
+        #if d:
+        #  warn('Warning: Multiple drivers on {}: {} {}'.format(self.name(), d.fullname(), p.fullname()), dedup=True)
+        d = p
+    return d
+
+  def check_drivers(self):
+    d = None
+    for p in self._pins:
+      if not p.is_hiz():
+        if d:
+          warn('Warning: Multiple drivers on {}: {} {}'.format(self.name(), d.fullname(), p.fullname()), dedup=True)
+        d = p
 
   # Called by a pin that is changing state.
   def update(self):
@@ -68,6 +101,7 @@ class Pin():
     self._value = 0
     self._hiz = True
     self._edge = None
+    self._nc = False
 
   def name(self):
     return self._name
@@ -104,8 +138,9 @@ class Pin():
     self._hiz = v is None
     if self._net:
       self._net.update()
-    #else:
-    #  print(f'Warning: driving unconnected pin {self.fullname()}')
+    else:
+      if not self._nc:
+        warn(f'Warning: driving unconnected pin {self.fullname()}', dedup=True)
     return self
 
   def __iadd__(self, other):
@@ -125,6 +160,11 @@ class Pin():
 
   def __add__(self, other):
     return self.__iadd__(other)
+
+  def nc(self):
+    if self._net:
+      warn('Warning: NC of a pin with a net: {}'.format(self.fullname()))
+    self._nc = True
 
 
 # Represents a subset of pins of a signal.
@@ -170,6 +210,10 @@ class SignalView():
 
   def __len__(self):
     return len(self._pins)
+
+  def nc(self):
+    for p in self._pins:
+      p.nc()
 
 
 # Represents a collection of pins on a component.
@@ -235,6 +279,9 @@ class Signal():
   def __len__(self):
     return len(self._pins)
 
+  def nc(self):
+    self._view.nc()
+
 
 # A special case of Signal that notifies the parent component when updated.
 class NotifySignal(Signal):
@@ -273,8 +320,11 @@ class Clock(Component):
 
   def tick(self):
     self.value = (self.value + 1) % (1 << len(self.clk))
-    #print('tick', self.value)
+    debug('tick {}'.format(self.value))
     self.clk <<= self.value
+
+    for n in all_nets:
+      n.check_drivers()
 
   def reset(self):
     self.value = 0
@@ -313,7 +363,7 @@ class Register(Component):
     super().__init__(name)
     self.v = 0
     self.data = Signal(self, 'data', width)
-    self.ie = NotifySignal(self, 'ie', 1)
+    self.we = NotifySignal(self, 'we', 1)
     self.oe = NotifySignal(self, 'oe', 1)
     self.state = Signal(self, 'state', width)
 
@@ -321,13 +371,51 @@ class Register(Component):
     return self.v
 
   def update(self, signal):
-    if self.ie.had_edge(0, 1):
+    if self.we.had_edge(0, 1):
       self.v = self.data.value()
+      trace('{} = 0x{:04x}'.format(self.name(), self.v))
     self.state <<= self.v
     if self.oe.value():
       self.data <<= self.v
     else:
       self.data <<= None
+
+class IORegister(Component):
+  def __init__(self, name, width=8):
+    super().__init__(name)
+    self.v = 0
+    self.inp = Signal(self, 'inp', width)
+    self.out = Signal(self, 'out', width)
+    self.we = NotifySignal(self, 'we', 1)
+    self.oe = NotifySignal(self, 'oe', 1)
+    self.state = Signal(self, 'state', width)
+
+  def value(self):
+    return self.v
+
+  def update(self, signal):
+    if self.we.had_edge(0, 1):
+      self.v = self.inp.value()
+      trace('{} = 0x{:04x}'.format(self.name(), self.v))
+    self.state <<= self.v
+    if self.oe.value():
+      self.out <<= self.v
+    else:
+      self.out <<= None
+
+
+class IncRegister(IORegister):
+  def __init__(self, name, width=8):
+    super().__init__(name, width)
+    self.inc = NotifySignal(self, 'inc', 1)
+    self.carry = Signal(self, 'carry', 1)
+
+  def update(self, signal):
+    if self.inc.had_edge(0, 1):
+      self.v = (self.v + 1) & (2**len(self.inp) - 1)
+      trace('{} = 0x{:04x} (inc)'.format(self.name(), self.v))
+    super().update(signal)
+    self.carry <<= self.v == 0 and self.inc.value() == 1
 
 
 class SplitRegister(Component):
@@ -336,7 +424,7 @@ class SplitRegister(Component):
     load_width = min(width, load_width)
     self.v = 0
     self.data = Signal(self, 'data', width)
-    self.ie = NotifySignal(self, 'ie', width // load_width)
+    self.we = NotifySignal(self, 'we', width // load_width)
     self.oe = NotifySignal(self, 'oe', 1)
     self.state = Signal(self, 'state', width)
 
@@ -344,10 +432,10 @@ class SplitRegister(Component):
     return self.v
 
   def update(self, signal):
-    load_width = len(self.data) // len(self.ie)
+    load_width = len(self.data) // len(self.we)
     mask = (1 << load_width) - 1
-    for i in range(len(self.ie)):
-      if self.ie.had_edge(i, 1):
+    for i in range(len(self.we)):
+      if self.we.had_edge(i, 1):
         self.v = (self.v & ~mask) | (self.data.value() & mask)
       mask <<= load_width
     self.state <<= self.v
@@ -379,6 +467,18 @@ class BusConnect(Component):
       self.a <<= None
 
 
+class Multiplexer(Component):
+  def __init__(self, name, width=8):
+    super().__init__(name)
+    self.a = NotifySignal(self, 'a', width)
+    self.b = NotifySignal(self, 'b', width)
+    self.sel = NotifySignal(self, 'sel', 1)
+    self.out = Signal(self, 'out', width)
+
+  def update(self, signal):
+    self.out <<= self.a.value() if self.sel.value() == 0 else self.b.value()
+
+
 class Rom(Component):
   def __init__(self, addr_width=16, data_width=8):
     super().__init__('rom')
@@ -400,18 +500,20 @@ class Ram(Component):
     self.ram = [0] * (2**addr_width)
     self.addr = NotifySignal(self, 'addr', addr_width)
     self.data = Signal(self, 'data', data_width)
-    self.ie = NotifySignal(self, 'ie', 1)
+    self.we = NotifySignal(self, 'we', 1)
     self.oe = NotifySignal(self, 'oe', 1)
 
   def update(self, signal):
-    if self.ie.had_edge(0, 1):
-      # print('write ram addr', hex(self.addr.value()), 'value', hex(self.data.value()))
+    if self.we.had_edge(0, 1):
+      trace('write: ram[0x{:04x}] = 0x{:02x}'.format(self.addr.value(), self.data.value()))
       self.ram[self.addr.value()] = self.data.value()
 
     if self.oe.value():
       # print('read ram addr', hex(self.addr.value()))
+      #print('RAM enabled')
       self.data <<= self.ram[self.addr.value()]
     else:
+      #print('RAM disabled')
       self.data <<= 0
       self.data <<= None
 
@@ -430,7 +532,7 @@ class Ram(Component):
 
 class PagedRamController(Component):
   def __init__(self, addr_width=13, num_pages=2, reg_base_addr=None, data_width=8):
-    super().__init__('paged-ram')
+    super().__init__('paged_ram')
     self.addr_width = addr_width
     self.page_width = int(math.log2(num_pages))
     self.page_size = 2**(addr_width - self.page_width)
@@ -442,14 +544,14 @@ class PagedRamController(Component):
     self.in_addr = NotifySignal(self, 'in_addr', addr_width)
     self.out_addr = Signal(self, 'out_addr', data_width)
     self.data = Signal(self, 'data', data_width)
-    self.ie = NotifySignal(self, 'ie', 1)
+    self.we = NotifySignal(self, 'we', 1)
     self.pages = [0] * num_pages
 
   def update(self, signal):
-    if self.ie.had_edge(0, 1):
+    if self.we.had_edge(0, 1):
       page = self.in_addr.value() - self.reg_base_addr
       if page >= 0 and page < self.num_pages:
-        print('Page {} = {:02x}'.format(page, self.data.value()))
+        trace('Page {} = {:02x}'.format(page, self.data.value()))
         self.pages[page] = self.data.value()
 
     self.out_addr <<= self.pages[self.in_addr.value() >> (self.addr_width - self.page_width)]
@@ -467,24 +569,70 @@ class Display(Component):
       print('{{}} {{:0{}b}}'.format(len(self.data)).format(self.name(), self.last))
 
 
-class MemDisplay(Component):
-  def __init__(self, addr_width=16, data_width=8, data_addr=0, trigger_addr=0):
-    super().__init__('mem display')
-    self.data_addr = data_addr
-    self.trigger_addr = trigger_addr
-    self.v = 0
+class MemoryDevice(Component):
+  def __init__(self, name, base_addr, size, addr_width=16, data_width=8):
+    super().__init__(name)
+    self.base_addr = base_addr
+    self.size = size
     self.addr = NotifySignal(self, 'addr', addr_width)
     self.data = Signal(self, 'data', data_width)
-    self.ie = NotifySignal(self, 'ie', 1)
+    self.oe = NotifySignal(self, 'oe', 1)
+    self.we = NotifySignal(self, 'we', 1)
+    self.oe_out = NotifySignal(self, 'oe_out', 1)
+    self.we_out = NotifySignal(self, 'we_out', 1)
     self.trigger = 0
 
+  def on_write(self, offset, v):
+    pass
+
+  def on_read(self, offset):
+    return 0
+
   def update(self, signal):
-    if self.ie.had_edge(0, 1):
-      if self.addr.value() == self.data_addr:
-        self.v = self.data.value()
-      if self.addr.value() == self.trigger_addr and self.data.value() != self.trigger:
+    if self.addr.value() >= self.base_addr and self.addr.value() < self.base_addr + self.size:
+      self.oe_out <<= 0
+      self.we_out <<= 0
+      if self.we.had_edge(0, 1):
+        self.on_write(self.addr.value() - self.base_addr, self.data.value())
+      if self.oe.value():
+        self.data <<= self.on_read(self.addr.value() - self.base_addr)
+      else:
+        self.data <<= None
+    else:
+      self.oe_out <<= self.oe.value()
+      self.we_out <<= self.we.value()
+      self.data <<= None
+
+
+class MemDisplay(MemoryDevice):
+  def __init__(self, addr_width=16, data_width=8, base_addr=0):
+    super().__init__('mem display', base_addr, 2, addr_width=addr_width, data_width=data_width)
+    self.v = 0
+    self.trigger = 0
+
+  def on_read(self, offset):
+    if offset == 0:
+      return self.v
+    elif offset == 1:
+      return self.trigger
+    else:
+      return 0
+
+  def on_write(self, offset, v):
+    if offset == 0:
+      self.v = v
+    elif offset == 1:
+      if v != self.trigger:
+        self.trigger = v
         print(self.v)
-        self.trigger = self.data.value()
+
+        
+class RNG(MemoryDevice):
+  def __init__(self, addr_width=16, data_width=8, base_addr=0):
+    super().__init__('rng', base_addr, 1, addr_width=addr_width, data_width=data_width)
+
+  def on_read(self, offset):
+    return random.randint(0, 255)
 
         
 class Adder(Component):
@@ -516,7 +664,7 @@ def main():
   d2.data += counter.out[(7,6,5,4,3,2,1,0)]
 
   reg.data += counter.out[0:4]
-  reg.ie += counter.out[0]
+  reg.we += counter.out[0]
 
   for c in (clk, counter, d1, d2, reg,):
     c.reset()
