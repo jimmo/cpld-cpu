@@ -1,0 +1,15 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP XC9572XL-VQ44
+D CPLD, 72 Macrocells, 1600 Usable Gates
+K CPLD
+F http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf
+$ENDCMP
+#
+$CMP XC9572XL-VQ44_0
+D CPLD, 72 Macrocells, 1600 Usable Gates
+K CPLD
+F http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf
+$ENDCMP
+#
+#End Doc Library

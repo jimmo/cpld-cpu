@@ -74,7 +74,6 @@ class Decoder(Component):
     
     self.carry = Signal(self, 'carry', 1)
     self.z = Signal(self, 'z', 1)
-    self.fn = Signal(self, 'fn', 1)
 
     self.instr = Signal(self, 'instr', 3)
 
@@ -100,8 +99,6 @@ class Decoder(Component):
     self.alu_we <<= 0
     self.idx_en <<= 0
 
-    self.fn <<= 0
-
   def update(self, signal):
     if self.clk.value() != self.last_clk:
       self.state = (self.state + 1) % 8
@@ -124,7 +121,6 @@ class Decoder(Component):
     self.alu_oe <<= self.instr.value() in (0b000, 0b001, 0b100, 0b101) and self.state in (5, 6,)
     self.a_we <<= self.instr.value() in (0b000, 0b001,) and self.state == 6
     self.x_we <<= self.instr.value() in (0b100, 0b101) and self.state == 6
-    self.fn <<= self.instr.value() & 1
 
     # sta/stx
     self.a_oe <<= self.instr.value() == 0b010 and self.state in (5, 6,)
@@ -235,7 +231,7 @@ def main():
   ax_alu.sel += ir.state[7]
   alu.a[0:8] += ax_alu.out
   alu.a[8] += acc.state[8]
-  alu.fn += dec.fn
+  alu.fn += ir.state[5]
 
   pcl.state.nc()
   pch.state.nc()

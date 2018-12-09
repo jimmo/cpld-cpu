@@ -1,0 +1,57 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP CPLD_CPU_ALU
+D CPLD, 72 Macrocells, 1600 Usable Gates
+K CPLD
+F http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf
+$ENDCMP
+#
+$CMP CPLD_CPU_Acc
+D CPLD, 72 Macrocells, 1600 Usable Gates
+K CPLD
+F http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf
+$ENDCMP
+#
+$CMP CPLD_CPU_Clock
+D CPLD, 72 Macrocells, 1600 Usable Gates
+K CPLD
+F http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf
+$ENDCMP
+#
+$CMP CPLD_CPU_Decoder
+D CPLD, 72 Macrocells, 1600 Usable Gates
+K CPLD
+F http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf
+$ENDCMP
+#
+$CMP CPLD_CPU_Multiplexer
+D CPLD, 72 Macrocells, 1600 Usable Gates
+K CPLD
+F http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf
+$ENDCMP
+#
+$CMP CPLD_CPU_PC
+D CPLD, 72 Macrocells, 1600 Usable Gates
+K CPLD
+F http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf
+$ENDCMP
+#
+$CMP CPLD_CPU_RAM_Index
+D CPLD, 72 Macrocells, 1600 Usable Gates
+K CPLD
+F http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf
+$ENDCMP
+#
+$CMP CPLD_CPU_RAM_Page
+D CPLD, 72 Macrocells, 1600 Usable Gates
+K CPLD
+F http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf
+$ENDCMP
+#
+$CMP CPLD_CPU_Register
+D CPLD, 72 Macrocells, 1600 Usable Gates
+K CPLD
+F http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf
+$ENDCMP
+#
+#End Doc Library

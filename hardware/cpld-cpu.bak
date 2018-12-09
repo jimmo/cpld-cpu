@@ -1,0 +1,267 @@
+EESchema Schematic File Version 4
+LIBS:cpld-cpu-cache
+EELAYER 26 0
+EELAYER END
+$Descr A3 16535 11693
+encoding utf-8
+Sheet 1 1
+Title "CPLD CPU"
+Date "2018-12-09"
+Rev ""
+Comp "Jim Mussared (jim.mussared@gmail.com)"
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L CPLD_CPU_Component:CPLD_CPU_Acc U?
+U 1 1 5C0DC642
+P 2750 2200
+F 0 "U?" H 2750 3528 50  0000 C CNN
+F 1 "CPLD_CPU_Acc" H 2750 3437 50  0000 C CNN
+F 2 "Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm" H 2800 2200 50  0001 C CNN
+F 3 "http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf" H 2750 450 50  0001 C CNN
+	1    2750 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L CPLD_CPU_Component:CPLD_CPU_ALU U?
+U 1 1 5C0DC6B0
+P 8550 2600
+F 0 "U?" H 8550 3928 50  0000 C CNN
+F 1 "CPLD_CPU_ALU" H 8550 3837 50  0000 C CNN
+F 2 "Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm" H 8600 2600 50  0001 C CNN
+F 3 "http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf" H 8550 850 50  0001 C CNN
+	1    8550 2600
+	1    0    0    -1  
+$EndComp
+$Comp
+L CPLD_CPU_Component:CPLD_CPU_Decoder U?
+U 1 1 5C0DC7C0
+P 5400 5500
+F 0 "U?" H 5400 6828 50  0000 C CNN
+F 1 "CPLD_CPU_Decoder" H 5400 6737 50  0000 C CNN
+F 2 "Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm" H 5450 5500 50  0001 C CNN
+F 3 "http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf" H 5400 3750 50  0001 C CNN
+	1    5400 5500
+	1    0    0    -1  
+$EndComp
+$Comp
+L CPLD_CPU_Component:CPLD_CPU_Multiplexer U?
+U 1 1 5C0DC836
+P 5100 2100
+F 0 "U?" H 5100 3428 50  0000 C CNN
+F 1 "CPLD_CPU_Multiplexer" H 5100 3337 50  0000 C CNN
+F 2 "Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm" H 5150 2100 50  0001 C CNN
+F 3 "http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf" H 5100 350 50  0001 C CNN
+	1    5100 2100
+	1    0    0    -1  
+$EndComp
+$Comp
+L CPLD_CPU_Component:CPLD_CPU_RAM_Index U?
+U 1 1 5C0DC8CF
+P 12850 3700
+F 0 "U?" H 12850 5028 50  0000 C CNN
+F 1 "CPLD_CPU_RAM_Index" H 12850 4937 50  0000 C CNN
+F 2 "Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm" H 12900 3700 50  0001 C CNN
+F 3 "http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf" H 12850 1950 50  0001 C CNN
+	1    12850 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L CPLD_CPU_Component:CPLD_CPU_RAM_Page U?
+U 1 1 5C0DC947
+P 14900 3700
+F 0 "U?" H 14900 5028 50  0000 C CNN
+F 1 "CPLD_CPU_RAM_Page" H 14900 4937 50  0000 C CNN
+F 2 "Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm" H 14950 3700 50  0001 C CNN
+F 3 "http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf" H 14900 1950 50  0001 C CNN
+	1    14900 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L CPLD_CPU_Component:CPLD_CPU_Register U?
+U 1 1 5C0DCADB
+P 1200 3800
+F 0 "U?" H 1200 5128 50  0000 C CNN
+F 1 "CPLD_CPU_Register" H 1200 5037 50  0000 C CNN
+F 2 "Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm" H 1250 3800 50  0001 C CNN
+F 3 "http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf" H 1200 2050 50  0001 C CNN
+	1    1200 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L CPLD_CPU_Component:CPLD_CPU_Register U?
+U 1 1 5C0DCB51
+P 1200 6450
+F 0 "U?" H 1200 7778 50  0000 C CNN
+F 1 "CPLD_CPU_Register" H 1200 7687 50  0000 C CNN
+F 2 "Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm" H 1250 6450 50  0001 C CNN
+F 3 "http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf" H 1200 4700 50  0001 C CNN
+	1    1200 6450
+	1    0    0    -1  
+$EndComp
+$Comp
+L CPLD_CPU_Component:CPLD_CPU_Register U?
+U 1 1 5C0DCBA5
+P 3150 8150
+F 0 "U?" H 3150 9478 50  0000 C CNN
+F 1 "CPLD_CPU_Register" H 3150 9387 50  0000 C CNN
+F 2 "Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm" H 3200 8150 50  0001 C CNN
+F 3 "http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf" H 3150 6400 50  0001 C CNN
+	1    3150 8150
+	1    0    0    -1  
+$EndComp
+$Comp
+L CPLD_CPU_Component:CPLD_CPU_PC U?
+U 1 1 5C0DD4FB
+P 9850 8200
+F 0 "U?" H 9850 8200 50  0000 C CNN
+F 1 "PC_L" H 9850 8100 50  0000 C CNN
+F 2 "Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm" H 9900 8200 50  0001 C CNN
+F 3 "http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf" H 9850 6450 50  0001 C CNN
+	1    9850 8200
+	1    0    0    -1  
+$EndComp
+$Comp
+L CPLD_CPU_Component:CPLD_CPU_PC U?
+U 1 1 5C0DD527
+P 12850 8200
+F 0 "U?" H 12850 9528 50  0000 C CNN
+F 1 "PC_H" H 12850 9437 50  0000 C CNN
+F 2 "Housings_QFP:TQFP-44_10x10mm_Pitch0.8mm" H 12900 8200 50  0001 C CNN
+F 3 "http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf" H 12850 6450 50  0001 C CNN
+	1    12850 8200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9050 7600 8700 7600
+Wire Wire Line
+	8700 7600 8700 6050
+Wire Wire Line
+	8700 6050 11300 6050
+Wire Wire Line
+	11300 6050 11300 7900
+Wire Wire Line
+	11300 7900 12050 7900
+Wire Wire Line
+	7200 7900 9050 7900
+$Comp
+L power:GND #PWR?
+U 1 1 5C0DD701
+P 9850 9700
+F 0 "#PWR?" H 9850 9450 50  0001 C CNN
+F 1 "GND" H 9855 9527 50  0000 C CNN
+F 2 "" H 9850 9700 50  0001 C CNN
+F 3 "" H 9850 9700 50  0001 C CNN
+	1    9850 9700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9850 9700 9850 9600
+Wire Wire Line
+	9950 9500 9950 9600
+Wire Wire Line
+	9950 9600 9850 9600
+Connection ~ 9850 9600
+Wire Wire Line
+	9850 9600 9850 9500
+Wire Wire Line
+	9750 9500 9750 9600
+Wire Wire Line
+	9750 9600 9850 9600
+$Comp
+L power:VCC #PWR?
+U 1 1 5C0DD953
+P 9950 6450
+F 0 "#PWR?" H 9950 6300 50  0001 C CNN
+F 1 "VCC" H 9967 6623 50  0000 C CNN
+F 2 "" H 9950 6450 50  0001 C CNN
+F 3 "" H 9950 6450 50  0001 C CNN
+	1    9950 6450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C_Small C?
+U 1 1 5C0DE3F3
+P 10200 6950
+F 0 "C?" V 10250 7050 50  0000 C CNN
+F 1 "100n" V 10150 7050 50  0000 C CNN
+F 2 "" H 10200 6950 50  0001 C CNN
+F 3 "~" H 10200 6950 50  0001 C CNN
+	1    10200 6950
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5C0DEB19
+P 10500 6750
+F 0 "#PWR?" H 10500 6500 50  0001 C CNN
+F 1 "GND" V 10505 6622 50  0000 R CNN
+F 2 "" H 10500 6750 50  0001 C CNN
+F 3 "" H 10500 6750 50  0001 C CNN
+	1    10500 6750
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:C_Small C?
+U 1 1 5C0DEB72
+P 10200 6750
+F 0 "C?" V 10250 6850 50  0000 C CNN
+F 1 "100n" V 10150 6850 50  0000 C CNN
+F 2 "" H 10200 6750 50  0001 C CNN
+F 3 "~" H 10200 6750 50  0001 C CNN
+	1    10200 6750
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:C_Small C?
+U 1 1 5C0DEBA0
+P 10200 6550
+F 0 "C?" V 10250 6650 50  0000 C CNN
+F 1 "100n" V 10150 6650 50  0000 C CNN
+F 2 "" H 10200 6550 50  0001 C CNN
+F 3 "~" H 10200 6550 50  0001 C CNN
+	1    10200 6550
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	10300 6750 10400 6750
+Wire Wire Line
+	10300 6550 10400 6550
+Wire Wire Line
+	10400 6550 10400 6750
+Connection ~ 10400 6750
+Wire Wire Line
+	10400 6750 10500 6750
+Wire Wire Line
+	10300 6950 10400 6950
+Wire Wire Line
+	10400 6950 10400 6750
+Wire Wire Line
+	10100 6950 9950 6950
+Wire Wire Line
+	9950 6950 9950 7050
+Wire Wire Line
+	10100 6750 9950 6750
+Wire Wire Line
+	9850 6750 9850 7050
+Wire Wire Line
+	9750 6550 9750 7050
+Wire Wire Line
+	9750 6550 9950 6550
+Wire Wire Line
+	9950 6450 9950 6550
+Connection ~ 9950 6550
+Wire Wire Line
+	9950 6550 10100 6550
+Wire Wire Line
+	9950 6550 9950 6750
+Connection ~ 9950 6750
+Wire Wire Line
+	9950 6750 9850 6750
+Wire Wire Line
+	9950 6750 9950 6950
+Connection ~ 9950 6950
+$EndSCHEMATC
