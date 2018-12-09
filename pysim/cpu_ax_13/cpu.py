@@ -1,5 +1,5 @@
 import sys
-from sim import Component, Signal, NotifySignal, Net, Register, IORegister, IncRegister, Clock, Ram, Rom, Power, MemDisplay, Multiplexer, PagedRamController, debug, trace, warn, RNG
+from sim import Component, Signal, NotifySignal, IORegister, IncRegister, Clock, Ram, Net, MemDisplay, Multiplexer, PagedRamController, debug, trace, warn, RNG
 from .asm import Assembler
 
 
