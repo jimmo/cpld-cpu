@@ -95,7 +95,7 @@ class Decoder(Component):
     self.a_cc <<= 0
     self.x_oe <<= 0
     self.x_we <<= 0
-    self.alu_oe <<= 0
+    self.alu_oe <<= 1
     self.alu_we <<= 0
     self.idx_en <<= 0
 
@@ -118,7 +118,7 @@ class Decoder(Component):
 
     # alu
     self.alu_we <<= self.instr.value() in (0b000, 0b001, 0b100, 0b101) and self.state == 5
-    self.alu_oe <<= self.instr.value() in (0b000, 0b001, 0b100, 0b101) and self.state in (5, 6,)
+    #self.alu_oe <<= self.instr.value() in (0b000, 0b001, 0b100, 0b101) and self.state in (5, 6,)
     self.a_we <<= self.instr.value() in (0b000, 0b001,) and self.state == 6
     self.x_we <<= self.instr.value() in (0b100, 0b101) and self.state == 6
 
