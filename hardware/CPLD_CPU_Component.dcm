@@ -24,6 +24,12 @@ K CPLD
 F http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf
 $ENDCMP
 #
+$CMP CPLD_CPU_GPIO_RNG
+D CPLD, 72 Macrocells, 1600 Usable Gates
+K CPLD
+F http://www.xilinx.com/support/documentation/data_sheets/ds057.pdf
+$ENDCMP
+#
 $CMP CPLD_CPU_Multiplexer
 D CPLD, 72 Macrocells, 1600 Usable Gates
 K CPLD
