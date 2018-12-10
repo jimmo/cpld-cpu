@@ -157,12 +157,12 @@ def main():
   
   clk = Clock(1)
   
-  ram = Ram(addr_width=20)
-  paged_ram = PagedRamController(addr_width=13, num_pages=2, reg_base_addr=2**12-7)
+  ram = Ram(addr_width=18)
+  paged_ram = PagedRamController(addr_width=13, num_pages=2, reg_base_addr=2**12-7, data_width=6)
   ram_index = RamIndex()
 
-  out = MemDisplay(addr_width=20, base_addr=2**12 - 5)
-  rng = RNG(addr_width=20, base_addr=2**12 - 6)
+  out = MemDisplay(addr_width=18, base_addr=2**12 - 5)
+  rng = RNG(addr_width=18, base_addr=2**12 - 6)
 
   acc = AccumulatorRegister()
   x = IORegister('x')
@@ -185,13 +185,14 @@ def main():
 
   ram.addr += out.addr + rng.addr
   ram.addr[0:12] += paged_ram.in_addr[0:12]
-  ram.addr[12:20] += paged_ram.out_addr
+  ram.addr[12:18] += paged_ram.out_addr
   
   pcl.oe += pch.oe + dec.pc_oe
   ir.oe += dec.ir_oe
   ar.oe += dec.ar_oe
   
-  ram.data += out.data + rng.data + ir.inp + ar.inp + alu.b + acc.out[0:8] + x.out + paged_ram.data
+  ram.data += out.data + rng.data + ir.inp + ar.inp + alu.b + acc.out[0:8] + x.out
+  paged_ram.data += ram.data[0:6]
   alu.out += acc.inp
   alu.out[0:8] += x.inp
 

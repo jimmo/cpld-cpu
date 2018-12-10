@@ -545,6 +545,7 @@ class PagedRamController(Component):
     self.out_addr = Signal(self, 'out_addr', data_width)
     self.data = Signal(self, 'data', data_width)
     self.we = NotifySignal(self, 'we', 1)
+    self.z = NotifySignal(self, 'z', 1)
     self.pages = [0] * num_pages
 
   def update(self, signal):
@@ -554,7 +555,9 @@ class PagedRamController(Component):
         trace('Page {} = {:02x}'.format(page, self.data.value()))
         self.pages[page] = self.data.value()
 
-    self.out_addr <<= self.pages[self.in_addr.value() >> (self.addr_width - self.page_width)]
+    v = self.pages[self.in_addr.value() >> (self.addr_width - self.page_width)]
+    self.out_addr <<= v
+    self.z <<= v == 0
 
         
 class Display(Component):
