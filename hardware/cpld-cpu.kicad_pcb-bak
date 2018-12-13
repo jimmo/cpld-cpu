@@ -4942,7 +4942,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F52A9)
-    (at 192.190366 109.963001)
+    (at 226.902 91.948)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /78303819)
@@ -4980,7 +4980,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F52BE)
-    (at 202.061026 111.813001)
+    (at 216.234 81.534)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /78303828)
@@ -5018,7 +5018,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F52D3)
-    (at 209.464021 109.963001)
+    (at 230.204 83.566)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /78303837)
@@ -5322,7 +5322,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F537B)
-    (at 231.673006 108.113001)
+    (at 245.19 90.17)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /79E93F69)
@@ -5854,7 +5854,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F54A1)
-    (at 218.512126 108.113001)
+    (at 236.046 92.456)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /7AE2A6A1)
@@ -6120,7 +6120,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F5534)
-    (at 186.980851 109.963001)
+    (at 218.694 72.898)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /61A48BD4)
@@ -6158,7 +6158,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F5549)
-    (at 194.932216 108.113001)
+    (at 206.836 92.202)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /61A48BE3)
@@ -6196,7 +6196,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F555E)
-    (at 184.513186 111.813001)
+    (at 198.708 90.424)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /61A48BF2)
@@ -6272,7 +6272,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F5588)
-    (at 188.625961 113.663001)
+    (at 204.55 82.042)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /61A48C10)
@@ -6310,7 +6310,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F559D)
-    (at 198.496621 108.113001)
+    (at 216.742 91.694)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /61A48C1F)
@@ -6386,7 +6386,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F55C7)
-    (at 196.851511 111.813001)
+    (at 184.992 81.788)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /61F9A815)
@@ -6424,7 +6424,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F55DC)
-    (at 201.512656 109.963001)
+    (at 191.088 92.964)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /61F9A824)
@@ -6462,7 +6462,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F99E4)
-    (at 185.061556 108.113001)
+    (at 195.58 72.136)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /61F9A833)
@@ -6576,7 +6576,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F5630)
-    (at 206.173801 108.113001)
+    (at 206.168 73.406)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /61F9A860)
@@ -6804,7 +6804,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F56AE)
-    (at 239.624371 108.113001)
+    (at 255.858 89.154)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /5DC7AF04)
@@ -7070,7 +7070,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F5741)
-    (at 206.447986 139.683001)
+    (at 194.564 174.752)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /615CC91F)
@@ -7754,7 +7754,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F58BB)
-    (at 247.849921 108.113001)
+    (at 264.24 80.518)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /5C47E0C7)
@@ -7868,7 +7868,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F58FA)
-    (at 184.787371 147.083001)
+    (at 208.36 178.054)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /5C47E0F4)
@@ -8058,7 +8058,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F5963)
-    (at 190.271071 148.933001)
+    (at 183.308 173.482)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /8465981C)
@@ -8514,7 +8514,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F5A5F)
-    (at 253.881991 108.113001)
+    (at 251.286 53.34)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /8465991E)
@@ -8780,7 +8780,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F5AF2)
-    (at 193.287106 148.933001)
+    (at 213.28 177.292)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /7F6E6EFA)
@@ -8818,7 +8818,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F5B07)
-    (at 212.205871 135.983001)
+    (at 222.932 174.752)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /7F6E6F09)
@@ -8932,7 +8932,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F5B46)
-    (at 212.754241 108.113001)
+    (at 234.87 72.39)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /7F6E6F36)
@@ -9160,7 +9160,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F5BC4)
-    (at 211.657501 109.963001)
+    (at 244.936 77.978)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /7FFD11CA)
@@ -9274,7 +9274,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F5C03)
-    (at 197.674066 147.083001)
+    (at 202.946 171.196)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /9693758E)
@@ -9350,7 +9350,7 @@
   )
 
   (module LEDs:LED_0805_HandSoldering (layer F.Cu) (tedit 595FCA25) (tstamp 5C0F5C2D)
-    (at 196.303141 150.783001)
+    (at 195.152 182.372)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /969375AC)
@@ -9648,7 +9648,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 58E0A804) (tstamp 5C0F5CC5)
-    (at 259.914061 108.128001)
+    (at 132.16 83.058)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /7AE2A6A8)
@@ -9864,7 +9864,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 58E0A804) (tstamp 5C0F5D2B)
-    (at 192.738736 147.068001)
+    (at 132.508 191.262)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /78303802)
@@ -9936,7 +9936,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 58E0A804) (tstamp 5C0F5D4D)
-    (at 185.884111 150.798001)
+    (at 94.154 146.304)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /78303820)
@@ -10116,7 +10116,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 58E0A804) (tstamp 5C0F5DA2)
-    (at 199.044991 148.948001)
+    (at 95.17 141.224)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /79E93F25)
@@ -10332,7 +10332,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 58E0A804) (tstamp 5C0F5E08)
-    (at 203.157766 150.828001)
+    (at 121.238 144.526)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /79E93F7F)
@@ -12923,8 +12923,8 @@
     )
   )
 
-  (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 58E0A804) (tstamp 5C0F62D0)
-    (at 217.141201 151.068001)
+  (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 58E0A804) (tstamp 5C0FB6DA)
+    (at 85.518 101.346)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /7C5606B1)
@@ -14328,7 +14328,7 @@
   )
 
   (module Resistors_SMD:R_0805_HandSoldering (layer F.Cu) (tedit 58E0A804) (tstamp 5C0F6567)
-    (at 224.544196 108.128001)
+    (at 101.52 173.228)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /76B23B36)

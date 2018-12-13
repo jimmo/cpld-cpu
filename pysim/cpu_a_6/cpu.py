@@ -100,7 +100,7 @@ def main():
   dec = Decoder()
   
   ram = Ram(addr_width=6)
-  out = MemDisplay(addr_width=6, data_addr=59, trigger_addr=60)
+  out = MemDisplay(addr_width=6, base_addr=59)
   clk = Clock(1)
 
   dec.clk += clk.clk
