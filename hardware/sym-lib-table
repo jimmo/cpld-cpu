@@ -1,4 +1,5 @@
 (sym_lib_table
   (lib (name CPLD_Xilinx_XC9500XL)(type Legacy)(uri ${KIPRJMOD}/CPLD_Xilinx_XC9500XL.lib)(options "")(descr ""))
   (lib (name CPLD_CPU_Component)(type Legacy)(uri ${KIPRJMOD}/CPLD_CPU_Component.lib)(options "")(descr ""))
+  (lib (name cpld-cpu-rescue)(type Legacy)(uri ${KIPRJMOD}/cpld-cpu-rescue.lib)(options "")(descr ""))
 )
