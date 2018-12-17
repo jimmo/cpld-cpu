@@ -1,0 +1,31 @@
+net instr<0> loc=pin39;
+net instr<1> loc=pin40;
+net instr<2> loc=pin41;
+
+net ram_oe loc=pin2;
+net ram_we loc=pin3;
+net pc_oe loc=pin5;
+net pc_we loc=pin6;
+net alu_oe loc=pin7;
+net alu_we loc=pin8;
+net a_oe loc=pin12;
+net a_we loc=pin13;
+net x_oe loc=pin14;
+net x_we loc=pin18;
+net ir_oe loc=pin16;
+net ir_we loc=pin19;
+net ar_oe loc=pin20;
+net ar_we loc=pin21;
+
+net pc_inc loc=pin22;
+net idx_en loc=pin23;
+net z loc=pin27;
+net carry loc=pin28;
+net cc loc=pin29;
+
+net state<0> loc=pin30;
+net state<1> loc=pin31;
+net state<2> loc=pin32;
+
+net clk loc=pin43;
+net nrst loc=pin33;

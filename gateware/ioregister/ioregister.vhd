@@ -19,7 +19,7 @@ begin
   process(nrst, nwe)
   begin
     if (nrst = '0') then
-      v <= "00000010";
+      v <= "00000000";
     elsif falling_edge(nwe) then
       v <= input;
     end if;

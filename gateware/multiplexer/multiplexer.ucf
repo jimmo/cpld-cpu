@@ -1,0 +1,29 @@
+net a<0> loc=pin5;
+net a<1> loc=pin6;
+net a<2> loc=pin7;
+net a<3> loc=pin8;
+net a<4> loc=pin12;
+net a<5> loc=pin13;
+net a<6> loc=pin14;
+net a<7> loc=pin16;
+
+net b<0> loc=pin18;
+net b<1> loc=pin19;
+net b<2> loc=pin20;
+net b<3> loc=pin21;
+net b<4> loc=pin22;
+net b<5> loc=pin23;
+net b<6> loc=pin27;
+net b<7> loc=pin28;
+
+net output<0> loc=pin29;
+net output<1> loc=pin30;
+net output<2> loc=pin31;
+net output<3> loc=pin32;
+net output<4> loc=pin37;
+net output<5> loc=pin38;
+net output<6> loc=pin39;
+net output<7> loc=pin40;
+
+net sel loc=pin43;
+net nrst loc=pin33;
