@@ -1,0 +1,37 @@
+net data<0> loc=pin2;
+net data<1> loc=pin3;
+net data<2> loc=pin5;
+net data<3> loc=pin6;
+net data<4> loc=pin7;
+net data<5> loc=pin8;
+net data<6> loc=pin12;
+net data<7> loc=pin13;
+
+net addr<0> loc=pin14;
+net addr<1> loc=pin16;
+net addr<2> loc=pin18;
+net addr<3> loc=pin19;
+net addr<4> loc=pin20;
+net addr<5> loc=pin21;
+net addr<6> loc=pin22;
+net addr<7> loc=pin23;
+net addr<8> loc=pin27;
+net page0 loc=pin28;
+
+net gpioa<0> loc=pin39;
+net gpioa<1> loc=pin40;
+net gpioa<2> loc=pin41;
+net gpioa<3> loc=pin42;
+net gpioa<4> loc=pin1;
+net gpioa<5> loc=pin29;
+net gpioa<6> loc=pin30;
+net gpioa<7> loc=pin31;
+net gpiob<0> loc=pin32;
+net gpiob<1> loc=pin37;
+net gpiob<2> loc=pin38;
+
+net nwe loc=pin43;
+net noe loc=pin44;
+net nrst loc=pin33;
+net nwe_out loc=pin34;
+net noe_out loc=pin36;
