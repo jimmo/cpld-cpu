@@ -4,15 +4,16 @@ use ieee.std_logic_unsigned.all;
 
 entity mem_page is
   port (
-  data: inout std_logic_vector(5 downto 0);
+  data: inout std_logic_vector(7 downto 0);
   addr: inout std_logic_vector(12 downto 0);
   z: out std_logic;
   output: out std_logic_vector(5 downto 0);
-  nwe_out: out std_logic;
-  noe_out: out std_logic;
-  nwe: in std_logic;
-  noe: in std_logic;
-  nrst: in std_logic
+  nwe: inout std_logic;
+  nrst: in std_logic;
+
+  prog_clk: in std_logic;
+  prog_data: in std_logic;
+  prog_latch: in std_logic
   );
 end mem_page;
 
@@ -22,7 +23,10 @@ architecture arch of mem_page is
   signal page1: std_logic_vector(5 downto 0);
   signal sel_page0: boolean := FALSE;
   signal sel_page1: boolean := FALSE;
-  signal sel_any: boolean := FALSE;
+
+  signal prog_addr: std_logic_vector(17 downto 0);
+  signal prog_reg: std_logic_vector(7 downto 0);
+  signal prog_nwe: std_logic := '1';
 begin
   process(nrst, nwe)
   begin
@@ -31,32 +35,55 @@ begin
       page1 <= (others => '0');
     elsif falling_edge(nwe) then
       if sel_page0 then
-        page0 <= data;
+        page0 <= data(5 downto 0);
       elsif sel_page1 then
-        page1 <= data;
+        page1 <= data(5 downto 0);
       end if;
     end if;
   end process;
+  
   sel_page0 <= addr = "0000011111000";
   sel_page1 <= addr = "0000011111001";
-  sel_any <= sel_page0 or sel_page1;
 
-  nwe_out <= nwe when not sel_any else '1';
-  noe_out <= noe when not sel_any else '1';
-
-  process(noe, nwe, sel_any, sel_page0, sel_page1, page0, page1)
+  process(nrst, page0, page1, prog_addr, prog_nwe, prog_reg)
   begin
-    if noe = '1' or nwe = '0' or not sel_any then
-      data <= (others => 'Z');
-    elsif sel_page0 then
-      data <= page0;
-    elsif sel_page1 then
-      data <= page1;
+    if nrst = '0' then
+      addr(12) <= 'Z';
+      addr(11 downto 0) <= prog_addr(11 downto 0);
+      output <= prog_addr(17 downto 12);
+
+      nwe <= prog_nwe;
+
+      data <= prog_reg;
     else
-      data <= (others => '0');
+      addr <= (others => 'Z');
+      if addr(12) = '0' then
+        output <= page0;
+      else
+        output <= page1;
+      end if;
+
+      nwe <= 'Z';
+
+      data <= (others => 'Z');
     end if;
   end process;
-
-  output <= page0 when addr(12) = '0' else page1;
+  
   z <= '1' when addr(12 downto 8) = "00000" else '0';
+
+  process(nrst, prog_clk)
+  begin
+    if (nrst = '0') then
+      prog_addr <= (others => '0');
+      prog_reg <= (others => '0');
+      prog_nwe <= '1';
+    elsif rising_edge(prog_clk) then
+      if prog_latch = '1' then
+        prog_nwe <= not prog_nwe;
+      else
+        prog_reg <= prog_reg(6 downto 0) & prog_data;
+        prog_addr <= prog_addr + 1;
+      end if;
+    end if;
+  end process;
 end arch;

@@ -9,10 +9,9 @@ entity gpio_rng is
   page0: in std_logic;
   gpioa: out std_logic_vector(7 downto 0);
   gpiob: out std_logic_vector(2 downto 0);
-  nwe_out: out std_logic;
-  noe_out: out std_logic;
   nwe: in std_logic;
   noe: in std_logic;
+  noe_out: out std_logic;
   nrst: in std_logic
   );
 end gpio_rng;
@@ -55,8 +54,6 @@ begin
   sel_portb <= page0 = '1' and addr = "11110011";
   sel_rng <= page0 = '1' and addr = "11110100";
   sel_any <= sel_ddra or sel_ddrb or sel_porta or sel_portb or sel_rng;
-
-  nwe_out <= nwe when not sel_any else '1';
   noe_out <= noe when not sel_any else '1';
 
   process(noe, nwe, sel_any, sel_ddra, sel_ddrb, sel_porta, sel_portb, sel_rng, ddra, ddrb, porta, portb)

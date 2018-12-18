@@ -32,6 +32,5 @@ net gpiob<2> loc=pin38;
 
 net nwe loc=pin43;
 net noe loc=pin44;
-net nrst loc=pin33;
-net nwe_out loc=pin34;
 net noe_out loc=pin36;
+net nrst loc=pin33;

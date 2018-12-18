@@ -1,9 +1,11 @@
-net data<0> loc=pin2;
-net data<1> loc=pin3;
-net data<2> loc=pin5;
-net data<3> loc=pin6;
-net data<4> loc=pin7;
-net data<5> loc=pin8;
+net data<0> loc=pin39;
+net data<1> loc=pin40;
+net data<2> loc=pin41;
+net data<3> loc=pin42;
+net data<4> loc=pin5;
+net data<5> loc=pin6;
+net data<6> loc=pin7;
+net data<7> loc=pin8;
 
 net addr<0> loc=pin12;
 net addr<1> loc=pin13;
@@ -17,19 +19,20 @@ net addr<8> loc=pin22;
 net addr<9> loc=pin23;
 net addr<10> loc=pin27;
 net addr<11> loc=pin28;
-net addr<12> loc=pin1;
+net addr<12> loc=pin29;
 
-net output<0> loc=pin29;
-net output<1> loc=pin30;
-net output<2> loc=pin31;
-net output<3> loc=pin32;
+net output<0> loc=pin31;
+net output<1> loc=pin32;
+net output<2> loc=pin34;
+net output<3> loc=pin36;
 net output<4> loc=pin37;
 net output<5> loc=pin38;
 
-net z loc=pin39;
+net z loc=pin30;
 
 net nwe loc=pin43;
-net noe loc=pin44;
 net nrst loc=pin33;
-net nwe_out loc=pin34;
-net noe_out loc=pin36;
+
+net prog_clk loc=p1;
+net prog_data loc=p2;
+net prog_latch loc=p3;
