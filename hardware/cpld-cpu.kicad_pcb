@@ -17216,7 +17216,7 @@
   )
   (gr_line (start 60.96 78.74) (end 15.24 78.74) (layer F.SilkS) (width 0.2) (tstamp 5C12DB45))
   (gr_line (start 15.24 78.74) (end 15.24 139.7) (layer F.SilkS) (width 0.2) (tstamp 5C12DB44))
-  (gr_text "Accumulator (A)" (at 15.24 20.32) (layer F.SilkS)
+  (gr_text "Accumulator (A)" (at 17.78 20.32) (layer F.SilkS)
     (effects (font (size 3 2) (thickness 0.3)) (justify left))
   )
   (gr_line (start 60.96 15.24) (end 15.24 15.24) (layer F.SilkS) (width 0.2))
