@@ -15,23 +15,23 @@
     (1 In1.Cu signal hide)
     (2 In2.Cu signal hide)
     (31 B.Cu signal)
-    (32 B.Adhes user)
-    (33 F.Adhes user)
+    (32 B.Adhes user hide)
+    (33 F.Adhes user hide)
     (34 B.Paste user hide)
-    (35 F.Paste user)
-    (36 B.SilkS user)
+    (35 F.Paste user hide)
+    (36 B.SilkS user hide)
     (37 F.SilkS user)
-    (38 B.Mask user)
-    (39 F.Mask user)
-    (40 Dwgs.User user)
-    (41 Cmts.User user)
-    (42 Eco1.User user)
-    (43 Eco2.User user)
+    (38 B.Mask user hide)
+    (39 F.Mask user hide)
+    (40 Dwgs.User user hide)
+    (41 Cmts.User user hide)
+    (42 Eco1.User user hide)
+    (43 Eco2.User user hide)
     (44 Edge.Cuts user)
-    (45 Margin user)
-    (46 B.CrtYd user)
-    (47 F.CrtYd user)
-    (48 B.Fab user)
+    (45 Margin user hide)
+    (46 B.CrtYd user hide)
+    (47 F.CrtYd user hide)
+    (48 B.Fab user hide)
     (49 F.Fab user hide)
   )
 
@@ -60,6 +60,7 @@
     (pad_size 1.524 1.524)
     (pad_drill 0.762)
     (pad_to_mask_clearance 0.05)
+    (solder_mask_min_width 0.01)
     (aux_axis_origin 0 0)
     (visible_elements FFFFFF7F)
     (pcbplotparams
@@ -1719,7 +1720,7 @@
     (tags "resistor 0805")
     (path /5C51519A)
     (attr smd)
-    (fp_text reference D131 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D131 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -1757,7 +1758,7 @@
     (tags "resistor 0805")
     (path /5C5151A1)
     (attr smd)
-    (fp_text reference R209 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R209 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -2216,7 +2217,7 @@
     (tags "capacitor 0805")
     (path /6E6D0AE2)
     (attr smd)
-    (fp_text reference C53 (at 0 -1.75 180) (layer F.SilkS)
+    (fp_text reference C53 (at 0 -1.75 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 180) (layer F.Fab)
@@ -2252,7 +2253,7 @@
     (tags "capacitor 0805")
     (path /6E3DF517)
     (attr smd)
-    (fp_text reference C51 (at 0 -1.75 180) (layer F.SilkS)
+    (fp_text reference C51 (at 0 -1.75 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 180) (layer F.Fab)
@@ -2288,7 +2289,7 @@
     (tags "capacitor 0805")
     (path /6E3DF547)
     (attr smd)
-    (fp_text reference C52 (at 0 -1.75 180) (layer F.SilkS)
+    (fp_text reference C52 (at 0 -1.75 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 180) (layer F.Fab)
@@ -2324,7 +2325,7 @@
     (tags "capacitor 0805")
     (path /6E9C6D28)
     (attr smd)
-    (fp_text reference C50 (at 0 -1.75 180) (layer F.SilkS)
+    (fp_text reference C50 (at 0 -1.75 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 180) (layer F.Fab)
@@ -2360,7 +2361,7 @@
     (tags "capacitor 0805")
     (path /6E9C6CF8)
     (attr smd)
-    (fp_text reference C49 (at 0 -1.75 180) (layer F.SilkS)
+    (fp_text reference C49 (at 0 -1.75 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 180) (layer F.Fab)
@@ -2396,7 +2397,7 @@
     (tags "capacitor 0805")
     (path /6E9C6CC8)
     (attr smd)
-    (fp_text reference C48 (at 0 -1.75 180) (layer F.SilkS)
+    (fp_text reference C48 (at 0 -1.75 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 180) (layer F.Fab)
@@ -2432,7 +2433,7 @@
     (tags "capacitor 0805")
     (path /6E9C6C98)
     (attr smd)
-    (fp_text reference C47 (at 0 -1.75 180) (layer F.SilkS)
+    (fp_text reference C47 (at 0 -1.75 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 180) (layer F.Fab)
@@ -2468,7 +2469,7 @@
     (tags "capacitor 0805")
     (path /78FF112B)
     (attr smd)
-    (fp_text reference C46 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C46 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -2504,7 +2505,7 @@
     (tags "capacitor 0805")
     (path /78FF1138)
     (attr smd)
-    (fp_text reference C45 (at 0 -1.75 90) (layer F.SilkS)
+    (fp_text reference C45 (at 0 -1.75 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 90) (layer F.Fab)
@@ -2540,7 +2541,7 @@
     (tags "capacitor 0805")
     (path /78FF113F)
     (attr smd)
-    (fp_text reference C44 (at 0 -1.75 270) (layer F.SilkS)
+    (fp_text reference C44 (at 0 -1.75 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 270) (layer F.Fab)
@@ -2576,7 +2577,7 @@
     (tags "capacitor 0805")
     (path /70B18AA3)
     (attr smd)
-    (fp_text reference C43 (at 0 -1.75 180) (layer F.SilkS)
+    (fp_text reference C43 (at 0 -1.75 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 180) (layer F.Fab)
@@ -2612,7 +2613,7 @@
     (tags "capacitor 0805")
     (path /6E3DF4E7)
     (attr smd)
-    (fp_text reference C42 (at 0 -1.75 180) (layer F.SilkS)
+    (fp_text reference C42 (at 0 -1.75 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 180) (layer F.Fab)
@@ -2776,7 +2777,7 @@
     (tags "resistor 0805")
     (path /78CC8721)
     (attr smd)
-    (fp_text reference D130 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D130 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -2814,7 +2815,7 @@
     (tags "resistor 0805")
     (path /783657FC)
     (attr smd)
-    (fp_text reference D128 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D128 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -2852,7 +2853,7 @@
     (tags "resistor 0805")
     (path /77A0CBF0)
     (attr smd)
-    (fp_text reference D127 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D127 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -2890,7 +2891,7 @@
     (tags "resistor 0805")
     (path /78CC8708)
     (attr smd)
-    (fp_text reference D129 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D129 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -2927,7 +2928,7 @@
     (descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x05 2.54mm single row")
     (path /6DB2ED52)
-    (fp_text reference J16 (at 0 -2.33) (layer F.SilkS)
+    (fp_text reference J16 (at 0 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value Clock (at 0 12.49) (layer F.Fab)
@@ -2973,7 +2974,7 @@
     (descr "Through hole straight pin header, 1x07, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x07 2.54mm single row")
     (path /7A9A4360)
-    (fp_text reference J15 (at 0 -2.33) (layer F.SilkS)
+    (fp_text reference J15 (at 0 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value Conn_01x07 (at 0 17.57) (layer F.Fab)
@@ -3024,7 +3025,7 @@
     (tags "resistor 0805")
     (path /6E3DF4CD)
     (attr smd)
-    (fp_text reference R196 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R196 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 10k (at 0 1.75) (layer F.Fab)
@@ -3060,7 +3061,7 @@
     (tags "resistor 0805")
     (path /70B18A89)
     (attr smd)
-    (fp_text reference R197 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R197 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 10k (at 0 1.75) (layer F.Fab)
@@ -3096,7 +3097,7 @@
     (tags "resistor 0805")
     (path /77A0CBF7)
     (attr smd)
-    (fp_text reference R198 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R198 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -3132,7 +3133,7 @@
     (tags "resistor 0805")
     (path /78365803)
     (attr smd)
-    (fp_text reference R199 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R199 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -3168,7 +3169,7 @@
     (tags "resistor 0805")
     (path /78CC870F)
     (attr smd)
-    (fp_text reference R200 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R200 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -3204,7 +3205,7 @@
     (tags "resistor 0805")
     (path /78CC8728)
     (attr smd)
-    (fp_text reference R201 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R201 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -3240,7 +3241,7 @@
     (tags "resistor 0805")
     (path /6E9C6C7E)
     (attr smd)
-    (fp_text reference R202 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R202 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 10k (at 0 1.75) (layer F.Fab)
@@ -3276,7 +3277,7 @@
     (tags "resistor 0805")
     (path /6E9C6CAE)
     (attr smd)
-    (fp_text reference R203 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R203 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 10k (at 0 1.75) (layer F.Fab)
@@ -3312,7 +3313,7 @@
     (tags "resistor 0805")
     (path /6E9C6CDE)
     (attr smd)
-    (fp_text reference R204 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R204 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 10k (at 0 1.75) (layer F.Fab)
@@ -3348,7 +3349,7 @@
     (tags "resistor 0805")
     (path /6E9C6D0E)
     (attr smd)
-    (fp_text reference R205 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R205 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 10k (at 0 1.75) (layer F.Fab)
@@ -3384,7 +3385,7 @@
     (tags "resistor 0805")
     (path /6E3DF4FD)
     (attr smd)
-    (fp_text reference R206 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R206 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 10k (at 0 1.75) (layer F.Fab)
@@ -3420,7 +3421,7 @@
     (tags "resistor 0805")
     (path /6E3DF52D)
     (attr smd)
-    (fp_text reference R207 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R207 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 10k (at 0 1.75) (layer F.Fab)
@@ -3456,7 +3457,7 @@
     (tags "resistor 0805")
     (path /6E6D0AC8)
     (attr smd)
-    (fp_text reference R208 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R208 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 10k (at 0 1.75) (layer F.Fab)
@@ -3491,7 +3492,7 @@
     (descr "Through hole straight pin header, 2x14, 2.54mm pitch, double rows")
     (tags "Through hole pin header THT 2x14 2.54mm double row")
     (path /953801E2)
-    (fp_text reference J12 (at 1.27 -2.33 180) (layer F.SilkS)
+    (fp_text reference J12 (at 1.27 -2.33 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value Conn_02x14_Odd_Even (at 1.27 35.35 180) (layer F.Fab)
@@ -3585,7 +3586,7 @@
     (descr "Through hole straight pin header, 2x17, 2.54mm pitch, double rows")
     (tags "Through hole pin header THT 2x17 2.54mm double row")
     (path /A6EC43A8)
-    (fp_text reference J14 (at 1.27 -2.33) (layer F.SilkS)
+    (fp_text reference J14 (at 1.27 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value Conn_02x17_Odd_Even (at 1.27 42.97) (layer F.Fab)
@@ -3692,7 +3693,7 @@
     (tags "resistor 0805")
     (path /69F4E6A1)
     (attr smd)
-    (fp_text reference D126 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D126 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -3730,7 +3731,7 @@
     (tags "resistor 0805")
     (path /6A221535)
     (attr smd)
-    (fp_text reference D125 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D125 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -3768,7 +3769,7 @@
     (tags "resistor 0805")
     (path /6A22153C)
     (attr smd)
-    (fp_text reference R194 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R194 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -3804,7 +3805,7 @@
     (tags "resistor 0805")
     (path /69F4E6A8)
     (attr smd)
-    (fp_text reference R195 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R195 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -3840,7 +3841,7 @@
     (tags "resistor 0805")
     (path /60CFC23D)
     (attr smd)
-    (fp_text reference R192 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R192 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -3876,7 +3877,7 @@
     (tags "resistor 0805")
     (path /60CFBF27)
     (attr smd)
-    (fp_text reference R193 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R193 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -3911,7 +3912,7 @@
     (descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x05 2.54mm single row")
     (path /5C75CDCD)
-    (fp_text reference J1 (at 0 -2.33) (layer F.SilkS)
+    (fp_text reference J1 (at 0 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value Acc (at 0 12.49) (layer F.Fab)
@@ -3957,7 +3958,7 @@
     (descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x05 2.54mm single row")
     (path /5C785C5A)
-    (fp_text reference J2 (at 0 -2.33) (layer F.SilkS)
+    (fp_text reference J2 (at 0 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value X (at 0 12.49) (layer F.Fab)
@@ -4003,7 +4004,7 @@
     (descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x05 2.54mm single row")
     (path /5C7DC5BE)
-    (fp_text reference J3 (at 0 -2.33) (layer F.SilkS)
+    (fp_text reference J3 (at 0 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value IR (at 0 12.49) (layer F.Fab)
@@ -4049,7 +4050,7 @@
     (descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x05 2.54mm single row")
     (path /5C70F33B)
-    (fp_text reference J4 (at 0 -2.33) (layer F.SilkS)
+    (fp_text reference J4 (at 0 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value AXM (at 0 12.49) (layer F.Fab)
@@ -4095,7 +4096,7 @@
     (descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x05 2.54mm single row")
     (path /5C7354F3)
-    (fp_text reference J5 (at 0 -2.33) (layer F.SilkS)
+    (fp_text reference J5 (at 0 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value Dec (at 0 12.49) (layer F.Fab)
@@ -4141,7 +4142,7 @@
     (descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x05 2.54mm single row")
     (path /5C7B0613)
-    (fp_text reference J6 (at 0 -2.33) (layer F.SilkS)
+    (fp_text reference J6 (at 0 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value AR (at 0 12.49) (layer F.Fab)
@@ -4187,7 +4188,7 @@
     (descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x05 2.54mm single row")
     (path /5C6EA68A)
-    (fp_text reference J7 (at 0 -2.33) (layer F.SilkS)
+    (fp_text reference J7 (at 0 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value ALU (at 0 12.49) (layer F.Fab)
@@ -4233,7 +4234,7 @@
     (descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x05 2.54mm single row")
     (path /5C6C6BA0)
-    (fp_text reference J8 (at 0 -2.33) (layer F.SilkS)
+    (fp_text reference J8 (at 0 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value Index (at 0 12.49) (layer F.Fab)
@@ -4279,7 +4280,7 @@
     (descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x05 2.54mm single row")
     (path /5C681B71)
-    (fp_text reference J9 (at 0 -2.33) (layer F.SilkS)
+    (fp_text reference J9 (at 0 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value PC_L (at 0 12.49) (layer F.Fab)
@@ -4325,7 +4326,7 @@
     (descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x05 2.54mm single row")
     (path /5C6A3DDF)
-    (fp_text reference J10 (at 0 -2.33) (layer F.SilkS)
+    (fp_text reference J10 (at 0 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value Page (at 0 12.49) (layer F.Fab)
@@ -4371,7 +4372,7 @@
     (descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x05 2.54mm single row")
     (path /5C5DD5D6)
-    (fp_text reference J11 (at 0 -2.33) (layer F.SilkS)
+    (fp_text reference J11 (at 0 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value PC_H (at 0 12.49) (layer F.Fab)
@@ -5825,7 +5826,7 @@
     (descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
     (tags "Through hole pin header THT 1x05 2.54mm single row")
     (path /937E6D64)
-    (fp_text reference J13 (at 0 -2.33) (layer F.SilkS)
+    (fp_text reference J13 (at 0 -2.33) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value GPIO (at 0 12.49) (layer F.Fab)
@@ -6240,7 +6241,7 @@
     (tags "capacitor 0805")
     (path /5C0E82D4)
     (attr smd)
-    (fp_text reference C1 (at 0 -1.75 270) (layer F.SilkS)
+    (fp_text reference C1 (at 0 -1.75 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 270) (layer F.Fab)
@@ -6276,7 +6277,7 @@
     (tags "capacitor 0805")
     (path /5C0E82CD)
     (attr smd)
-    (fp_text reference C2 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C2 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -6312,7 +6313,7 @@
     (tags "capacitor 0805")
     (path /5C0E82C0)
     (attr smd)
-    (fp_text reference C3 (at 0 -1.75 90) (layer F.SilkS)
+    (fp_text reference C3 (at 0 -1.75 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 90) (layer F.Fab)
@@ -6348,7 +6349,7 @@
     (tags "capacitor 0805")
     (path /5C0EC5EB)
     (attr smd)
-    (fp_text reference C4 (at 0 -1.75 270) (layer F.SilkS)
+    (fp_text reference C4 (at 0 -1.75 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 270) (layer F.Fab)
@@ -6384,7 +6385,7 @@
     (tags "capacitor 0805")
     (path /5C0EC5E4)
     (attr smd)
-    (fp_text reference C5 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C5 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -6420,7 +6421,7 @@
     (tags "capacitor 0805")
     (path /5C0EC5D7)
     (attr smd)
-    (fp_text reference C6 (at 0 -1.75 90) (layer F.SilkS)
+    (fp_text reference C6 (at 0 -1.75 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 90) (layer F.Fab)
@@ -6456,7 +6457,7 @@
     (tags "capacitor 0805")
     (path /5C101D65)
     (attr smd)
-    (fp_text reference C7 (at 0 -1.75 90) (layer F.SilkS)
+    (fp_text reference C7 (at 0 -1.75 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 90) (layer F.Fab)
@@ -6492,7 +6493,7 @@
     (tags "capacitor 0805")
     (path /5C101D5E)
     (attr smd)
-    (fp_text reference C8 (at 0 -1.75 270) (layer F.SilkS)
+    (fp_text reference C8 (at 0 -1.75 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 270) (layer F.Fab)
@@ -6528,7 +6529,7 @@
     (tags "capacitor 0805")
     (path /5C101D51)
     (attr smd)
-    (fp_text reference C9 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C9 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -6564,7 +6565,7 @@
     (tags "capacitor 0805")
     (path /5C0E55DF)
     (attr smd)
-    (fp_text reference C10 (at 0 -1.75 270) (layer F.SilkS)
+    (fp_text reference C10 (at 0 -1.75 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 270) (layer F.Fab)
@@ -6600,7 +6601,7 @@
     (tags "capacitor 0805")
     (path /5C0E55D8)
     (attr smd)
-    (fp_text reference C11 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C11 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -6636,7 +6637,7 @@
     (tags "capacitor 0805")
     (path /5C0E55CB)
     (attr smd)
-    (fp_text reference C12 (at 0 -1.75 90) (layer F.SilkS)
+    (fp_text reference C12 (at 0 -1.75 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 90) (layer F.Fab)
@@ -6672,7 +6673,7 @@
     (tags "capacitor 0805")
     (path /5C0F1FEC)
     (attr smd)
-    (fp_text reference C13 (at 0 -1.75 270) (layer F.SilkS)
+    (fp_text reference C13 (at 0 -1.75 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 270) (layer F.Fab)
@@ -6708,7 +6709,7 @@
     (tags "capacitor 0805")
     (path /5C0F1FE5)
     (attr smd)
-    (fp_text reference C14 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C14 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -6744,7 +6745,7 @@
     (tags "capacitor 0805")
     (path /5C0F1FD8)
     (attr smd)
-    (fp_text reference C15 (at 0 -1.75 90) (layer F.SilkS)
+    (fp_text reference C15 (at 0 -1.75 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 90) (layer F.Fab)
@@ -6780,7 +6781,7 @@
     (tags "capacitor 0805")
     (path /5C0F903C)
     (attr smd)
-    (fp_text reference C16 (at 0 -1.75 270) (layer F.SilkS)
+    (fp_text reference C16 (at 0 -1.75 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 270) (layer F.Fab)
@@ -6816,7 +6817,7 @@
     (tags "capacitor 0805")
     (path /5C0F9035)
     (attr smd)
-    (fp_text reference C17 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C17 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -6852,7 +6853,7 @@
     (tags "capacitor 0805")
     (path /5C0F9028)
     (attr smd)
-    (fp_text reference C18 (at 0 -1.75 90) (layer F.SilkS)
+    (fp_text reference C18 (at 0 -1.75 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 90) (layer F.Fab)
@@ -6888,7 +6889,7 @@
     (tags "capacitor 0805")
     (path /5C0E399C)
     (attr smd)
-    (fp_text reference C19 (at 0 -1.75 270) (layer F.SilkS)
+    (fp_text reference C19 (at 0 -1.75 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 270) (layer F.Fab)
@@ -6924,7 +6925,7 @@
     (tags "capacitor 0805")
     (path /5C0E3995)
     (attr smd)
-    (fp_text reference C20 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C20 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -6960,7 +6961,7 @@
     (tags "capacitor 0805")
     (path /5C0E3988)
     (attr smd)
-    (fp_text reference C21 (at 0 -1.75 90) (layer F.SilkS)
+    (fp_text reference C21 (at 0 -1.75 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 90) (layer F.Fab)
@@ -6996,7 +6997,7 @@
     (tags "capacitor 0805")
     (path /5C0E21CB)
     (attr smd)
-    (fp_text reference C22 (at 0 -1.75 270) (layer F.SilkS)
+    (fp_text reference C22 (at 0 -1.75 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 270) (layer F.Fab)
@@ -7032,7 +7033,7 @@
     (tags "capacitor 0805")
     (path /5C0E21C4)
     (attr smd)
-    (fp_text reference C23 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C23 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -7068,7 +7069,7 @@
     (tags "capacitor 0805")
     (path /5C0E21B7)
     (attr smd)
-    (fp_text reference C24 (at 0 -1.75 90) (layer F.SilkS)
+    (fp_text reference C24 (at 0 -1.75 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 90) (layer F.Fab)
@@ -7104,7 +7105,7 @@
     (tags "capacitor 0805")
     (path /5C0DEBA0)
     (attr smd)
-    (fp_text reference C25 (at 0 -1.75 270) (layer F.SilkS)
+    (fp_text reference C25 (at 0 -1.75 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 270) (layer F.Fab)
@@ -7140,7 +7141,7 @@
     (tags "capacitor 0805")
     (path /5C0DEB72)
     (attr smd)
-    (fp_text reference C26 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C26 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -7176,7 +7177,7 @@
     (tags "capacitor 0805")
     (path /5C0DE3F3)
     (attr smd)
-    (fp_text reference C27 (at 0 -1.75 90) (layer F.SilkS)
+    (fp_text reference C27 (at 0 -1.75 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 90) (layer F.Fab)
@@ -7212,7 +7213,7 @@
     (tags "capacitor 0805")
     (path /AA12C8E4)
     (attr smd)
-    (fp_text reference C28 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C28 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -7248,7 +7249,7 @@
     (tags "capacitor 0805")
     (path /A9C0E6CC)
     (attr smd)
-    (fp_text reference C29 (at 0 -1.75 180) (layer F.SilkS)
+    (fp_text reference C29 (at 0 -1.75 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 180) (layer F.Fab)
@@ -7284,7 +7285,7 @@
     (tags "capacitor 0805")
     (path /5C0E2A61)
     (attr smd)
-    (fp_text reference C30 (at 0 -1.75 270) (layer F.SilkS)
+    (fp_text reference C30 (at 0 -1.75 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 270) (layer F.Fab)
@@ -7320,7 +7321,7 @@
     (tags "capacitor 0805")
     (path /5C0E2A5A)
     (attr smd)
-    (fp_text reference C31 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C31 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -7356,7 +7357,7 @@
     (tags "capacitor 0805")
     (path /5C0E2A4D)
     (attr smd)
-    (fp_text reference C32 (at 0 -1.75 90) (layer F.SilkS)
+    (fp_text reference C32 (at 0 -1.75 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 90) (layer F.Fab)
@@ -7392,7 +7393,7 @@
     (tags "capacitor 0805")
     (path /5C10CB38)
     (attr smd)
-    (fp_text reference C33 (at 0 -1.75 270) (layer F.SilkS)
+    (fp_text reference C33 (at 0 -1.75 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 270) (layer F.Fab)
@@ -7428,7 +7429,7 @@
     (tags "capacitor 0805")
     (path /5C10CB31)
     (attr smd)
-    (fp_text reference C34 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C34 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -7464,7 +7465,7 @@
     (tags "capacitor 0805")
     (path /5C10CB24)
     (attr smd)
-    (fp_text reference C35 (at 0 -1.75 90) (layer F.SilkS)
+    (fp_text reference C35 (at 0 -1.75 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 90) (layer F.Fab)
@@ -7500,7 +7501,7 @@
     (tags "capacitor 0805")
     (path /93C0B631)
     (attr smd)
-    (fp_text reference C36 (at 0 -1.75 270) (layer F.SilkS)
+    (fp_text reference C36 (at 0 -1.75 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 270) (layer F.Fab)
@@ -7536,7 +7537,7 @@
     (tags "capacitor 0805")
     (path /93C0B62A)
     (attr smd)
-    (fp_text reference C37 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C37 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -7572,7 +7573,7 @@
     (tags "capacitor 0805")
     (path /93C0B61D)
     (attr smd)
-    (fp_text reference C38 (at 0 -1.75 90) (layer F.SilkS)
+    (fp_text reference C38 (at 0 -1.75 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75 90) (layer F.Fab)
@@ -7608,7 +7609,7 @@
     (tags "capacitor 0805")
     (path /A62B2DE2)
     (attr smd)
-    (fp_text reference C39 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C39 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -7644,7 +7645,7 @@
     (tags "capacitor 0805")
     (path /A69E7C20)
     (attr smd)
-    (fp_text reference C40 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C40 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -7680,7 +7681,7 @@
     (tags "capacitor 0805")
     (path /A6C51F4C)
     (attr smd)
-    (fp_text reference C41 (at 0 -1.75) (layer F.SilkS)
+    (fp_text reference C41 (at 0 -1.75) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 100n (at 0 1.75) (layer F.Fab)
@@ -7716,7 +7717,7 @@
     (tags "resistor 0805")
     (path /783037EC)
     (attr smd)
-    (fp_text reference D1 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D1 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -7754,7 +7755,7 @@
     (tags "resistor 0805")
     (path /783037FB)
     (attr smd)
-    (fp_text reference D2 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D2 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -7792,7 +7793,7 @@
     (tags "resistor 0805")
     (path /7830380A)
     (attr smd)
-    (fp_text reference D3 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D3 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -7830,7 +7831,7 @@
     (tags "resistor 0805")
     (path /78303819)
     (attr smd)
-    (fp_text reference D4 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D4 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -7868,7 +7869,7 @@
     (tags "resistor 0805")
     (path /78303828)
     (attr smd)
-    (fp_text reference D5 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D5 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -7906,7 +7907,7 @@
     (tags "resistor 0805")
     (path /78303837)
     (attr smd)
-    (fp_text reference D6 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D6 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -7944,7 +7945,7 @@
     (tags "resistor 0805")
     (path /78303846)
     (attr smd)
-    (fp_text reference D7 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D7 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -7982,7 +7983,7 @@
     (tags "resistor 0805")
     (path /78303855)
     (attr smd)
-    (fp_text reference D8 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D8 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8020,7 +8021,7 @@
     (tags "resistor 0805")
     (path /79E93F1E)
     (attr smd)
-    (fp_text reference D9 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D9 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8058,7 +8059,7 @@
     (tags "resistor 0805")
     (path /79E93F2D)
     (attr smd)
-    (fp_text reference D10 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D10 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8096,7 +8097,7 @@
     (tags "resistor 0805")
     (path /79E93F3C)
     (attr smd)
-    (fp_text reference D11 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D11 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8134,7 +8135,7 @@
     (tags "resistor 0805")
     (path /79E93F4B)
     (attr smd)
-    (fp_text reference D12 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D12 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8172,7 +8173,7 @@
     (tags "resistor 0805")
     (path /79E93F5A)
     (attr smd)
-    (fp_text reference D13 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D13 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8210,7 +8211,7 @@
     (tags "resistor 0805")
     (path /79E93F69)
     (attr smd)
-    (fp_text reference D14 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D14 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8248,7 +8249,7 @@
     (tags "resistor 0805")
     (path /79E93F78)
     (attr smd)
-    (fp_text reference D15 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D15 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8286,7 +8287,7 @@
     (tags "resistor 0805")
     (path /79E93F87)
     (attr smd)
-    (fp_text reference D16 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D16 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -8324,7 +8325,7 @@
     (tags "resistor 0805")
     (path /5E1F6E35)
     (attr smd)
-    (fp_text reference D17 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D17 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -8362,7 +8363,7 @@
     (tags "resistor 0805")
     (path /5E1F6E44)
     (attr smd)
-    (fp_text reference D18 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D18 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -8400,7 +8401,7 @@
     (tags "resistor 0805")
     (path /5E1F6E53)
     (attr smd)
-    (fp_text reference D19 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D19 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -8438,7 +8439,7 @@
     (tags "resistor 0805")
     (path /5E1F6E62)
     (attr smd)
-    (fp_text reference D20 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D20 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -8476,7 +8477,7 @@
     (tags "resistor 0805")
     (path /5E1F6E71)
     (attr smd)
-    (fp_text reference D21 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D21 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -8514,7 +8515,7 @@
     (tags "resistor 0805")
     (path /5E1F6E80)
     (attr smd)
-    (fp_text reference D22 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D22 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -8552,7 +8553,7 @@
     (tags "resistor 0805")
     (path /5E1F6E8F)
     (attr smd)
-    (fp_text reference D23 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D23 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -8590,7 +8591,7 @@
     (tags "resistor 0805")
     (path /5E1F6E9E)
     (attr smd)
-    (fp_text reference D24 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D24 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -8628,7 +8629,7 @@
     (tags "resistor 0805")
     (path /7AE2A674)
     (attr smd)
-    (fp_text reference D25 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D25 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8666,7 +8667,7 @@
     (tags "resistor 0805")
     (path /7AE2A683)
     (attr smd)
-    (fp_text reference D26 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D26 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8704,7 +8705,7 @@
     (tags "resistor 0805")
     (path /7AE2A692)
     (attr smd)
-    (fp_text reference D27 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D27 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8742,7 +8743,7 @@
     (tags "resistor 0805")
     (path /7AE2A6A1)
     (attr smd)
-    (fp_text reference D28 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D28 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8780,7 +8781,7 @@
     (tags "resistor 0805")
     (path /7AE2A6B0)
     (attr smd)
-    (fp_text reference D29 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D29 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8818,7 +8819,7 @@
     (tags "resistor 0805")
     (path /7AE2A6BF)
     (attr smd)
-    (fp_text reference D30 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D30 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8856,7 +8857,7 @@
     (tags "resistor 0805")
     (path /7AE2A6CE)
     (attr smd)
-    (fp_text reference D31 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D31 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8894,7 +8895,7 @@
     (tags "resistor 0805")
     (path /7AE2A6DD)
     (attr smd)
-    (fp_text reference D32 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference D32 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 180) (layer F.Fab)
@@ -8932,7 +8933,7 @@
     (tags "resistor 0805")
     (path /61A48BB6)
     (attr smd)
-    (fp_text reference D33 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D33 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -8970,7 +8971,7 @@
     (tags "resistor 0805")
     (path /61A48BC5)
     (attr smd)
-    (fp_text reference D34 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D34 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9008,7 +9009,7 @@
     (tags "resistor 0805")
     (path /61A48BD4)
     (attr smd)
-    (fp_text reference D35 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D35 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9046,7 +9047,7 @@
     (tags "resistor 0805")
     (path /61A48BE3)
     (attr smd)
-    (fp_text reference D36 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D36 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9084,7 +9085,7 @@
     (tags "resistor 0805")
     (path /61A48BF2)
     (attr smd)
-    (fp_text reference D37 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D37 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9122,7 +9123,7 @@
     (tags "resistor 0805")
     (path /61A48C01)
     (attr smd)
-    (fp_text reference D38 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D38 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9160,7 +9161,7 @@
     (tags "resistor 0805")
     (path /61A48C10)
     (attr smd)
-    (fp_text reference D39 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D39 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9198,7 +9199,7 @@
     (tags "resistor 0805")
     (path /61A48C1F)
     (attr smd)
-    (fp_text reference D40 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D40 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9236,7 +9237,7 @@
     (tags "resistor 0805")
     (path /61D32FBD)
     (attr smd)
-    (fp_text reference D41 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D41 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9274,7 +9275,7 @@
     (tags "resistor 0805")
     (path /61F9A815)
     (attr smd)
-    (fp_text reference D42 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D42 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9312,7 +9313,7 @@
     (tags "resistor 0805")
     (path /61F9A824)
     (attr smd)
-    (fp_text reference D43 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D43 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9350,7 +9351,7 @@
     (tags "resistor 0805")
     (path /61F9A833)
     (attr smd)
-    (fp_text reference D44 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D44 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9388,7 +9389,7 @@
     (tags "resistor 0805")
     (path /61F9A842)
     (attr smd)
-    (fp_text reference D45 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D45 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9426,7 +9427,7 @@
     (tags "resistor 0805")
     (path /61F9A851)
     (attr smd)
-    (fp_text reference D46 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D46 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9464,7 +9465,7 @@
     (tags "resistor 0805")
     (path /61F9A860)
     (attr smd)
-    (fp_text reference D47 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D47 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9502,7 +9503,7 @@
     (tags "resistor 0805")
     (path /61F9A86F)
     (attr smd)
-    (fp_text reference D48 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D48 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9540,7 +9541,7 @@
     (tags "resistor 0805")
     (path /61F9A87E)
     (attr smd)
-    (fp_text reference D49 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D49 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9578,7 +9579,7 @@
     (tags "resistor 0805")
     (path /5DC7AED7)
     (attr smd)
-    (fp_text reference D50 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D50 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9616,7 +9617,7 @@
     (tags "resistor 0805")
     (path /5DC7AEE6)
     (attr smd)
-    (fp_text reference D51 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D51 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9654,7 +9655,7 @@
     (tags "resistor 0805")
     (path /5DC7AEF5)
     (attr smd)
-    (fp_text reference D52 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D52 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9692,7 +9693,7 @@
     (tags "resistor 0805")
     (path /5DC7AF04)
     (attr smd)
-    (fp_text reference D53 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D53 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9730,7 +9731,7 @@
     (tags "resistor 0805")
     (path /5DC7AF13)
     (attr smd)
-    (fp_text reference D54 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D54 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9768,7 +9769,7 @@
     (tags "resistor 0805")
     (path /5DC7AF22)
     (attr smd)
-    (fp_text reference D55 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D55 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9806,7 +9807,7 @@
     (tags "resistor 0805")
     (path /5DC7AF31)
     (attr smd)
-    (fp_text reference D56 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D56 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9844,7 +9845,7 @@
     (tags "resistor 0805")
     (path /5DC7AF40)
     (attr smd)
-    (fp_text reference D57 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D57 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9882,7 +9883,7 @@
     (tags "resistor 0805")
     (path /615CC901)
     (attr smd)
-    (fp_text reference D58 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D58 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9920,7 +9921,7 @@
     (tags "resistor 0805")
     (path /615CC910)
     (attr smd)
-    (fp_text reference D59 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D59 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9958,7 +9959,7 @@
     (tags "resistor 0805")
     (path /615CC91F)
     (attr smd)
-    (fp_text reference D60 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D60 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -9996,7 +9997,7 @@
     (tags "resistor 0805")
     (path /7B97E9AE)
     (attr smd)
-    (fp_text reference D61 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D61 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10034,7 +10035,7 @@
     (tags "resistor 0805")
     (path /7B97E9BD)
     (attr smd)
-    (fp_text reference D62 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D62 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10072,7 +10073,7 @@
     (tags "resistor 0805")
     (path /7B97E9CC)
     (attr smd)
-    (fp_text reference D63 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D63 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10110,7 +10111,7 @@
     (tags "resistor 0805")
     (path /7B97E9DB)
     (attr smd)
-    (fp_text reference D64 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D64 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10148,7 +10149,7 @@
     (tags "resistor 0805")
     (path /7B97E9EA)
     (attr smd)
-    (fp_text reference D65 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D65 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10186,7 +10187,7 @@
     (tags "resistor 0805")
     (path /7B97E9F9)
     (attr smd)
-    (fp_text reference D66 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D66 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10224,7 +10225,7 @@
     (tags "resistor 0805")
     (path /7B97EA08)
     (attr smd)
-    (fp_text reference D67 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D67 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10262,7 +10263,7 @@
     (tags "resistor 0805")
     (path /7B97EA17)
     (attr smd)
-    (fp_text reference D68 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D68 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10300,7 +10301,7 @@
     (tags "resistor 0805")
     (path /7BCDE7C7)
     (attr smd)
-    (fp_text reference D69 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D69 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10338,7 +10339,7 @@
     (tags "resistor 0805")
     (path /5C1B92D8)
     (attr smd)
-    (fp_text reference D70 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D70 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10376,7 +10377,7 @@
     (tags "resistor 0805")
     (path /5C1F6D81)
     (attr smd)
-    (fp_text reference D71 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D71 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10414,7 +10415,7 @@
     (tags "resistor 0805")
     (path /5C20B9A3)
     (attr smd)
-    (fp_text reference D72 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D72 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10452,7 +10453,7 @@
     (tags "resistor 0805")
     (path /5C22028B)
     (attr smd)
-    (fp_text reference D73 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D73 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10490,7 +10491,7 @@
     (tags "resistor 0805")
     (path /5C234DA0)
     (attr smd)
-    (fp_text reference D74 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D74 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10528,7 +10529,7 @@
     (tags "resistor 0805")
     (path /5C249AED)
     (attr smd)
-    (fp_text reference D75 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D75 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10566,7 +10567,7 @@
     (tags "resistor 0805")
     (path /5C25EA75)
     (attr smd)
-    (fp_text reference D76 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D76 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10604,7 +10605,7 @@
     (tags "resistor 0805")
     (path /5C273C37)
     (attr smd)
-    (fp_text reference D77 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D77 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10642,7 +10643,7 @@
     (tags "resistor 0805")
     (path /5C47E0C7)
     (attr smd)
-    (fp_text reference D78 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D78 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10680,7 +10681,7 @@
     (tags "resistor 0805")
     (path /5C47E0D6)
     (attr smd)
-    (fp_text reference D79 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D79 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10718,7 +10719,7 @@
     (tags "resistor 0805")
     (path /5C47E0E5)
     (attr smd)
-    (fp_text reference D80 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D80 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10756,7 +10757,7 @@
     (tags "resistor 0805")
     (path /5C47E0F4)
     (attr smd)
-    (fp_text reference D81 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D81 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10794,7 +10795,7 @@
     (tags "resistor 0805")
     (path /5C47E103)
     (attr smd)
-    (fp_text reference D82 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D82 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10832,7 +10833,7 @@
     (tags "resistor 0805")
     (path /5C47E112)
     (attr smd)
-    (fp_text reference D83 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D83 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10870,7 +10871,7 @@
     (tags "resistor 0805")
     (path /5C47E121)
     (attr smd)
-    (fp_text reference D84 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D84 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10908,7 +10909,7 @@
     (tags "resistor 0805")
     (path /5C47E130)
     (attr smd)
-    (fp_text reference D85 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D85 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10946,7 +10947,7 @@
     (tags "resistor 0805")
     (path /8465981C)
     (attr smd)
-    (fp_text reference D86 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D86 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -10984,7 +10985,7 @@
     (tags "resistor 0805")
     (path /8465982B)
     (attr smd)
-    (fp_text reference D87 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D87 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11022,7 +11023,7 @@
     (tags "resistor 0805")
     (path /8465983A)
     (attr smd)
-    (fp_text reference D88 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D88 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11060,7 +11061,7 @@
     (tags "resistor 0805")
     (path /84659849)
     (attr smd)
-    (fp_text reference D89 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D89 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11098,7 +11099,7 @@
     (tags "resistor 0805")
     (path /84659858)
     (attr smd)
-    (fp_text reference D90 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D90 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11136,7 +11137,7 @@
     (tags "resistor 0805")
     (path /84659867)
     (attr smd)
-    (fp_text reference D91 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D91 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11174,7 +11175,7 @@
     (tags "resistor 0805")
     (path /84659876)
     (attr smd)
-    (fp_text reference D92 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D92 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11212,7 +11213,7 @@
     (tags "resistor 0805")
     (path /84659885)
     (attr smd)
-    (fp_text reference D93 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D93 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11250,7 +11251,7 @@
     (tags "resistor 0805")
     (path /846598C9)
     (attr smd)
-    (fp_text reference D94 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D94 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11288,7 +11289,7 @@
     (tags "resistor 0805")
     (path /846598D8)
     (attr smd)
-    (fp_text reference D95 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D95 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11326,7 +11327,7 @@
     (tags "resistor 0805")
     (path /846598E7)
     (attr smd)
-    (fp_text reference D96 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D96 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11364,7 +11365,7 @@
     (tags "resistor 0805")
     (path /846598F6)
     (attr smd)
-    (fp_text reference D97 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D97 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11402,7 +11403,7 @@
     (tags "resistor 0805")
     (path /8465991E)
     (attr smd)
-    (fp_text reference D98 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D98 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11440,7 +11441,7 @@
     (tags "resistor 0805")
     (path /84847AE9)
     (attr smd)
-    (fp_text reference D99 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D99 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11478,7 +11479,7 @@
     (tags "resistor 0805")
     (path /84847AF8)
     (attr smd)
-    (fp_text reference D100 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D100 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11516,7 +11517,7 @@
     (tags "resistor 0805")
     (path /84847B07)
     (attr smd)
-    (fp_text reference D101 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D101 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11554,7 +11555,7 @@
     (tags "resistor 0805")
     (path /84847B16)
     (attr smd)
-    (fp_text reference D102 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D102 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11592,7 +11593,7 @@
     (tags "resistor 0805")
     (path /84847B25)
     (attr smd)
-    (fp_text reference D103 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D103 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11630,7 +11631,7 @@
     (tags "resistor 0805")
     (path /7F6E6EEB)
     (attr smd)
-    (fp_text reference D104 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D104 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11668,7 +11669,7 @@
     (tags "resistor 0805")
     (path /7F6E6EFA)
     (attr smd)
-    (fp_text reference D105 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D105 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11706,7 +11707,7 @@
     (tags "resistor 0805")
     (path /7F6E6F09)
     (attr smd)
-    (fp_text reference D106 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D106 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11744,7 +11745,7 @@
     (tags "resistor 0805")
     (path /7F6E6F18)
     (attr smd)
-    (fp_text reference D107 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D107 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11782,7 +11783,7 @@
     (tags "resistor 0805")
     (path /7F6E6F27)
     (attr smd)
-    (fp_text reference D108 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D108 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11820,7 +11821,7 @@
     (tags "resistor 0805")
     (path /7F6E6F36)
     (attr smd)
-    (fp_text reference D109 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D109 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11858,7 +11859,7 @@
     (tags "resistor 0805")
     (path /7F6E6F45)
     (attr smd)
-    (fp_text reference D110 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D110 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11896,7 +11897,7 @@
     (tags "resistor 0805")
     (path /7F6E6F54)
     (attr smd)
-    (fp_text reference D111 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D111 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11934,7 +11935,7 @@
     (tags "resistor 0805")
     (path /7FFD119D)
     (attr smd)
-    (fp_text reference D112 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D112 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -11972,7 +11973,7 @@
     (tags "resistor 0805")
     (path /7FFD11AC)
     (attr smd)
-    (fp_text reference D113 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D113 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -12010,7 +12011,7 @@
     (tags "resistor 0805")
     (path /7FFD11BB)
     (attr smd)
-    (fp_text reference D114 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D114 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -12048,7 +12049,7 @@
     (tags "resistor 0805")
     (path /7FFD11CA)
     (attr smd)
-    (fp_text reference D115 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D115 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -12086,7 +12087,7 @@
     (tags "resistor 0805")
     (path /807167C7)
     (attr smd)
-    (fp_text reference D116 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D116 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -12124,7 +12125,7 @@
     (tags "resistor 0805")
     (path /9693757F)
     (attr smd)
-    (fp_text reference D117 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D117 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -12162,7 +12163,7 @@
     (tags "resistor 0805")
     (path /9693758E)
     (attr smd)
-    (fp_text reference D118 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D118 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -12200,7 +12201,7 @@
     (tags "resistor 0805")
     (path /9693759D)
     (attr smd)
-    (fp_text reference D119 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D119 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -12238,7 +12239,7 @@
     (tags "resistor 0805")
     (path /969375AC)
     (attr smd)
-    (fp_text reference D120 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D120 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -12276,7 +12277,7 @@
     (tags "resistor 0805")
     (path /969375BB)
     (attr smd)
-    (fp_text reference D121 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D121 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -12314,7 +12315,7 @@
     (tags "resistor 0805")
     (path /969375CA)
     (attr smd)
-    (fp_text reference D122 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D122 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -12352,7 +12353,7 @@
     (tags "resistor 0805")
     (path /969375D9)
     (attr smd)
-    (fp_text reference D123 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D123 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -12390,7 +12391,7 @@
     (tags "resistor 0805")
     (path /969375E8)
     (attr smd)
-    (fp_text reference D124 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference D124 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value LED_Small (at 0 1.75 270) (layer F.Fab)
@@ -12428,7 +12429,7 @@
     (tags "resistor 0805")
     (path /7AE2A67B)
     (attr smd)
-    (fp_text reference R1 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R1 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75) (layer F.Fab)
@@ -12464,7 +12465,7 @@
     (tags "resistor 0805")
     (path /7AE2A68A)
     (attr smd)
-    (fp_text reference R2 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R2 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75) (layer F.Fab)
@@ -12500,7 +12501,7 @@
     (tags "resistor 0805")
     (path /7AE2A699)
     (attr smd)
-    (fp_text reference R3 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R3 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75) (layer F.Fab)
@@ -12536,7 +12537,7 @@
     (tags "resistor 0805")
     (path /7AE2A6A8)
     (attr smd)
-    (fp_text reference R4 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R4 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75) (layer F.Fab)
@@ -12572,7 +12573,7 @@
     (tags "resistor 0805")
     (path /7AE2A6B7)
     (attr smd)
-    (fp_text reference R5 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R5 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75) (layer F.Fab)
@@ -12608,7 +12609,7 @@
     (tags "resistor 0805")
     (path /7AE2A6C6)
     (attr smd)
-    (fp_text reference R6 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R6 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75) (layer F.Fab)
@@ -12644,7 +12645,7 @@
     (tags "resistor 0805")
     (path /7AE2A6D5)
     (attr smd)
-    (fp_text reference R7 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R7 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75) (layer F.Fab)
@@ -12680,7 +12681,7 @@
     (tags "resistor 0805")
     (path /7AE2A6E4)
     (attr smd)
-    (fp_text reference R8 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R8 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75) (layer F.Fab)
@@ -12716,7 +12717,7 @@
     (tags "resistor 0805")
     (path /783037F3)
     (attr smd)
-    (fp_text reference R9 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R9 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -12752,7 +12753,7 @@
     (tags "resistor 0805")
     (path /78303802)
     (attr smd)
-    (fp_text reference R10 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R10 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -12788,7 +12789,7 @@
     (tags "resistor 0805")
     (path /78303811)
     (attr smd)
-    (fp_text reference R11 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R11 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -12824,7 +12825,7 @@
     (tags "resistor 0805")
     (path /78303820)
     (attr smd)
-    (fp_text reference R12 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R12 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -12860,7 +12861,7 @@
     (tags "resistor 0805")
     (path /7830382F)
     (attr smd)
-    (fp_text reference R13 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R13 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -12896,7 +12897,7 @@
     (tags "resistor 0805")
     (path /7830383E)
     (attr smd)
-    (fp_text reference R14 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R14 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -12932,7 +12933,7 @@
     (tags "resistor 0805")
     (path /7830384D)
     (attr smd)
-    (fp_text reference R15 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R15 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -12968,7 +12969,7 @@
     (tags "resistor 0805")
     (path /7830385C)
     (attr smd)
-    (fp_text reference R16 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R16 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -13004,7 +13005,7 @@
     (tags "resistor 0805")
     (path /79E93F25)
     (attr smd)
-    (fp_text reference R17 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R17 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -13040,7 +13041,7 @@
     (tags "resistor 0805")
     (path /79E93F34)
     (attr smd)
-    (fp_text reference R18 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R18 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -13076,7 +13077,7 @@
     (tags "resistor 0805")
     (path /79E93F43)
     (attr smd)
-    (fp_text reference R19 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R19 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -13112,7 +13113,7 @@
     (tags "resistor 0805")
     (path /79E93F52)
     (attr smd)
-    (fp_text reference R20 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R20 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -13148,7 +13149,7 @@
     (tags "resistor 0805")
     (path /79E93F61)
     (attr smd)
-    (fp_text reference R21 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R21 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -13184,7 +13185,7 @@
     (tags "resistor 0805")
     (path /79E93F70)
     (attr smd)
-    (fp_text reference R22 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R22 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -13220,7 +13221,7 @@
     (tags "resistor 0805")
     (path /79E93F7F)
     (attr smd)
-    (fp_text reference R23 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R23 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75) (layer F.Fab)
@@ -13256,7 +13257,7 @@
     (tags "resistor 0805")
     (path /79E93F8E)
     (attr smd)
-    (fp_text reference R24 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R24 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13292,7 +13293,7 @@
     (tags "resistor 0805")
     (path /5E1F6E3C)
     (attr smd)
-    (fp_text reference R25 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R25 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13328,7 +13329,7 @@
     (tags "resistor 0805")
     (path /5E1F6E4B)
     (attr smd)
-    (fp_text reference R26 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R26 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13364,7 +13365,7 @@
     (tags "resistor 0805")
     (path /5E1F6E5A)
     (attr smd)
-    (fp_text reference R27 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R27 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13400,7 +13401,7 @@
     (tags "resistor 0805")
     (path /5E1F6E69)
     (attr smd)
-    (fp_text reference R28 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R28 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13436,7 +13437,7 @@
     (tags "resistor 0805")
     (path /5E1F6E78)
     (attr smd)
-    (fp_text reference R29 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R29 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13472,7 +13473,7 @@
     (tags "resistor 0805")
     (path /5E1F6E87)
     (attr smd)
-    (fp_text reference R30 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R30 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13508,7 +13509,7 @@
     (tags "resistor 0805")
     (path /5E1F6E96)
     (attr smd)
-    (fp_text reference R31 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R31 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13544,7 +13545,7 @@
     (tags "resistor 0805")
     (path /5E1F6EA5)
     (attr smd)
-    (fp_text reference R32 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R32 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13580,7 +13581,7 @@
     (tags "resistor 0805")
     (path /61A48BBD)
     (attr smd)
-    (fp_text reference R33 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R33 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13616,7 +13617,7 @@
     (tags "resistor 0805")
     (path /61A48BCC)
     (attr smd)
-    (fp_text reference R34 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R34 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13652,7 +13653,7 @@
     (tags "resistor 0805")
     (path /61A48BDB)
     (attr smd)
-    (fp_text reference R35 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R35 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13688,7 +13689,7 @@
     (tags "resistor 0805")
     (path /61A48BEA)
     (attr smd)
-    (fp_text reference R36 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R36 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13724,7 +13725,7 @@
     (tags "resistor 0805")
     (path /61A48BF9)
     (attr smd)
-    (fp_text reference R37 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R37 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13760,7 +13761,7 @@
     (tags "resistor 0805")
     (path /61A48C08)
     (attr smd)
-    (fp_text reference R38 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R38 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13796,7 +13797,7 @@
     (tags "resistor 0805")
     (path /61A48C17)
     (attr smd)
-    (fp_text reference R39 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R39 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13832,7 +13833,7 @@
     (tags "resistor 0805")
     (path /61A48C26)
     (attr smd)
-    (fp_text reference R40 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R40 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13868,7 +13869,7 @@
     (tags "resistor 0805")
     (path /61D32FC4)
     (attr smd)
-    (fp_text reference R41 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R41 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13904,7 +13905,7 @@
     (tags "resistor 0805")
     (path /61F9A81C)
     (attr smd)
-    (fp_text reference R42 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R42 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13940,7 +13941,7 @@
     (tags "resistor 0805")
     (path /61F9A82B)
     (attr smd)
-    (fp_text reference R43 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R43 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -13976,7 +13977,7 @@
     (tags "resistor 0805")
     (path /61F9A83A)
     (attr smd)
-    (fp_text reference R44 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R44 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -14012,7 +14013,7 @@
     (tags "resistor 0805")
     (path /61F9A849)
     (attr smd)
-    (fp_text reference R45 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R45 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -14048,7 +14049,7 @@
     (tags "resistor 0805")
     (path /61F9A858)
     (attr smd)
-    (fp_text reference R46 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R46 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -14084,7 +14085,7 @@
     (tags "resistor 0805")
     (path /61F9A867)
     (attr smd)
-    (fp_text reference R47 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R47 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -14120,7 +14121,7 @@
     (tags "resistor 0805")
     (path /61F9A876)
     (attr smd)
-    (fp_text reference R48 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R48 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -14156,7 +14157,7 @@
     (tags "resistor 0805")
     (path /61F9A885)
     (attr smd)
-    (fp_text reference R49 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R49 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -14192,7 +14193,7 @@
     (tags "resistor 0805")
     (path /673BFF2D)
     (attr smd)
-    (fp_text reference R50 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R50 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14228,7 +14229,7 @@
     (tags "resistor 0805")
     (path /673BFF34)
     (attr smd)
-    (fp_text reference R51 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R51 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14264,7 +14265,7 @@
     (tags "resistor 0805")
     (path /673BFF3B)
     (attr smd)
-    (fp_text reference R52 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R52 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14300,7 +14301,7 @@
     (tags "resistor 0805")
     (path /673BFF42)
     (attr smd)
-    (fp_text reference R53 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R53 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14336,7 +14337,7 @@
     (tags "resistor 0805")
     (path /673BFF49)
     (attr smd)
-    (fp_text reference R54 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R54 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14372,7 +14373,7 @@
     (tags "resistor 0805")
     (path /673BFF5A)
     (attr smd)
-    (fp_text reference R55 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R55 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14408,7 +14409,7 @@
     (tags "resistor 0805")
     (path /673BFF63)
     (attr smd)
-    (fp_text reference R56 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R56 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14444,7 +14445,7 @@
     (tags "resistor 0805")
     (path /673BFF6C)
     (attr smd)
-    (fp_text reference R57 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R57 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14480,7 +14481,7 @@
     (tags "resistor 0805")
     (path /6758AFD3)
     (attr smd)
-    (fp_text reference R58 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R58 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14516,7 +14517,7 @@
     (tags "resistor 0805")
     (path /6758AFDA)
     (attr smd)
-    (fp_text reference R59 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R59 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14552,7 +14553,7 @@
     (tags "resistor 0805")
     (path /6758AFE1)
     (attr smd)
-    (fp_text reference R60 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R60 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14588,7 +14589,7 @@
     (tags "resistor 0805")
     (path /6758AFE8)
     (attr smd)
-    (fp_text reference R61 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R61 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14624,7 +14625,7 @@
     (tags "resistor 0805")
     (path /6758AFEF)
     (attr smd)
-    (fp_text reference R62 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R62 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14660,7 +14661,7 @@
     (tags "resistor 0805")
     (path /6758B000)
     (attr smd)
-    (fp_text reference R63 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R63 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14696,7 +14697,7 @@
     (tags "resistor 0805")
     (path /6758B009)
     (attr smd)
-    (fp_text reference R64 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R64 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14732,7 +14733,7 @@
     (tags "resistor 0805")
     (path /6758B012)
     (attr smd)
-    (fp_text reference R65 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R65 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -14768,7 +14769,7 @@
     (tags "resistor 0805")
     (path /5E255B38)
     (attr smd)
-    (fp_text reference R66 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R66 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -14804,7 +14805,7 @@
     (tags "resistor 0805")
     (path /5E25664B)
     (attr smd)
-    (fp_text reference R67 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R67 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -14840,7 +14841,7 @@
     (tags "resistor 0805")
     (path /5E25674D)
     (attr smd)
-    (fp_text reference R68 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R68 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -14876,7 +14877,7 @@
     (tags "resistor 0805")
     (path /5E256855)
     (attr smd)
-    (fp_text reference R69 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R69 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -14912,7 +14913,7 @@
     (tags "resistor 0805")
     (path /5E25695B)
     (attr smd)
-    (fp_text reference R70 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R70 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -14948,7 +14949,7 @@
     (tags "resistor 0805")
     (path /5DC7AEDE)
     (attr smd)
-    (fp_text reference R71 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R71 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -14984,7 +14985,7 @@
     (tags "resistor 0805")
     (path /5DC7AEED)
     (attr smd)
-    (fp_text reference R72 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R72 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15020,7 +15021,7 @@
     (tags "resistor 0805")
     (path /5DC7AEFC)
     (attr smd)
-    (fp_text reference R73 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R73 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15056,7 +15057,7 @@
     (tags "resistor 0805")
     (path /5DC7AF0B)
     (attr smd)
-    (fp_text reference R74 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R74 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15092,7 +15093,7 @@
     (tags "resistor 0805")
     (path /5DC7AF1A)
     (attr smd)
-    (fp_text reference R75 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R75 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15128,7 +15129,7 @@
     (tags "resistor 0805")
     (path /5DC7AF29)
     (attr smd)
-    (fp_text reference R76 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R76 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15164,7 +15165,7 @@
     (tags "resistor 0805")
     (path /5DC7AF38)
     (attr smd)
-    (fp_text reference R77 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R77 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15200,7 +15201,7 @@
     (tags "resistor 0805")
     (path /5DC7AF47)
     (attr smd)
-    (fp_text reference R78 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R78 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15236,7 +15237,7 @@
     (tags "resistor 0805")
     (path /615CC908)
     (attr smd)
-    (fp_text reference R79 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R79 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15272,7 +15273,7 @@
     (tags "resistor 0805")
     (path /615CC917)
     (attr smd)
-    (fp_text reference R80 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R80 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15308,7 +15309,7 @@
     (tags "resistor 0805")
     (path /615CC926)
     (attr smd)
-    (fp_text reference R81 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R81 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15344,7 +15345,7 @@
     (tags "resistor 0805")
     (path /5E7BF7B8)
     (attr smd)
-    (fp_text reference R82 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R82 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -15380,7 +15381,7 @@
     (tags "resistor 0805")
     (path /5E7BF7BF)
     (attr smd)
-    (fp_text reference R83 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R83 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -15416,7 +15417,7 @@
     (tags "resistor 0805")
     (path /5E7BF7C6)
     (attr smd)
-    (fp_text reference R84 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R84 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -15452,7 +15453,7 @@
     (tags "resistor 0805")
     (path /5E7BF7CD)
     (attr smd)
-    (fp_text reference R85 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R85 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -15488,7 +15489,7 @@
     (tags "resistor 0805")
     (path /5E7BF7D4)
     (attr smd)
-    (fp_text reference R86 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R86 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -15524,7 +15525,7 @@
     (tags "resistor 0805")
     (path /5E87B253)
     (attr smd)
-    (fp_text reference R87 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R87 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -15560,7 +15561,7 @@
     (tags "resistor 0805")
     (path /5E8D9B51)
     (attr smd)
-    (fp_text reference R88 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R88 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -15596,7 +15597,7 @@
     (tags "resistor 0805")
     (path /5E93909F)
     (attr smd)
-    (fp_text reference R89 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R89 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -15632,7 +15633,7 @@
     (tags "resistor 0805")
     (path /7C56068E)
     (attr smd)
-    (fp_text reference R90 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R90 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15668,7 +15669,7 @@
     (tags "resistor 0805")
     (path /7C560695)
     (attr smd)
-    (fp_text reference R91 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R91 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15704,7 +15705,7 @@
     (tags "resistor 0805")
     (path /7C56069C)
     (attr smd)
-    (fp_text reference R92 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R92 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15740,7 +15741,7 @@
     (tags "resistor 0805")
     (path /7C5606A3)
     (attr smd)
-    (fp_text reference R93 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R93 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15776,7 +15777,7 @@
     (tags "resistor 0805")
     (path /7C5606AA)
     (attr smd)
-    (fp_text reference R94 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R94 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15812,7 +15813,7 @@
     (tags "resistor 0805")
     (path /7C5606B1)
     (attr smd)
-    (fp_text reference R95 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R95 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15848,7 +15849,7 @@
     (tags "resistor 0805")
     (path /7C5606B8)
     (attr smd)
-    (fp_text reference R96 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R96 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15884,7 +15885,7 @@
     (tags "resistor 0805")
     (path /7C5606BF)
     (attr smd)
-    (fp_text reference R97 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R97 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15920,7 +15921,7 @@
     (tags "resistor 0805")
     (path /7C5606C6)
     (attr smd)
-    (fp_text reference R98 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R98 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15956,7 +15957,7 @@
     (tags "resistor 0805")
     (path /5C1B93E5)
     (attr smd)
-    (fp_text reference R99 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R99 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -15992,7 +15993,7 @@
     (tags "resistor 0805")
     (path /5C1F6D88)
     (attr smd)
-    (fp_text reference R100 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R100 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16028,7 +16029,7 @@
     (tags "resistor 0805")
     (path /5C20B9AA)
     (attr smd)
-    (fp_text reference R101 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R101 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16064,7 +16065,7 @@
     (tags "resistor 0805")
     (path /5C220292)
     (attr smd)
-    (fp_text reference R102 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R102 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16100,7 +16101,7 @@
     (tags "resistor 0805")
     (path /5C234DA7)
     (attr smd)
-    (fp_text reference R103 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R103 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16136,7 +16137,7 @@
     (tags "resistor 0805")
     (path /5C249AF4)
     (attr smd)
-    (fp_text reference R104 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R104 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16172,7 +16173,7 @@
     (tags "resistor 0805")
     (path /5C25EA7C)
     (attr smd)
-    (fp_text reference R105 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R105 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16208,7 +16209,7 @@
     (tags "resistor 0805")
     (path /5C273C3E)
     (attr smd)
-    (fp_text reference R106 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R106 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16244,7 +16245,7 @@
     (tags "resistor 0805")
     (path /5E99A113)
     (attr smd)
-    (fp_text reference R107 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R107 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -16280,7 +16281,7 @@
     (tags "resistor 0805")
     (path /5E9F61E7)
     (attr smd)
-    (fp_text reference R108 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R108 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -16316,7 +16317,7 @@
     (tags "resistor 0805")
     (path /5EAB07CA)
     (attr smd)
-    (fp_text reference R109 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R109 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -16352,7 +16353,7 @@
     (tags "resistor 0805")
     (path /5EB0DCEF)
     (attr smd)
-    (fp_text reference R110 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R110 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -16388,7 +16389,7 @@
     (tags "resistor 0805")
     (path /5EB6BC4D)
     (attr smd)
-    (fp_text reference R111 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R111 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -16424,7 +16425,7 @@
     (tags "resistor 0805")
     (path /5EBCA5F6)
     (attr smd)
-    (fp_text reference R112 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R112 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -16460,7 +16461,7 @@
     (tags "resistor 0805")
     (path /5EC299FA)
     (attr smd)
-    (fp_text reference R113 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R113 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -16496,7 +16497,7 @@
     (tags "resistor 0805")
     (path /5EC89867)
     (attr smd)
-    (fp_text reference R114 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R114 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -16532,7 +16533,7 @@
     (tags "resistor 0805")
     (path /5C47E0CE)
     (attr smd)
-    (fp_text reference R115 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R115 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16568,7 +16569,7 @@
     (tags "resistor 0805")
     (path /5C47E0DD)
     (attr smd)
-    (fp_text reference R116 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R116 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16604,7 +16605,7 @@
     (tags "resistor 0805")
     (path /5C47E0EC)
     (attr smd)
-    (fp_text reference R117 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R117 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16640,7 +16641,7 @@
     (tags "resistor 0805")
     (path /5C47E0FB)
     (attr smd)
-    (fp_text reference R118 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R118 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16676,7 +16677,7 @@
     (tags "resistor 0805")
     (path /5C47E10A)
     (attr smd)
-    (fp_text reference R119 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R119 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16712,7 +16713,7 @@
     (tags "resistor 0805")
     (path /5C47E119)
     (attr smd)
-    (fp_text reference R120 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R120 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16748,7 +16749,7 @@
     (tags "resistor 0805")
     (path /5C47E128)
     (attr smd)
-    (fp_text reference R121 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R121 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16784,7 +16785,7 @@
     (tags "resistor 0805")
     (path /5C47E137)
     (attr smd)
-    (fp_text reference R122 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R122 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -16820,7 +16821,7 @@
     (tags "resistor 0805")
     (path /761E1673)
     (attr smd)
-    (fp_text reference R123 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R123 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75) (layer F.Fab)
@@ -16856,7 +16857,7 @@
     (tags "resistor 0805")
     (path /761E3305)
     (attr smd)
-    (fp_text reference R124 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R124 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75) (layer F.Fab)
@@ -16892,7 +16893,7 @@
     (tags "resistor 0805")
     (path /AAB722D2)
     (attr smd)
-    (fp_text reference R125 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R125 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -16928,7 +16929,7 @@
     (tags "resistor 0805")
     (path /AAB72644)
     (attr smd)
-    (fp_text reference R126 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R126 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -16964,7 +16965,7 @@
     (tags "resistor 0805")
     (path /AAB7294C)
     (attr smd)
-    (fp_text reference R127 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R127 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -17000,7 +17001,7 @@
     (tags "resistor 0805")
     (path /AAB72C56)
     (attr smd)
-    (fp_text reference R128 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R128 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 90) (layer F.Fab)
@@ -17036,7 +17037,7 @@
     (tags "resistor 0805")
     (path /AAB72F8E)
     (attr smd)
-    (fp_text reference R129 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R129 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 90) (layer F.Fab)
@@ -17072,7 +17073,7 @@
     (tags "resistor 0805")
     (path /AAB732A0)
     (attr smd)
-    (fp_text reference R130 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R130 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 90) (layer F.Fab)
@@ -17108,7 +17109,7 @@
     (tags "resistor 0805")
     (path /AAB735B0)
     (attr smd)
-    (fp_text reference R131 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R131 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 90) (layer F.Fab)
@@ -17144,7 +17145,7 @@
     (tags "resistor 0805")
     (path /AAB738C6)
     (attr smd)
-    (fp_text reference R132 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R132 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 90) (layer F.Fab)
@@ -17180,7 +17181,7 @@
     (tags "resistor 0805")
     (path /76B22EBE)
     (attr smd)
-    (fp_text reference R133 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R133 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75) (layer F.Fab)
@@ -17216,7 +17217,7 @@
     (tags "resistor 0805")
     (path /76B23B36)
     (attr smd)
-    (fp_text reference R134 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R134 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75) (layer F.Fab)
@@ -17252,7 +17253,7 @@
     (tags "resistor 0805")
     (path /76B23CE0)
     (attr smd)
-    (fp_text reference R135 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R135 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -17288,7 +17289,7 @@
     (tags "resistor 0805")
     (path /76B23E8C)
     (attr smd)
-    (fp_text reference R136 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R136 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -17324,7 +17325,7 @@
     (tags "resistor 0805")
     (path /5ECEA1A1)
     (attr smd)
-    (fp_text reference R137 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R137 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -17360,7 +17361,7 @@
     (tags "resistor 0805")
     (path /5ED4B350)
     (attr smd)
-    (fp_text reference R138 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R138 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -17396,7 +17397,7 @@
     (tags "resistor 0805")
     (path /5EDACDDD)
     (attr smd)
-    (fp_text reference R139 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R139 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -17432,7 +17433,7 @@
     (tags "resistor 0805")
     (path /5EE0F14F)
     (attr smd)
-    (fp_text reference R140 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R140 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -17468,7 +17469,7 @@
     (tags "resistor 0805")
     (path /5EE71DB9)
     (attr smd)
-    (fp_text reference R141 (at 0 -1.7 270) (layer F.SilkS)
+    (fp_text reference R141 (at 0 -1.7 270) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 270) (layer F.Fab)
@@ -17504,7 +17505,7 @@
     (tags "resistor 0805")
     (path /85A32154)
     (attr smd)
-    (fp_text reference R142 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R142 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -17540,7 +17541,7 @@
     (tags "resistor 0805")
     (path /85A3215B)
     (attr smd)
-    (fp_text reference R143 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R143 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -17576,7 +17577,7 @@
     (tags "resistor 0805")
     (path /85A32162)
     (attr smd)
-    (fp_text reference R144 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R144 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -17612,7 +17613,7 @@
     (tags "resistor 0805")
     (path /85A32169)
     (attr smd)
-    (fp_text reference R145 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R145 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -17648,7 +17649,7 @@
     (tags "resistor 0805")
     (path /85A32170)
     (attr smd)
-    (fp_text reference R146 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R146 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -17684,7 +17685,7 @@
     (tags "resistor 0805")
     (path /85A32177)
     (attr smd)
-    (fp_text reference R147 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R147 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -17720,7 +17721,7 @@
     (tags "resistor 0805")
     (path /85A3217E)
     (attr smd)
-    (fp_text reference R148 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R148 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -17756,7 +17757,7 @@
     (tags "resistor 0805")
     (path /85A32185)
     (attr smd)
-    (fp_text reference R149 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R149 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -17792,7 +17793,7 @@
     (tags "resistor 0805")
     (path /85A3218C)
     (attr smd)
-    (fp_text reference R150 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R150 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -17828,7 +17829,7 @@
     (tags "resistor 0805")
     (path /85C2ECE6)
     (attr smd)
-    (fp_text reference R151 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R151 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -17864,7 +17865,7 @@
     (tags "resistor 0805")
     (path /85C2ECED)
     (attr smd)
-    (fp_text reference R152 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R152 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -17900,7 +17901,7 @@
     (tags "resistor 0805")
     (path /85C2ECF4)
     (attr smd)
-    (fp_text reference R153 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R153 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -17936,7 +17937,7 @@
     (tags "resistor 0805")
     (path /85C2ECFB)
     (attr smd)
-    (fp_text reference R154 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R154 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -17972,7 +17973,7 @@
     (tags "resistor 0805")
     (path /85C2ED02)
     (attr smd)
-    (fp_text reference R155 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R155 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -18008,7 +18009,7 @@
     (tags "resistor 0805")
     (path /85C2ED09)
     (attr smd)
-    (fp_text reference R156 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R156 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -18044,7 +18045,7 @@
     (tags "resistor 0805")
     (path /85C2ED10)
     (attr smd)
-    (fp_text reference R157 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R157 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -18080,7 +18081,7 @@
     (tags "resistor 0805")
     (path /85C2ED17)
     (attr smd)
-    (fp_text reference R158 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R158 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -18116,7 +18117,7 @@
     (tags "resistor 0805")
     (path /85C2ED1E)
     (attr smd)
-    (fp_text reference R159 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R159 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -18152,7 +18153,7 @@
     (tags "resistor 0805")
     (path /7F6E6EF2)
     (attr smd)
-    (fp_text reference R160 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R160 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75 90) (layer F.Fab)
@@ -18188,7 +18189,7 @@
     (tags "resistor 0805")
     (path /7F6E6F01)
     (attr smd)
-    (fp_text reference R161 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R161 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75 90) (layer F.Fab)
@@ -18224,7 +18225,7 @@
     (tags "resistor 0805")
     (path /7F6E6F10)
     (attr smd)
-    (fp_text reference R162 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R162 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75 90) (layer F.Fab)
@@ -18260,7 +18261,7 @@
     (tags "resistor 0805")
     (path /7F6E6F1F)
     (attr smd)
-    (fp_text reference R163 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R163 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75 90) (layer F.Fab)
@@ -18296,7 +18297,7 @@
     (tags "resistor 0805")
     (path /7F6E6F2E)
     (attr smd)
-    (fp_text reference R164 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R164 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75 90) (layer F.Fab)
@@ -18332,7 +18333,7 @@
     (tags "resistor 0805")
     (path /7F6E6F3D)
     (attr smd)
-    (fp_text reference R165 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R165 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75 90) (layer F.Fab)
@@ -18368,7 +18369,7 @@
     (tags "resistor 0805")
     (path /7F6E6F4C)
     (attr smd)
-    (fp_text reference R166 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R166 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75 90) (layer F.Fab)
@@ -18404,7 +18405,7 @@
     (tags "resistor 0805")
     (path /7F6E6F5B)
     (attr smd)
-    (fp_text reference R167 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R167 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75 90) (layer F.Fab)
@@ -18440,7 +18441,7 @@
     (tags "resistor 0805")
     (path /7FFD11A4)
     (attr smd)
-    (fp_text reference R168 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R168 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75 90) (layer F.Fab)
@@ -18476,7 +18477,7 @@
     (tags "resistor 0805")
     (path /7FFD11B3)
     (attr smd)
-    (fp_text reference R169 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R169 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75 90) (layer F.Fab)
@@ -18512,7 +18513,7 @@
     (tags "resistor 0805")
     (path /7FFD11C2)
     (attr smd)
-    (fp_text reference R170 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R170 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75 90) (layer F.Fab)
@@ -18548,7 +18549,7 @@
     (tags "resistor 0805")
     (path /7FFD11D1)
     (attr smd)
-    (fp_text reference R171 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R171 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75 90) (layer F.Fab)
@@ -18584,7 +18585,7 @@
     (tags "resistor 0805")
     (path /807167CE)
     (attr smd)
-    (fp_text reference R172 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R172 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 1.2k (at 0 1.75 90) (layer F.Fab)
@@ -18620,7 +18621,7 @@
     (tags "resistor 0805")
     (path /96937586)
     (attr smd)
-    (fp_text reference R173 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R173 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -18656,7 +18657,7 @@
     (tags "resistor 0805")
     (path /96937595)
     (attr smd)
-    (fp_text reference R174 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R174 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -18692,7 +18693,7 @@
     (tags "resistor 0805")
     (path /969375A4)
     (attr smd)
-    (fp_text reference R175 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R175 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -18728,7 +18729,7 @@
     (tags "resistor 0805")
     (path /969375B3)
     (attr smd)
-    (fp_text reference R176 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R176 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -18764,7 +18765,7 @@
     (tags "resistor 0805")
     (path /969375C2)
     (attr smd)
-    (fp_text reference R177 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R177 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -18800,7 +18801,7 @@
     (tags "resistor 0805")
     (path /969375D1)
     (attr smd)
-    (fp_text reference R178 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R178 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -18836,7 +18837,7 @@
     (tags "resistor 0805")
     (path /969375E0)
     (attr smd)
-    (fp_text reference R179 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R179 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -18872,7 +18873,7 @@
     (tags "resistor 0805")
     (path /969375EF)
     (attr smd)
-    (fp_text reference R180 (at 0 -1.7 90) (layer F.SilkS)
+    (fp_text reference R180 (at 0 -1.7 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 2k (at 0 1.75 90) (layer F.Fab)
@@ -18908,7 +18909,7 @@
     (tags "resistor 0805")
     (path /A060C2B6)
     (attr smd)
-    (fp_text reference R181 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R181 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -18944,7 +18945,7 @@
     (tags "resistor 0805")
     (path /A060C2BD)
     (attr smd)
-    (fp_text reference R182 (at 0 -1.7 180) (layer F.SilkS)
+    (fp_text reference R182 (at 0 -1.7 180) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75 180) (layer F.Fab)
@@ -18980,7 +18981,7 @@
     (tags "resistor 0805")
     (path /A03B5D7B)
     (attr smd)
-    (fp_text reference R183 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R183 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75) (layer F.Fab)
@@ -19016,7 +19017,7 @@
     (tags "resistor 0805")
     (path /A03B5D82)
     (attr smd)
-    (fp_text reference R184 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R184 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75) (layer F.Fab)
@@ -19052,7 +19053,7 @@
     (tags "resistor 0805")
     (path /A03B5D89)
     (attr smd)
-    (fp_text reference R185 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R185 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75) (layer F.Fab)
@@ -19088,7 +19089,7 @@
     (tags "resistor 0805")
     (path /A03B5D90)
     (attr smd)
-    (fp_text reference R186 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R186 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75) (layer F.Fab)
@@ -19124,7 +19125,7 @@
     (tags "resistor 0805")
     (path /A060C2C4)
     (attr smd)
-    (fp_text reference R187 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R187 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75) (layer F.Fab)
@@ -19160,7 +19161,7 @@
     (tags "resistor 0805")
     (path /A060C2CB)
     (attr smd)
-    (fp_text reference R188 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R188 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 470 (at 0 1.75) (layer F.Fab)
@@ -19196,7 +19197,7 @@
     (tags "resistor 0805")
     (path /A3C3B28F)
     (attr smd)
-    (fp_text reference R189 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R189 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 10k (at 0 1.75) (layer F.Fab)
@@ -19232,7 +19233,7 @@
     (tags "resistor 0805")
     (path /A69E7C06)
     (attr smd)
-    (fp_text reference R190 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R190 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 10k (at 0 1.75) (layer F.Fab)
@@ -19268,7 +19269,7 @@
     (tags "resistor 0805")
     (path /A6C51F32)
     (attr smd)
-    (fp_text reference R191 (at 0 -1.7) (layer F.SilkS)
+    (fp_text reference R191 (at 0 -1.7) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_text value 10k (at 0 1.75) (layer F.Fab)
@@ -25615,7 +25616,7 @@
   (segment (start 209.384 180.34) (end 211.074 182.03) (width 0.254) (layer F.Cu) (net 485))
   (segment (start 49.61 68.58) (end 51.99 68.58) (width 0.254) (layer F.Cu) (net 505))
 
-  (zone (net 1) (net_name GND) (layer In1.Cu) (tstamp 5C1B9AED) (hatch edge 0.508)
+  (zone (net 1) (net_name GND) (layer In1.Cu) (tstamp 5C1BA101) (hatch edge 0.508)
     (connect_pads (clearance 0.508))
     (min_thickness 0.254)
     (fill yes (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
@@ -27977,7 +27978,7 @@
       )
     )
   )
-  (zone (net 2) (net_name VCC) (layer In2.Cu) (tstamp 5C1B9AEA) (hatch edge 0.508)
+  (zone (net 2) (net_name VCC) (layer In2.Cu) (tstamp 5C1BA0FE) (hatch edge 0.508)
     (connect_pads (clearance 0.508))
     (min_thickness 0.254)
     (fill yes (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
@@ -30978,7 +30979,7 @@
       )
     )
   )
-  (zone (net 0) (net_name "") (layer F.Cu) (tstamp 5C1B9AE7) (hatch edge 0.508)
+  (zone (net 0) (net_name "") (layer F.Cu) (tstamp 5C1BA0FB) (hatch edge 0.508)
     (connect_pads (clearance 0.508))
     (min_thickness 0.254)
     (fill yes (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
@@ -30993,7 +30994,7 @@
       )
     )
   )
-  (zone (net 0) (net_name "") (layer F.Cu) (tstamp 5C1B9AE4) (hatch edge 0.508)
+  (zone (net 0) (net_name "") (layer F.Cu) (tstamp 5C1BA0F8) (hatch edge 0.508)
     (connect_pads (clearance 0.508))
     (min_thickness 0.254)
     (fill yes (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
@@ -31008,7 +31009,7 @@
       )
     )
   )
-  (zone (net 0) (net_name "") (layer F.Cu) (tstamp 5C1B9AE1) (hatch edge 0.508)
+  (zone (net 0) (net_name "") (layer F.Cu) (tstamp 5C1BA0F5) (hatch edge 0.508)
     (connect_pads (clearance 0.508))
     (min_thickness 0.254)
     (fill yes (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
@@ -31023,7 +31024,7 @@
       )
     )
   )
-  (zone (net 0) (net_name "") (layer F.Cu) (tstamp 5C1B9ADE) (hatch edge 0.508)
+  (zone (net 0) (net_name "") (layer F.Cu) (tstamp 5C1BA0F2) (hatch edge 0.508)
     (connect_pads (clearance 0.508))
     (min_thickness 0.254)
     (fill yes (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
