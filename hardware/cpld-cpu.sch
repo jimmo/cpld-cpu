@@ -11448,6 +11448,65 @@ Connection ~ 1250 10450
 Wire Wire Line
 	2050 3750 2350 3750
 Wire Bus Line
+	2300 3050 2300 4650
+Wire Bus Line
+	2300 4750 2300 7900
+$Comp
+L Mechanical:MountingHole H4
+U 1 1 5C519B71
+P 26300 3900
+F 0 "H4" H 26400 3946 50  0000 L CNN
+F 1 "MountingHole" H 26400 3855 50  0000 L CNN
+F 2 "Mounting_Holes:MountingHole_4.3mm_M4" H 26300 3900 50  0001 C CNN
+F 3 "~" H 26300 3900 50  0001 C CNN
+	1    26300 3900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H3
+U 1 1 5C85F760
+P 26300 3700
+F 0 "H3" H 26400 3746 50  0000 L CNN
+F 1 "MountingHole" H 26400 3655 50  0000 L CNN
+F 2 "Mounting_Holes:MountingHole_4.3mm_M4" H 26300 3700 50  0001 C CNN
+F 3 "~" H 26300 3700 50  0001 C CNN
+	1    26300 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H2
+U 1 1 5C85FADE
+P 26300 3500
+F 0 "H2" H 26400 3546 50  0000 L CNN
+F 1 "MountingHole" H 26400 3455 50  0000 L CNN
+F 2 "Mounting_Holes:MountingHole_4.3mm_M4" H 26300 3500 50  0001 C CNN
+F 3 "~" H 26300 3500 50  0001 C CNN
+	1    26300 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H1
+U 1 1 5C85FE62
+P 26300 3300
+F 0 "H1" H 26400 3346 50  0000 L CNN
+F 1 "MountingHole" H 26400 3255 50  0000 L CNN
+F 2 "Mounting_Holes:MountingHole_4.3mm_M4" H 26300 3300 50  0001 C CNN
+F 3 "~" H 26300 3300 50  0001 C CNN
+	1    26300 3300
+	1    0    0    -1  
+$EndComp
+$Comp
+L CPLD_CPU_Symbols:KicadLogo S1
+U 1 1 5CEF5532
+P 26650 4150
+F 0 "S1" H 26428 4196 50  0000 L CNN
+F 1 "KicadLogo" H 26428 4105 50  0000 L CNN
+F 2 "Symbols:Symbol_KiCAD-Logo_CopperAndSilkScreenTop" H 26650 4150 50  0001 C CNN
+F 3 "" H 26650 4150 50  0001 C CNN
+	1    26650 4150
+	1    0    0    -1  
+$EndComp
+Wire Bus Line
 	26600 9800 26600 10150
 Wire Wire Line
 	11050 7200 12100 7200
@@ -11467,28 +11526,6 @@ Wire Bus Line
 	11450 2250 11450 5050
 Wire Bus Line
 	11650 6700 11650 8900
-Wire Bus Line
-	10550 12050 10550 14350
-Wire Bus Line
-	15150 9900 15150 12050
-Wire Bus Line
-	7000 9900 7000 12050
-Wire Bus Line
-	6300 6700 6300 9900
-Wire Bus Line
-	11600 850  11600 2750
-Wire Bus Line
-	2500 4850 2500 6900
-Wire Bus Line
-	22000 4900 22000 6900
-Wire Bus Line
-	15550 2900 15550 4900
-Wire Bus Line
-	11750 650  11750 3750
-Wire Bus Line
-	19750 2000 19750 5050
-Wire Bus Line
-	14950 7200 14950 9150
 Wire Wire Line
 	2050 3050 2950 3050
 Wire Wire Line
@@ -11517,6 +11554,28 @@ Wire Wire Line
 	2050 7400 2950 7400
 Wire Wire Line
 	2050 7700 2750 7700
+Wire Bus Line
+	10550 12050 10550 14350
+Wire Bus Line
+	15150 9900 15150 12050
+Wire Bus Line
+	7000 9900 7000 12050
+Wire Bus Line
+	6300 6700 6300 9900
+Wire Bus Line
+	11600 850  11600 2750
+Wire Bus Line
+	2500 4850 2500 6900
+Wire Bus Line
+	22000 4900 22000 6900
+Wire Bus Line
+	15550 2900 15550 4900
+Wire Bus Line
+	11750 650  11750 3750
+Wire Bus Line
+	19750 2000 19750 5050
+Wire Bus Line
+	14950 7200 14950 9150
 Wire Bus Line
 	14550 2650 14550 4850
 Wire Bus Line
@@ -11562,10 +11621,6 @@ Wire Bus Line
 Wire Bus Line
 	2900 9900 2900 12050
 Wire Bus Line
-	2300 3050 2300 4650
-Wire Bus Line
-	2300 4750 2300 7900
-Wire Bus Line
 	11300 6000 11300 9150
 Wire Bus Line
 	10050 12150 10050 14550
@@ -11609,4 +11664,15 @@ Wire Bus Line
 	19100 10200 19100 14550
 Wire Bus Line
 	18800 6500 18800 9150
+$Comp
+L CPLD_CPU_Symbols:OSHWLogo S2
+U 1 1 5D23BE06
+P 26650 4400
+F 0 "S2" H 26428 4446 50  0000 L CNN
+F 1 "OSHWLogo" H 26428 4355 50  0000 L CNN
+F 2 "CPLD_CPU_Symbols:OSHW-Logo2_14.6x12mm_Copper_Top" H 26650 4400 50  0001 C CNN
+F 3 "" H 26650 4400 50  0001 C CNN
+	1    26650 4400
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

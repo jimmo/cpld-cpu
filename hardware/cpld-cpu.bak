@@ -11410,17 +11410,11 @@ Wire Wire Line
 	20650 15350 20750 15350
 Wire Wire Line
 	20750 15450 20650 15450
-Wire Wire Line
-	2050 3750 2350 3750
-Wire Bus Line
-	2300 3050 2300 4650
-Wire Bus Line
-	2300 4750 2300 7900
 $Comp
-L Device:LED_Small D?
+L Device:LED_Small D131
 U 1 1 5C51519A
 P 1400 10450
-F 0 "D?" H 1500 10500 50  0000 C CNN
+F 0 "D131" H 1500 10500 50  0000 C CNN
 F 1 "LED_Small" H 1400 10594 50  0001 C CNN
 F 2 "LEDs:LED_0805_HandSoldering" V 1400 10450 50  0001 C CNN
 F 3 "~" V 1400 10450 50  0001 C CNN
@@ -11428,10 +11422,10 @@ F 3 "~" V 1400 10450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R_Small R?
+L Device:R_Small R209
 U 1 1 5C5151A1
 P 1650 10450
-F 0 "R?" V 1600 10600 50  0000 C CNN
+F 0 "R209" V 1600 10600 50  0000 C CNN
 F 1 "2k" V 1650 10450 50  0000 C CNN
 F 2 "Resistors_SMD:R_0805_HandSoldering" H 1650 10450 50  0001 C CNN
 F 3 "~" H 1650 10450 50  0001 C CNN
@@ -11450,6 +11444,68 @@ Text Label 2100 10450 0    50   ~ 0
 A_CC
 Wire Wire Line
 	1250 10700 1250 10450
+Connection ~ 1250 10450
+Wire Wire Line
+	2050 3750 2350 3750
+Wire Bus Line
+	2300 3050 2300 4650
+Wire Bus Line
+	2300 4750 2300 7900
+$Comp
+L Mechanical:MountingHole H4
+U 1 1 5C519B71
+P 26300 3900
+F 0 "H4" H 26400 3946 50  0000 L CNN
+F 1 "MountingHole" H 26400 3855 50  0000 L CNN
+F 2 "Mounting_Holes:MountingHole_4.3mm_M4" H 26300 3900 50  0001 C CNN
+F 3 "~" H 26300 3900 50  0001 C CNN
+	1    26300 3900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H3
+U 1 1 5C85F760
+P 26300 3700
+F 0 "H3" H 26400 3746 50  0000 L CNN
+F 1 "MountingHole" H 26400 3655 50  0000 L CNN
+F 2 "Mounting_Holes:MountingHole_4.3mm_M4" H 26300 3700 50  0001 C CNN
+F 3 "~" H 26300 3700 50  0001 C CNN
+	1    26300 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H2
+U 1 1 5C85FADE
+P 26300 3500
+F 0 "H2" H 26400 3546 50  0000 L CNN
+F 1 "MountingHole" H 26400 3455 50  0000 L CNN
+F 2 "Mounting_Holes:MountingHole_4.3mm_M4" H 26300 3500 50  0001 C CNN
+F 3 "~" H 26300 3500 50  0001 C CNN
+	1    26300 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H1
+U 1 1 5C85FE62
+P 26300 3300
+F 0 "H1" H 26400 3346 50  0000 L CNN
+F 1 "MountingHole" H 26400 3255 50  0000 L CNN
+F 2 "Mounting_Holes:MountingHole_4.3mm_M4" H 26300 3300 50  0001 C CNN
+F 3 "~" H 26300 3300 50  0001 C CNN
+	1    26300 3300
+	1    0    0    -1  
+$EndComp
+$Comp
+L CPLD_CPU_Symbols:KicadLogo S1
+U 1 1 5CEF5532
+P 26650 4150
+F 0 "S1" H 26428 4196 50  0000 L CNN
+F 1 "KicadLogo" H 26428 4105 50  0000 L CNN
+F 2 "Symbols:Symbol_KiCAD-Logo_CopperAndSilkScreenTop" H 26650 4150 50  0001 C CNN
+F 3 "" H 26650 4150 50  0001 C CNN
+	1    26650 4150
+	1    0    0    -1  
+$EndComp
 Wire Bus Line
 	26600 9800 26600 10150
 Wire Wire Line
@@ -11608,5 +11664,15 @@ Wire Bus Line
 	19100 10200 19100 14550
 Wire Bus Line
 	18800 6500 18800 9150
-Connection ~ 1250 10450
+$Comp
+L CPLD_CPU_Symbols:OSHWLogo S2
+U 1 1 5D23BE06
+P 26650 4400
+F 0 "S2" H 26428 4446 50  0000 L CNN
+F 1 "OSHWLogo" H 26428 4355 50  0000 L CNN
+F 2 "Symbols:OSHW-Logo2_14.6x12mm_Copper" H 26650 4400 50  0001 C CNN
+F 3 "" H 26650 4400 50  0001 C CNN
+	1    26650 4400
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
