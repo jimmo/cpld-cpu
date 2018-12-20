@@ -1965,9 +1965,9 @@ Wire Wire Line
 Wire Wire Line
 	16450 12950 16450 13550
 Text Label 16450 13550 3    50   ~ 0
-RST
+~RST~
 Text Label 12050 13550 3    50   ~ 0
-RST
+~RST~
 Wire Wire Line
 	12050 13550 12050 12950
 Wire Wire Line
@@ -3537,9 +3537,9 @@ Wire Wire Line
 Entry Wire Line
 	11200 11950 11300 12050
 Text Label 11400 12050 0    50   ~ 0
-PC_OE
+PC_~OE~
 Text Label 11400 11950 0    50   ~ 0
-PC_WE
+PC_~WE~
 Wire Wire Line
 	16500 11950 15250 11950
 Entry Wire Line
@@ -3549,9 +3549,9 @@ Wire Wire Line
 Entry Wire Line
 	15150 11950 15250 12050
 Text Label 15800 12050 0    50   ~ 0
-PC_OE
+PC_~OE~
 Text Label 15800 11950 0    50   ~ 0
-PC_WE
+PC_~WE~
 Wire Wire Line
 	11750 11850 12100 11850
 Entry Wire Line
@@ -3572,9 +3572,9 @@ Wire Wire Line
 Entry Wire Line
 	7000 11950 7100 12050
 Text Label 7150 12050 0    50   ~ 0
-AR_OE
+AR_~OE~
 Text Label 7150 11950 0    50   ~ 0
-AR_WE
+AR_~WE~
 Wire Wire Line
 	7100 11950 7500 11950
 Entry Wire Line
@@ -3584,9 +3584,9 @@ Wire Wire Line
 Entry Wire Line
 	2900 11950 3000 12050
 Text Label 3050 12050 0    50   ~ 0
-IR_OE
+IR_~OE~
 Text Label 3050 11950 0    50   ~ 0
-IR_WE
+IR_~WE~
 Wire Wire Line
 	3000 11950 3400 11950
 Wire Bus Line
@@ -3603,39 +3603,39 @@ NoConn ~ 9100 13150
 NoConn ~ 7500 13050
 NoConn ~ 7500 13150
 Text Label 7450 13550 3    50   ~ 0
-RST
+~RST~
 Wire Wire Line
 	7450 13550 7450 12950
 Text Label 3350 13550 3    50   ~ 0
-RST
+~RST~
 Wire Wire Line
 	3350 13550 3350 12950
 Text Label 7450 8100 3    50   ~ 0
-RST
+~RST~
 Wire Wire Line
 	7450 8100 7450 7500
 Text Label 12050 8100 3    50   ~ 0
-RST
+~RST~
 Wire Wire Line
 	12050 8100 12050 7500
 Text Label 16450 8100 3    50   ~ 0
-RST
+~RST~
 Wire Wire Line
 	16450 8100 16450 7500
 Text Label 12050 3950 3    50   ~ 0
-RST
+~RST~
 Wire Wire Line
 	12050 3950 12050 3350
 Text Label 7450 3950 3    50   ~ 0
-RST
+~RST~
 Wire Wire Line
 	7450 3950 7450 3350
 Text Label 2900 3950 3    50   ~ 0
-RST
+~RST~
 Wire Wire Line
 	2900 3950 2900 3350
 Text Label 2900 8200 3    50   ~ 0
-RST
+~RST~
 Wire Wire Line
 	2900 8200 2900 7500
 Wire Wire Line
@@ -3671,73 +3671,73 @@ Entry Wire Line
 Wire Wire Line
 	9100 6100 10000 6100
 Text Label 9450 6100 0    50   ~ 0
-PC_OE
+PC_~OE~
 Entry Wire Line
 	10000 6200 10100 6300
 Wire Wire Line
 	9100 6200 10000 6200
 Text Label 9450 6200 0    50   ~ 0
-PC_WE
+PC_~WE~
 Entry Wire Line
 	10000 6300 10100 6400
 Wire Wire Line
 	9100 6300 10000 6300
 Text Label 9450 6300 0    50   ~ 0
-ALU_OE
+ALU_~OE~
 Entry Wire Line
 	10000 6400 10100 6500
 Wire Wire Line
 	9100 6400 10000 6400
 Text Label 9450 6400 0    50   ~ 0
-ALU_WE
+ALU_~WE~
 Entry Wire Line
 	10000 6500 10100 6600
 Wire Wire Line
 	9100 6500 10000 6500
 Text Label 9450 6500 0    50   ~ 0
-A_OE
+A_~OE~
 Entry Wire Line
 	10000 6600 10100 6700
 Wire Wire Line
 	9100 6600 10000 6600
 Text Label 9450 6600 0    50   ~ 0
-A_WE
+A_~WE~
 Entry Wire Line
 	10000 6700 10100 6800
 Wire Wire Line
 	9100 6700 10000 6700
 Text Label 9450 6700 0    50   ~ 0
-X_OE
+X_~OE~
 Entry Wire Line
 	10000 6800 10100 6900
 Wire Wire Line
 	9100 6800 10000 6800
 Text Label 9450 6800 0    50   ~ 0
-X_WE
+X_~WE~
 Entry Wire Line
 	10000 6900 10100 7000
 Wire Wire Line
 	9100 6900 10000 6900
 Text Label 9450 6900 0    50   ~ 0
-IR_OE
+IR_~OE~
 Entry Wire Line
 	10000 7100 10100 7200
 Wire Wire Line
 	9100 7100 10000 7100
 Text Label 9450 7100 0    50   ~ 0
-IR_WE
+IR_~WE~
 Entry Wire Line
 	10000 7200 10100 7300
 Wire Wire Line
 	9100 7200 10000 7200
 Text Label 9450 7200 0    50   ~ 0
-AR_OE
+AR_~OE~
 Entry Wire Line
 	10000 7300 10100 7400
 Wire Wire Line
 	9100 7300 10000 7300
 Text Label 9450 7300 0    50   ~ 0
-AR_WE
+AR_~WE~
 Entry Wire Line
 	10000 7400 10100 7500
 Wire Wire Line
@@ -3765,9 +3765,9 @@ Wire Bus Line
 Wire Wire Line
 	6400 6900 7500 6900
 Text Label 6750 6800 0    50   ~ 0
-GPIO_OE
+GPIO_~OE~
 Text Label 6750 6900 0    50   ~ 0
-RAM_WE
+RAM_~WE~
 Entry Wire Line
 	6300 7000 6400 7100
 Wire Wire Line
@@ -5118,9 +5118,9 @@ Entry Wire Line
 Entry Wire Line
 	950  6500 1050 6600
 Text Label 1100 6600 0    50   ~ 0
-X_OE
+X_~OE~
 Text Label 1100 6500 0    50   ~ 0
-X_WE
+X_~WE~
 Wire Wire Line
 	1050 6500 2950 6500
 Wire Wire Line
@@ -5130,9 +5130,9 @@ Entry Wire Line
 Entry Wire Line
 	950  2350 1050 2450
 Text Label 1100 2450 0    50   ~ 0
-A_OE
+A_~OE~
 Text Label 1100 2350 0    50   ~ 0
-A_WE
+A_~WE~
 Wire Wire Line
 	1050 2350 2950 2350
 Wire Wire Line
@@ -5441,9 +5441,9 @@ Wire Wire Line
 Wire Wire Line
 	12100 2450 11550 2450
 Text Label 11800 2350 0    50   ~ 0
-ALU_WE
+ALU_~WE~
 Text Label 11800 2450 0    50   ~ 0
-ALU_OE
+ALU_~OE~
 NoConn ~ 7500 6700
 Wire Wire Line
 	8200 13850 8200 13750
@@ -5757,7 +5757,7 @@ Entry Wire Line
 Wire Wire Line
 	15750 6500 16500 6500
 Text Label 16150 6500 0    50   ~ 0
-RAM_WE
+RAM_~WE~
 $Comp
 L Device:R_Small R123
 U 1 1 761E1673
@@ -6397,31 +6397,31 @@ Connection ~ 15500 13250
 Wire Wire Line
 	15500 12850 15500 12950
 Text Label 2100 8850 0    50   ~ 0
-GPIO_OE
+GPIO_~OE~
 Text Label 2100 8950 0    50   ~ 0
-RAM_WE
+RAM_~WE~
 Text Label 2100 9050 0    50   ~ 0
-PC_OE
+PC_~OE~
 Text Label 2100 9150 0    50   ~ 0
-ALU_OE
+ALU_~OE~
 Text Label 2100 9250 0    50   ~ 0
-ALU_WE
+ALU_~WE~
 Text Label 2100 9350 0    50   ~ 0
-A_OE
+A_~OE~
 Text Label 2100 9450 0    50   ~ 0
-A_WE
+A_~WE~
 Text Label 2100 9550 0    50   ~ 0
-X_OE
+X_~OE~
 Text Label 2100 9650 0    50   ~ 0
-X_WE
+X_~WE~
 Text Label 2100 9750 0    50   ~ 0
-IR_OE
+IR_~OE~
 Text Label 2100 9850 0    50   ~ 0
-IR_WE
+IR_~WE~
 Text Label 2100 9950 0    50   ~ 0
-AR_OE
+AR_~OE~
 Text Label 2100 10050 0    50   ~ 0
-AR_WE
+AR_~WE~
 Text Label 2100 10150 0    50   ~ 0
 PC_INC
 Text Label 2100 10250 0    50   ~ 0
@@ -8427,7 +8427,7 @@ Wire Wire Line
 	23550 5550 23550 5750
 Connection ~ 23550 5750
 Text Label 22600 8100 3    50   ~ 0
-RST
+~RST~
 Wire Wire Line
 	22600 8100 22600 7500
 Wire Wire Line
@@ -9422,7 +9422,7 @@ Entry Wire Line
 Entry Wire Line
 	25050 8900 25150 9000
 Text Label 25400 9100 2    50   ~ 0
-RST
+~RST~
 Wire Wire Line
 	25400 9100 25550 9100
 Text Label 25400 9200 2    50   ~ 0
@@ -9948,9 +9948,9 @@ Wire Wire Line
 Entry Wire Line
 	26500 9700 26600 9800
 Text Label 26100 9700 0    50   ~ 0
-DEV_OE
+DEV_~OE~
 Text Label 25150 9700 0    50   ~ 0
-RAM_WE
+RAM_~WE~
 Wire Bus Line
 	11450 5050 19750 5050
 Connection ~ 11450 5050
@@ -9961,9 +9961,9 @@ Entry Wire Line
 Wire Wire Line
 	17950 2000 19650 2000
 Text Label 19250 2000 0    50   ~ 0
-RAM_WE
+RAM_~WE~
 Text Label 19250 2550 0    50   ~ 0
-RAM_OE
+RAM_~OE~
 NoConn ~ 22650 7600
 Wire Bus Line
 	19750 5050 21350 5050
@@ -9977,9 +9977,9 @@ Entry Wire Line
 Wire Wire Line
 	21450 6600 22650 6600
 Text Label 22250 6500 0    50   ~ 0
-RAM_WE
+RAM_~WE~
 Text Label 22250 6600 0    50   ~ 0
-GPIO_OE
+GPIO_~OE~
 Wire Bus Line
 	25000 9900 25000 10150
 Wire Bus Line
@@ -10002,13 +10002,13 @@ Wire Wire Line
 Wire Wire Line
 	22200 7700 22650 7700
 Text Label 22250 7700 0    50   ~ 0
-DEV_OE
+DEV_~OE~
 Wire Wire Line
 	26050 9800 26500 9800
 Entry Wire Line
 	26500 9800 26600 9900
 Text Label 26100 9800 0    50   ~ 0
-RAM_OE
+RAM_~OE~
 Wire Wire Line
 	25550 9900 25450 9900
 Wire Wire Line
@@ -10072,7 +10072,7 @@ Entry Wire Line
 Wire Wire Line
 	1750 8750 2800 8750
 Text Label 2100 8750 0    50   ~ 0
-DEV_OE
+DEV_~OE~
 $Comp
 L Device:LED_Small D125
 U 1 1 6A221535
@@ -10102,7 +10102,7 @@ Entry Wire Line
 Wire Wire Line
 	1750 8650 2800 8650
 Text Label 2100 8650 0    50   ~ 0
-RAM_OE
+RAM_~OE~
 Wire Wire Line
 	1300 8650 1250 8650
 Wire Wire Line
@@ -11050,7 +11050,7 @@ BTN_RST
 Text Label 22550 12550 2    50   ~ 0
 CLK
 Text Label 22550 12650 2    50   ~ 0
-RST
+~RST~
 Wire Wire Line
 	22550 12550 22650 12550
 Wire Wire Line
@@ -11121,7 +11121,7 @@ CLK
 Wire Wire Line
 	21550 13900 21700 13900
 Text Label 21550 14200 2    50   ~ 0
-RST
+~RST~
 $Comp
 L Device:LED_Small D128
 U 1 1 783657FC
