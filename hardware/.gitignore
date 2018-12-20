@@ -1,2 +1,4 @@
 *.bck
 bom/
+*.net
+*.kicad_pcb-bak
