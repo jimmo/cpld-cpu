@@ -8,8 +8,8 @@ net data<6> loc=pin12;
 net data<7> loc=pin13;
 
 net addr<0> loc=pin14;
-net addr<1> loc=pin16;
-net addr<2> loc=pin18;
+net addr<1> loc=pin18;
+net addr<2> loc=pin16;
 net addr<3> loc=pin19;
 net addr<4> loc=pin20;
 net addr<5> loc=pin21;

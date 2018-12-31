@@ -2,9 +2,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 
-entity program_counter is
+entity program_counter_high is
   port (
-  input: in std_logic_vector(7 downto 0);
+  input: in std_logic_vector(4 downto 0);
   output: out std_logic_vector(7 downto 0);
   state: out std_logic_vector(7 downto 0);
   nwe: in std_logic;
@@ -13,9 +13,9 @@ entity program_counter is
   inc: in std_logic;
   carry: out std_logic
   );
-end program_counter;
+end program_counter_high;
 
-architecture arch of program_counter is
+architecture arch of program_counter_high is
   signal clk: std_logic := '0';
   signal ring: std_logic_vector(7 downto 0) := "00000000";
   attribute KEEP: string;
@@ -44,7 +44,7 @@ begin
       carry <= '0';
     elsif rising_edge(clk) then
       if nwe = '0' and nwe_p = '1' then
-        v <= input;
+        v <= "000" & input;
       elsif inc = '1' and inc_p = '0' then
         v <= v + 1;
         if v = "11111111" then

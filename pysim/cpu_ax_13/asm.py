@@ -1,4 +1,5 @@
 import collections
+import sys
 from lark import Lark, UnexpectedInput
 
 l = Lark(open('cpu_ax_13/asm.g').read(), parser='earley', lexer='auto')
@@ -372,3 +373,20 @@ class Assembler:
         return False
       AssemblerTransformer(self).transform(ast)
       return True
+
+
+def main():
+  ram = [0] * (2**18)
+  with Assembler(ram, 0) as asm:
+    if not asm.parse(sys.argv[1]):
+      return
+  n = len(ram) - 1
+  while ram[n] == 0:
+    n -= 1
+  with open(sys.argv[2], 'w') as f:
+    print('DATA = ' + repr(bytearray(ram[0:n+1])), file=f)
+    print('load(DATA)', file=f)
+
+    
+if __name__ == '__main__':
+  main()

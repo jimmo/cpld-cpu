@@ -48,11 +48,11 @@ begin
       end if;
     end if;
   end process;
-  sel_ddra <= page0 = '1' and addr = "11110000";
-  sel_ddrb <= page0 = '1' and addr = "11110001";
-  sel_porta <= page0 = '1' and addr = "11110010";
-  sel_portb <= page0 = '1' and addr = "11110011";
-  sel_rng <= page0 = '1' and addr = "11110100";
+  sel_ddra <= page0 = '1' and addr =  "011110000";
+  sel_ddrb <= page0 = '1' and addr =  "011110001";
+  sel_porta <= page0 = '1' and addr = "011110010";
+  sel_portb <= page0 = '1' and addr = "011110011";
+  sel_rng <= page0 = '1' and addr =   "011110100";
   sel_any <= sel_ddra or sel_ddrb or sel_porta or sel_portb or sel_rng;
   noe_out <= noe when not sel_any else '1';
 

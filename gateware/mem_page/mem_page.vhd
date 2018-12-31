@@ -13,7 +13,7 @@ entity mem_page is
 
   prog_clk: in std_logic;
   prog_data: in std_logic;
-  prog_latch: in std_logic
+  prog_latch: in std_logic;
   );
 end mem_page;
 
@@ -73,16 +73,20 @@ begin
 
   process(nrst, prog_clk)
   begin
-    if (nrst = '0') then
+    if (nrst = '1') then
       prog_addr <= (others => '0');
       prog_reg <= (others => '0');
       prog_nwe <= '1';
     elsif rising_edge(prog_clk) then
       if prog_latch = '1' then
-        prog_nwe <= not prog_nwe;
+        if prog_nwe = '1' then
+          prog_nwe <= '0';
+        else
+          prog_nwe <= '1';
+          prog_addr <= prog_addr + 1;
+        end if;
       else
         prog_reg <= prog_reg(6 downto 0) & prog_data;
-        prog_addr <= prog_addr + 1;
       end if;
     end if;
   end process;

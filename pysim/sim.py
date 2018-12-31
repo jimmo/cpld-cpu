@@ -529,6 +529,13 @@ class Ram(Component):
       skip = False
       print('{:04x}: {}'.format(i, ' '.join('{:02x}'.format(b) for b in self.ram[i:i+16])))
 
+  def save(self, path):
+    n = len(self.ram) - 1
+    while self.ram[n] == 0:
+      n -= 1
+    with open(path, 'w') as f:
+      print(bytearray(self.ram[0:n]), file=f)
+
 
 class PagedRamController(Component):
   def __init__(self, addr_width=13, num_pages=2, reg_base_addr=None, data_width=8):

@@ -14,5 +14,14 @@ end mem_index;
 
 architecture arch of mem_index is
 begin
-  output <= addr when en = '0' else addr + x;
+  process(addr, en, x, nrst)
+  begin
+    if nrst = '0' then
+      output <= (others => 'Z');
+    elsif en = '1' then
+      output <= addr + x;
+    else
+      output <= addr;
+    end if;
+  end process;
 end arch;

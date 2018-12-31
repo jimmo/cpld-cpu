@@ -11,14 +11,14 @@ net addr<9> loc=pin16;
 net addr<10> loc=pin18;
 net addr<11> loc=pin19;
 
-net x<0> loc=pin20;
-net x<1> loc=pin21;
-net x<2> loc=pin22;
-net x<3> loc=pin23;
-net x<4> loc=pin27;
-net x<5> loc=pin28;
-net x<6> loc=pin29;
-net x<7> loc=pin30;
+net x<0> loc=pin22;
+net x<1> loc=pin23;
+net x<2> loc=pin27;
+net x<3> loc=pin28;
+net x<4> loc=pin29;
+net x<5> loc=pin30;
+net x<6> loc=pin43;
+net x<7> loc=pin44;
 
 net output<0> loc=pin31;
 net output<1> loc=pin32;
@@ -30,8 +30,8 @@ net output<6> loc=pin39;
 net output<7> loc=pin40;
 net output<8> loc=pin41;
 net output<9> loc=pin42;
-net output<10> loc=pin43;
-net output<11> loc=pin44;
+net output<10> loc=pin20;
+net output<11> loc=pin21;
 
 net en loc=pin1;
 net nrst loc=pin33;

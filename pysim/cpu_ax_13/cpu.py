@@ -248,6 +248,7 @@ def main():
       return
 
   ram.stdout()
+  ram.save('ram.hex')
 
   for c in (
       dec,

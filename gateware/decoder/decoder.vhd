@@ -48,32 +48,43 @@ begin
   
   state <= std_logic_vector(s);
 
-  ram_oe <= '1' when s <= 3 or ((instr = "000" or instr = "001" or instr = "100" or instr = "101") and s <= 5) else '0';
+  ram_oe <= '0' when nrst = '1' and (s <= 3 or ((instr = "000" or instr = "001" or instr = "100" or instr = "101") and s <= 5)) else '1';
 
-  ar_oe <= '1' when s > 3 else '0';
-  ir_oe <= '1' when s > 3 else '0';
-  pc_oe <= '1' when s <= 3 else '0';
-  ir_we <= '1' when s = 1 else '0';
-  pc_inc <= '1' when (s = 2 or s = 4) else '0';
-  ar_we <= '1' when s = 3 else '0';
+  ar_oe <= '0' when nrst = '1' and s > 3 else '1';
+  ir_oe <= '0' when nrst = '1' and s > 3 else '1';
+  pc_oe <= '0' when nrst = '1' and s <= 3 else '1';
+  pc_inc <= '1' when nrst = '1' and (s = 2 or s = 4) else '0';
+  
+  ir_we <= '0' when nrst = '1' and s = 1 else '1';
+  ar_we <= '0' when nrst = '1' and s = 3 else '1';
 
   -- alu
-  alu_we <= '1' when (instr = "000" or instr = "001" or instr = "100" or instr = "101") and s = 5 else '0';
-  alu_oe <= '1';
-  --alu_oe <= '1' when (instr = "000" or instr = "001" or instr = "100" or instr = "101") and (s = 5 or s = 6) else '0';
-  a_we <= '1' when (instr = "000" or instr = "001") and s = 6 else '0';
-  x_we <= '1' when (instr = "100" or instr = "101") and s = 6 else '0';
+  alu_we <= '0' when nrst = '1' and (instr = "000" or instr = "001" or instr = "100" or instr = "101") and s = 5 else '1';
+  alu_oe <= '0' when nrst = '1' else '1';
+  --alu_oe <= '0' when (instr = "000" or instr = "001" or instr = "100" or instr = "101") and (s = 5 or s = 6) else '1';
+  a_we <= '0' when nrst = '1' and (instr = "000" or instr = "001") and s = 6 else '1';
+  x_we <= '0' when nrst = '1' and (instr = "100" or instr = "101") and s = 6 else '1';
 
   -- sta/stx
-  a_oe <= '1' when instr = "010" and (s = 5 or s = 6) else '0';
-  x_oe <= '1' when instr = "110" and (s = 5 or s = 6) else '0';
-  ram_we <= '1' when (instr = "010" or instr = "110") and s = 6 else '0';
+  a_oe <= '0' when nrst = '1' and instr = "010" and (s = 5 or s = 6) else '1';
+  x_oe <= '0' when nrst = '1' and instr = "110" and (s = 5 or s = 6) else '1';
+
+  process(instr, s)
+  begin
+    if nrst = '0' then
+      ram_we <= 'Z';
+    elsif (instr = "010" or instr = "110") and s = 6 then
+      ram_we <= '0';
+    else
+      ram_we <= '1';
+    end if;
+  end process;
 
   -- Indexing for alu(a), sta
-  idx_en <= '1' when (instr = "000" or instr = "001" or instr = "010") and s > 3 else '0';
+  idx_en <= '1' when nrst = '1' and (instr = "000" or instr = "001" or instr = "010") and s > 3 else '0';
 
   -- jcc c=0 / jnz z=0
-  pc_we <= '1' when ((instr = "011" and carry = '0') or (instr = "111" and z = '0')) and s = "101" else '0';
+  pc_we <= '0' when nrst = '1' and ((instr = "011" and carry = '0') or (instr = "111" and z = '0')) and s = "101" else '1';
   -- jcc c=1 / jnz z=1
-  cc <= '1' when ((instr = "011" and carry /= '0') or (instr = "111" and z = '1')) and s = "101" else '0';
+  cc <= '1' when nrst = '1' and ((instr = "011" and carry /= '0') or (instr = "111" and z = '1')) and s = "101" else '0';
 end arch;

@@ -1,0 +1,16 @@
+net led0 loc=pin2;
+net led1 loc=pin3;
+net btn_halt loc=pin39;
+net btn_rst loc=pin40;
+net btn_step1 loc=pin5;
+net btn_step8 loc=pin6;
+net btn_s0 loc=pin7;
+net btn_s1 loc=pin8;
+net btn_s2 loc=pin12;
+net btn_s3 loc=pin13;
+net btn_s4 loc=pin14;
+net prog4 loc=pin19;
+net prog5 loc=pin20;
+net cpu_clk loc=pin29;
+net cpu_rst loc=pin30;
+net nrst loc=pin33;
