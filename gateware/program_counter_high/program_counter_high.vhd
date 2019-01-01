@@ -16,7 +16,7 @@ entity program_counter_high is
 end program_counter_high;
 
 architecture arch of program_counter_high is
-  signal clk: std_logic := '0';
+  signal counter: std_logic_vector(3 downto 0) := "0000";
   signal ring: std_logic_vector(7 downto 0) := "00000000";
   attribute KEEP: string;
   attribute KEEP of ring: signal is "true";
@@ -33,16 +33,16 @@ begin
   process (ring)
   begin
     if rising_edge(ring(7)) then
-      clk <= not clk;
+      counter <= counter + 1;
     end if;
   end process;
-  
-  process (nrst, clk)
+
+  process (nrst, counter(3))
   begin
     if nrst = '0' then
       v <= (others => '0');
       carry <= '0';
-    elsif rising_edge(clk) then
+    elsif rising_edge(counter(3)) then
       if nwe = '0' and nwe_p = '1' then
         v <= "000" & input;
       elsif inc = '1' and inc_p = '0' then

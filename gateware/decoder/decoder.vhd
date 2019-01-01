@@ -28,7 +28,7 @@ entity decoder is
   carry: in std_logic;
 
   cc: out std_logic;
-  
+
   clk: in std_logic;
   nrst: in std_logic
   );
@@ -45,8 +45,36 @@ begin
       s <= s + 1;
     end if;
   end process;
-  
+
   state <= std_logic_vector(s);
+
+  -- Ops:
+  -- 000  nor a   (A)
+  -- 001  add a   (A)
+  -- 010  sta     (S)
+  -- 011  jcc     (J)
+  -- 100  nor x   (A)
+  -- 101  add x   (A)
+  -- 110  stx     (S)
+  -- 111  jnz     (J)
+
+  -- States     0    1    2    3    4    5    6    7
+  -- RAM OE     X    X    X    X    A    A
+  -- RAM WE                                   S          (Store A or X to RAM)
+  -- IR OE                          X    X    X    X
+  -- IR WE           X                                   (Load first byte of instr)
+  -- AR OE                          X    X    X    X
+  -- AR WE                     X                         (Load second byte of instr)
+  -- PC INC               X         X
+  -- ALU OE     X    X    X    X    X    X    X    X
+  -- ALU WE                              A               (Store A/X + Data)
+  -- A OE                                Sa   Sa
+  -- A WE                                     Aa         (Load A from ALU)
+  -- X OE                                Sx   Sx
+  -- X WE                                     Ax         (Load X from ALU)
+  -- IDX EN                         ASa  ASa  ASa  ASa
+  -- PC WE                               J               (Set PC to IR/AR)
+  -- CC                                  J               (Clear carry on A)
 
   ram_oe <= '0' when nrst = '1' and (s <= 3 or ((instr = "000" or instr = "001" or instr = "100" or instr = "101") and s <= 5)) else '1';
 
@@ -54,7 +82,7 @@ begin
   ir_oe <= '0' when nrst = '1' and s > 3 else '1';
   pc_oe <= '0' when nrst = '1' and s <= 3 else '1';
   pc_inc <= '1' when nrst = '1' and (s = 2 or s = 4) else '0';
-  
+
   ir_we <= '0' when nrst = '1' and s = 1 else '1';
   ar_we <= '0' when nrst = '1' and s = 3 else '1';
 
@@ -84,7 +112,7 @@ begin
   idx_en <= '1' when nrst = '1' and (instr = "000" or instr = "001" or instr = "010") and s > 3 else '0';
 
   -- jcc c=0 / jnz z=0
-  pc_we <= '0' when nrst = '1' and ((instr = "011" and carry = '0') or (instr = "111" and z = '0')) and s = "101" else '1';
+  pc_we <= '0' when nrst = '1' and ((instr = "011" and carry = '0') or (instr = "111" and z = '0')) and s = 5 else '1';
   -- jcc c=1 / jnz z=1
-  cc <= '1' when nrst = '1' and ((instr = "011" and carry /= '0') or (instr = "111" and z = '1')) and s = "101" else '0';
+  cc <= '1' when nrst = '1' and ((instr = "011" and carry /= '0') or (instr = "111" and z = '1')) and s = 5 else '0';
 end arch;
