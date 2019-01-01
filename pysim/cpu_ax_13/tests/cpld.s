@@ -1,14 +1,21 @@
-foo:    lda allone
+        lda allone
         sta ddra
 
-        lda nn
-        sta porta
+
+        lda start1
+up:     sta porta
         add one
-        sta nn
+        jcc up
 
-        jmp foo
+        lda start2
+down:   sta porta
+        sub one
+        jnz down
 
-nn:     dcb 1
+        hlt
+        
+start1:  dcb 254
+start2:  dcb 2      
         
         org 240
 ddra:   dcb 0

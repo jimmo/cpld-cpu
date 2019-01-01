@@ -111,7 +111,8 @@ begin
       counter <= counter + 1;
 
       cpu_clk_prev <= cpu_clk_int;
-      cpu_clk_int <= (counter(22) and speed(0)) or (counter(20) and speed(1)) or (counter(18) and speed(2)) or (counter(16) and speed(3)) or (counter(14) and speed(4));
+      cpu_clk_int <= (counter(22) and speed(0)) or (counter(20) and speed(1)) or (counter(18) and speed(2)) or (counter(15) and speed(3)) or (counter(4) and speed(4));
+-- 8 is about 14kHz.
     end if;
   end process;
 end arch;

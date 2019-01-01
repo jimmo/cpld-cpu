@@ -7,8 +7,8 @@ entity gpio_rng is
   data: inout std_logic_vector(7 downto 0);
   addr: in std_logic_vector(8 downto 0);
   page0: in std_logic;
-  gpioa: out std_logic_vector(7 downto 0);
-  gpiob: out std_logic_vector(2 downto 0);
+  gpioa: inout std_logic_vector(7 downto 0);
+  gpiob: inout std_logic_vector(2 downto 0);
   nwe: in std_logic;
   noe: in std_logic;
   noe_out: out std_logic;
@@ -67,7 +67,7 @@ begin
     elsif sel_porta then
       data <= porta;
     elsif sel_portb then
-      data <= "00000" & portb;
+      data <= "00000" & gpiob;
     elsif sel_rng then
       data <= (others => '0');
     else

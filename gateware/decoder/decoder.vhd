@@ -36,6 +36,8 @@ end decoder;
 
 architecture arch of decoder is
   signal s: unsigned(2 downto 0);
+  signal carry_buf: std_logic := '0';
+  signal z_buf: std_logic := '0';
 begin
   process(nrst, clk)
   begin
@@ -43,6 +45,8 @@ begin
       s <= "000";
     elsif rising_edge(clk) then
       s <= s + 1;
+      carry_buf <= carry;
+      z_buf <= z;
     end if;
   end process;
 
@@ -112,7 +116,7 @@ begin
   idx_en <= '1' when nrst = '1' and (instr = "000" or instr = "001" or instr = "010") and s > 3 else '0';
 
   -- jcc c=0 / jnz z=0
-  pc_we <= '0' when nrst = '1' and ((instr = "011" and carry = '0') or (instr = "111" and z = '0')) and s = 5 else '1';
+  pc_we <= '0' when nrst = '1' and ((instr = "011" and carry_buf = '0') or (instr = "111" and z_buf = '0')) and s = 5 else '1';
   -- jcc c=1 / jnz z=1
-  cc <= '1' when nrst = '1' and ((instr = "011" and carry /= '0') or (instr = "111" and z = '1')) and s = 5 else '0';
+  cc <= '1' when nrst = '1' and ((instr = "011" and carry_buf /= '0') or (instr = "111" and z_buf = '1')) and s = 5 else '0';
 end arch;

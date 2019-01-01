@@ -1,9 +1,22 @@
+        lda zero
+        sta subs
+        lda 3
+        sta number
+
         lda allone
         sta ddra
 
         lda two
         sta porta
 
+        # Wait for button press
+wait1:  lda portb
+        nor 254
+        jz wait1
+wait2:  lda portb
+        nor 254
+        jnz wait2
+        
 start:  lda allone
         add allone
         sta subs
@@ -36,6 +49,14 @@ inner:  add subs
         lda number
         sta porta
 
+        # Wait for button press
+wait3:  lda portb
+        nor 254
+        jz wait3
+wait4:  lda portb
+        nor 254
+        jnz wait4
+
         # Found a dividend, test the next odd number.
 noprime:        lda number
         add two
@@ -48,6 +69,7 @@ number: dcb 3
 
         org 240
 ddra:   dcb 0
-        org 242
+ddrb:   dcb 0
 porta:  dcb 0
+portb:  dcb 0
         

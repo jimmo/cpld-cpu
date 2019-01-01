@@ -1,5 +1,9 @@
+        lda allone
+        sta ddra
+
 start:  lda 3
-        out
+        sta porta
+        #out
 
 
         lda *
@@ -9,12 +13,14 @@ start:  lda 3
         jmp fn
 
         lda 27
-        out
+        sta porta
+        #out
         hlt
 
 
 fn:     lda 7
-        out
+        sta porta
+        #out
 
         lda ret
         sta thunk_
@@ -22,4 +28,10 @@ thunk:  jmp ret
 
 ret:    dcb 0
         hlt
+        
+        org 240
+ddra:   dcb 0
+ddrb:   dcb 0
+porta:  dcb 0
+portb:  dcb 0
         

@@ -26,6 +26,7 @@ net gpioa<4> loc=pin1;
 net gpioa<5> loc=pin29;
 net gpioa<6> loc=pin30;
 net gpioa<7> loc=pin31;
+
 net gpiob<0> loc=pin32;
 net gpiob<1> loc=pin37;
 net gpiob<2> loc=pin38;

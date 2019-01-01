@@ -30,5 +30,5 @@ begin
   end process;
   output <= v when (noe = '0' and nrst = '1') else (others => 'Z');
   state <= v when (nrst = '1') else (others => 'Z');
-  z <= '1' when v = "000000000" else '0';
+  z <= '1' when v(7 downto 0) = "00000000" else '0';
 end arch;

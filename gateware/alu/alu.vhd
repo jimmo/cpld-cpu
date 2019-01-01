@@ -23,9 +23,9 @@ begin
       v <= "000000000";
     elsif falling_edge(nwe) then
       if fn = '0' then
-        v <= not (a or ('0' & b));
+        v <= a(8) & not (a(7 downto 0) or b);
       else
-        v <= (a + b);
+        v <= ('0' & a(7 downto 0)) + ('0' & b);
       end if;
     end if;
   end process;
