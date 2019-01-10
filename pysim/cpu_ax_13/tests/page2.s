@@ -8,7 +8,7 @@ start:
         out
         
         lda one
-        sta bank1
+        sta page1
 
         lda addr0
         out
@@ -17,7 +17,7 @@ start:
         out
         
         lda two
-        sta bank1
+        sta page1
 
         lda addr0
         out
@@ -48,7 +48,7 @@ code:   lda num
         out
 
         lda threex
-        sta bank0
+        sta page0
         jmp resume
         
         hlt

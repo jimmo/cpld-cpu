@@ -42,16 +42,6 @@ start:
         org 230
 data_p0:  dcb 7
         dcb 0x55
-
-        org 240
-ddra:   dcb 0
-ddrb:   dcb 0
-porta:  dcb 0
-portb:  dcb 0
-        
-        org 248
-bank0:  dcb 0
-bank1:  dcb 0
         
         page p1 1
         

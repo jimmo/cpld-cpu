@@ -17,8 +17,3 @@ down:   sta porta
 start1:  dcb 254
 start2:  dcb 2      
         
-        org 240
-ddra:   dcb 0
-        org 242
-porta:  dcb 0
-        

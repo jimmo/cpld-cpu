@@ -188,7 +188,7 @@ class Assembler:
         self._offset = offset_num
         self.dcb(self._pages[name]._num)
         self._offset = offset_sta
-        self.sta(self.create_label('bank{}'.format(self._pages[name]._target)))
+        self.sta(self.create_label('page{}'.format(self._pages[name]._target)))
 
     for l in self._labels.values():
       if l._offset is None:
@@ -199,7 +199,7 @@ class Assembler:
             raise ValueError(f'Same-target jump to {l._name}')
         else:
           if page._target == l._page._target and page._num != l._page._num and not l._register:
-            raise ValueError(f'Referecing label {l._name} from a different page in the same bank')
+            raise ValueError(f'Referecing label {l._name} from a different page in the same page')
         linear = page.linear(offset)
         addr = l.addr()
         self._data[linear] |= (addr >> 8) & 0x1f
@@ -217,14 +217,15 @@ class Assembler:
     self._page._target = target
 
     if target == 0:
-      self.reserve('one', 1, register=True)
-      self.reserve('allone', 0xff, register=True)
-      self.reserve('zero', 0, register=True)
-      self.reserve('trigger', 0, register=True)
-      self.reserve('display', 0, register=True)
-      self.reserve('rng', 0, register=True)
-      #self.reserve('bank1', 0, register=True)
-      #self.reserve('bank0', 0, register=True)
+      self.reserve('one', 1, register=True, const=True)
+      self.reserve('allone', 0xff, register=True, const=True)
+      self.reserve('zero', 0, register=True, const=True)
+      self.reserve('ddra', 0, register=True)
+      self.reserve('porta', 0, register=True)
+      self.reserve('ddrb', 0, register=True)
+      self.reserve('portb', 0, register=True)
+      self.reserve('page1', 0, register=True)
+      self.reserve('page0', 0, register=True)
       self.reserve('_tmp1', 0, register=True)
       self.reserve('_tmp2', 0, register=True)
       self.reserve('_sp', 0, register=True)
@@ -236,23 +237,24 @@ class Assembler:
     if value in self._page._consts:
       return self._page._consts[value]
     name = '_const_{}_{:x}'.format(self._page._num, value)
-    l = self.create_label(name)
-    self.reserve(name, value)
-    self._page._consts[value] = l
-    return l
+    _, label = self.reserve(name, value, const=True)
+    return label
 
-  def reserve(self, name, value, register=False):
+  def reserve(self, name, value, register=False, const=False):
     if isinstance(value, int):
       value = [value]
     prev_offset = self._offset
     self._offset = PAGE_SIZE - len(value) - self._page._nreserved
     self._page._nreserved += len(value)
-    self.label(self.create_label(name), register)
+    label = self.create_label(name)
+    self.label(label, register)
+    if const:
+      self._page._consts[value[0]] = label
     offset = self._offset
     for x in value:
       self.dcb(x)
     self._offset = prev_offset
-    return offset
+    return offset, label
         
   def label(self, l, register=False):
     self.log('  label "{}" at 0x{:04x}'.format(l._name, self._offset))
@@ -264,6 +266,7 @@ class Assembler:
     l._offset = self._offset
     l._register = register
 
+    # Create a label for offset+1, useful for SMC.
     l1 = self.create_label(l._name + '_')
     l1._page = self._page
     l1._offset = self._offset + 1
@@ -347,7 +350,7 @@ class Assembler:
     self.sta(self.create_label('_tmp1'))
     self.lda(self.create_label(label_name))
     self._page._fixups.append((name, offset, self._offset,))
-    self.dcb(0)  # Replace with `sta bankN`
+    self.dcb(0)  # Replace with `sta pageN`
     self.dcb(0)
     self.lda(self.create_label('_tmp1'))
     self._indent -= 1

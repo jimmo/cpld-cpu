@@ -1,4 +1,4 @@
-# Simple demo to show that reading from bank 1 is affected by the bank1 register.
+# Simple demo to show that reading from page 1 is affected by the page1 register.
 
         org 0
 
@@ -9,7 +9,7 @@
         out
         
         lda one
-        sta bank1
+        sta page1
 
         lda addr0
         out
@@ -18,7 +18,7 @@
         out
         
         lda two
-        sta bank1
+        sta page1
 
         lda addr0
         out

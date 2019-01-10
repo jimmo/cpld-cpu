@@ -13,7 +13,7 @@ entity mem_page is
 
   prog_clk: in std_logic;
   prog_data: in std_logic;
-  prog_latch: in std_logic;
+  prog_latch: in std_logic
   );
 end mem_page;
 
@@ -41,9 +41,6 @@ begin
       end if;
     end if;
   end process;
-  
-  sel_page0 <= addr = "0000011111000";
-  sel_page1 <= addr = "0000011111001";
 
   process(nrst, page0, page1, prog_addr, prog_nwe, prog_reg)
   begin
@@ -69,7 +66,10 @@ begin
     end if;
   end process;
   
-  z <= '1' when addr(12 downto 8) = "00000" else '0';
+  z <= '1' when (page0 = "000000" and addr(12 downto 9) = "0111") else '0';
+  
+  sel_page0 <= (page0 = "000000" and addr(12 downto 9) = "0111") and addr = "0111111110111";
+  sel_page1 <= (page0 = "000000" and addr(12 downto 9) = "0111") and addr = "0111111111000";
 
   process(nrst, prog_clk)
   begin

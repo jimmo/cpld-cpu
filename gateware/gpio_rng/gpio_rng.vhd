@@ -26,7 +26,6 @@ architecture arch of gpio_rng is
   signal sel_ddrb: boolean := FALSE;
   signal sel_porta: boolean := FALSE;
   signal sel_portb: boolean := FALSE;
-  signal sel_rng: boolean := FALSE;
   signal sel_any: boolean := FALSE;
 begin
   process(nrst, nwe)
@@ -48,15 +47,15 @@ begin
       end if;
     end if;
   end process;
-  sel_ddra <= page0 = '1' and addr =  "011110000";
-  sel_ddrb <= page0 = '1' and addr =  "011110001";
-  sel_porta <= page0 = '1' and addr = "011110010";
-  sel_portb <= page0 = '1' and addr = "011110011";
-  sel_rng <= page0 = '1' and addr =   "011110100";
-  sel_any <= sel_ddra or sel_ddrb or sel_porta or sel_portb or sel_rng;
+  
+  sel_ddra <= page0 = '1' and addr =  "111111100";
+  sel_porta <= page0 = '1' and addr = "111111011";
+  sel_ddrb <= page0 = '1' and addr =  "111111010";
+  sel_portb <= page0 = '1' and addr = "111111001";
+  sel_any <= sel_ddra or sel_ddrb or sel_porta or sel_portb;
   noe_out <= noe when not sel_any else '1';
 
-  process(noe, nwe, sel_any, sel_ddra, sel_ddrb, sel_porta, sel_portb, sel_rng, ddra, ddrb, porta, portb)
+  process(noe, nwe, sel_any, sel_ddra, sel_ddrb, sel_porta, sel_portb, ddra, ddrb, porta, portb)
   begin
     if noe = '1' or nwe = '0' or not sel_any then
       data <= (others => 'Z');
@@ -68,8 +67,6 @@ begin
       data <= porta;
     elsif sel_portb then
       data <= "00000" & gpiob;
-    elsif sel_rng then
-      data <= (others => '0');
     else
       data <= (others => '0');
     end if;

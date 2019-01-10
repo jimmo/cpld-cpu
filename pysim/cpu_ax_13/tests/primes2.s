@@ -1,5 +1,24 @@
+        # Reset variables.
+        lda 0
+        sta subs
+        lda 3
+        sta number
+
+        # Setup GPIO.
+        lda allone
+        sta ddra
+
+        # Hardcode 2 as prime.
         lda 2
-        out
+        sta porta
+
+        # Wait for button press
+wait1:  lda portb
+        nor 254
+        jz wait1
+wait2:  lda portb
+        nor 254
+        jnz wait2
 
 start:  lda 2
         sta subs
@@ -26,21 +45,28 @@ inner:  sub subs
 inc23:  lda subs
         add one
 inc:    sta subs
-        #out
 
         # Try the next dividend if subs * 2 < number
         lda subs
         add subs
-        #sub one
         sub number
         jcs loop
 
         # No subs worked --> prime
         lda number
-        out
+        sta porta
+        
+        # Wait for button press
+wait3:  lda portb
+        nor 254
+        jz wait3
+wait4:  lda portb
+        nor 254
+        jnz wait4
 
         # Found a dividend, test the next odd number.
-noprime:        lda number
+noprime:
+        lda number
         add 2
         sta number
         jmp start
