@@ -6,6 +6,9 @@
 
 loop:
         lda portb
-        nor 254
+        nand 1
+        and 1
+        shl
+        shl
         sta porta
         jmp loop

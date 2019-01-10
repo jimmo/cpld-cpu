@@ -28,6 +28,8 @@ class AssemblerTransformer():
       return int(token, 16)
     if token.startswith('0o'):
       return int(token, 8)
+    if token.startswith('0b'):
+      return int(token, 2)
     return int(token, 10)
 
   def cmd(self, m):
@@ -58,7 +60,9 @@ class AssemblerTransformer():
         label = self.assembler.create_label(m[1])
       elif m[1].type == 'LOCATION':
         label = self.assembler.const(self.assembler._offset)
-    
+
+    # More logic ops: https://en.wikipedia.org/wiki/NOR_logic
+
     if m[0].type == 'OP_NOR':
       self.assembler.nor(label)
     elif m[0].type == 'OP_ADD':
@@ -102,6 +106,54 @@ class AssemblerTransformer():
       self.assembler.jcs(label)
     elif m[0].type == 'OP_JZ':
       self.assembler.jz(label)
+    elif m[0].type == 'OP_SHL':
+      self.assembler.sta(self.assembler.create_label('_tmp1'))
+      self.assembler.add(self.assembler.create_label('_tmp1'))
+    elif m[0].type == 'OP_INC':
+      self.assembler.add(self.assembler.create_label('one'))
+    elif m[0].type == 'OP_DEC':
+      self.assembler.nor(self.assembler.create_label('zero'))
+      self.assembler.add(self.assembler.create_label('one'))
+      self.assembler.nor(self.assembler.create_label('zero'))
+    elif m[0].type == 'OP_OR':
+      # or addr   --> nor addr, not
+      self.assembler.nor(label)
+      self.assembler.nor(self.assembler.create_label('zero'))
+    elif m[0].type == 'OP_AND':
+      # and addr  --> not, sta _tmp1, lda addr, not, nor _tmp1
+      self.assembler.nor(self.assembler.create_label('zero'))
+      self.assembler.sta(self.assembler.create_label('_tmp1'))
+      self.assembler.lda(label)
+      self.assembler.nor(self.assembler.create_label('zero'))
+      self.assembler.nor(self.assembler.create_label('_tmp1'))
+    elif m[0].type == 'OP_NAND':
+      # nand addr --> and addr, not
+      self.assembler.nor(self.assembler.create_label('zero'))
+      self.assembler.sta(self.assembler.create_label('_tmp1'))
+      self.assembler.lda(label)
+      self.assembler.nor(self.assembler.create_label('zero'))
+      self.assembler.nor(self.assembler.create_label('_tmp1'))
+      self.assembler.nor(self.assembler.create_label('zero'))
+    elif m[0].type == 'OP_XNOR':
+      # xnor addr --> sta _tmp1, nor addr, sta _tmp2, nor _tmp1, sta _tmp1, lda _tmp2, nor addr, nor _tmp1
+      self.assembler.sta(self.assembler.create_label('_tmp1'))
+      self.assembler.nor(label)
+      self.assembler.sta(self.assembler.create_label('_tmp2'))
+      self.assembler.nor(self.assembler.create_label('_tmp1'))
+      self.assembler.sta(self.assembler.create_label('_tmp1'))
+      self.assembler.lda(self.assembler.create_label('_tmp2'))
+      self.assembler.nor(label)
+      self.assembler.nor(self.assembler.create_label('_tmp1'))
+    elif m[0].type == 'OP_XOR':
+      # xor addr  --> sta _tmp1, not, nor addr, sta _tmp2, lda addr, not, nor _tmp1, nor _tmp2
+      self.assembler.sta(self.assembler.create_label('_tmp1'))
+      self.assembler.nor(self.assembler.create_label('zero'))
+      self.assembler.nor(label)
+      self.assembler.sta(self.assembler.create_label('_tmp2'))
+      self.assembler.lda(label)
+      self.assembler.nor(self.assembler.create_label('zero'))
+      self.assembler.nor(self.assembler.create_label('_tmp1'))
+      self.assembler.nor(self.assembler.create_label('_tmp2'))
     elif m[0].type == 'OP_LDPG':
       self.assembler.ldpg(m[1])
     elif m[0].type == 'OP_HLT':
@@ -382,7 +434,7 @@ def main():
   ram = [0] * (2**18)
   with Assembler(ram, 0) as asm:
     if not asm.parse(sys.argv[1]):
-      return
+      sys.exit(1)
   n = len(ram) - 1
   while ram[n] == 0:
     n -= 1
