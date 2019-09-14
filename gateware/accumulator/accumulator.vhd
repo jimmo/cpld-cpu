@@ -2,6 +2,11 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 
+-- The accumulator is an ioregister (see ioregister.vhd) with the following changes:
+--   9-bit value, where the MSB represents a carry.
+--   `cc` input that clears the carry bit
+--   `z` output that is hign when the value is zero.
+
 entity accumulator is
   port (
   input: in std_logic_vector(8 downto 0);
