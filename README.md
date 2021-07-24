@@ -2,16 +2,16 @@
 
 This is a project to create a demonstration CPU that is simple enough to be able to watch its execution but also able to do something almost useful.
 
-It was inspired by the following four projects:
+It was inspired by the following five projects:
  - [Fourbit, by Jaromir Sukuba](http://jaromir.xf.cz/fourbit/fourbit.html). This is a 4-bit CPU made entirely from 74xx series logic.
  - [Tiny CPU in a CPLD, by Big Mess o' Wires](https://www.bigmessowires.com/cpu-in-a-cpld/). This implements a whole CPU inside a single Altera CPLD.
- - [MCPU, by Tim Böscke](https://github.com/cpldcpu/MCPU) (and [writeup, by Jean-Claude Wippler](https://jeelabs.org/2017/11/tfoc---a-minimal-computer/)). Similar to above, but using the exact CPLD that I was intending to use.
+ - [MCPU, by Tim Böscke](https://github.com/cpldcpu/MCPU) (and [writeup, by Jean-Claude Wippler](https://jeelabs.org/2017/11/tfoc---a-minimal-computer/)). Similar to above, but using the exact CPLD that I was intending to use, and with a really well-documented and practical ISA.
  - [The Megaprocessor, by James Newman](http://megaprocessor.com/). "The Megaprocessor is a micro-processor built large. Very large." Each gate is made from through-hole transistors with LEDs on all inputs and outputs.
  - [monster6502, by TubeTime & Evil Mad Scientist Laboratories](https://monster6502.com/). A working replica of the 6502 using discrete SMT transistors, complete with loads of LEDs.
 
-In particular the CPU design (ISA and architecture) is inspired by Fourbit, MCPU, and Tiny CPU, while the exploded design and "LEDs everywhere" is inspired by the Megaprocessor and monster6502. While nowhere near as capable as monster6502 or the Megaprocessor, it is definitely much more budget-friendly! And it can still [compute prime numbers](pysim/cpu_ax_13/tests/primes.s) ([video](https://www.youtube.com/watch?v=ZP9e-FCwwOs)) and [drive APA102 LED strips](pysim/cpu_ax_13/tests/apa102c.s).
+In particular the CPU design (ISA and architecture) is inspired by Fourbit, Tiny CPU, and especially MPU, while the exploded design and "LEDs everywhere" is inspired by the Megaprocessor and monster6502. While nowhere near as capable as monster6502 or the Megaprocessor, it is definitely much more budget-friendly! And it can still [compute prime numbers](pysim/cpu_ax_13/tests/primes.s) ([video](https://www.youtube.com/watch?v=ZP9e-FCwwOs)) and [drive APA102 LED strips](pysim/cpu_ax_13/tests/apa102c.s).
 
-Also not a direct inspiration to this project, it's absolutely worth linking to [Breadboard 8-bit computer, by Ben Eater](https://eater.net/8bit) which is a wonderful series about a similar project.
+Also, while not a direct inspiration to this project, it's absolutely worth linking to [Breadboard 8-bit computer, by Ben Eater](https://eater.net/8bit) which is a wonderful series about a similar project.
 
 ![](hardware/board.jpg)
 
