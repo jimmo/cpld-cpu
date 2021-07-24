@@ -1,5 +1,18 @@
 import sys
-from sim import Component, Signal, NotifySignal, Net, Register, SplitRegister, BusConnect, Clock, Ram, Rom, Power, MemDisplay
+from sim import (
+    Component,
+    Signal,
+    NotifySignal,
+    Net,
+    Register,
+    SplitRegister,
+    BusConnect,
+    Clock,
+    Ram,
+    Rom,
+    Power,
+    MemDisplay,
+)
 from .asm import Assembler
 
 # Implements https://github.com/cpldcpu/MCPU
@@ -37,118 +50,120 @@ from .asm import Assembler
 
 # xxdd dddd  (6-bit addressing --> 64 bytes RAM)
 
+
 class Decoder(Component):
-  def __init__(self):
-    super().__init__('decoder')
-    self.clk = NotifySignal(self, 'clk', 1)
-    self.addr = Signal(self, 'addr', 6)
-    self.data = Signal(self, 'data', 8)
-    self.we = Signal(self, 'we', 1)
-    self.oe = Signal(self, 'oe', 1)
-    self.acc = 0
-    self.adreg = 0
-    self.pc = 0
-    self.states = 0
+    def __init__(self):
+        super().__init__("decoder")
+        self.clk = NotifySignal(self, "clk", 1)
+        self.addr = Signal(self, "addr", 6)
+        self.data = Signal(self, "data", 8)
+        self.we = Signal(self, "we", 1)
+        self.oe = Signal(self, "oe", 1)
+        self.acc = 0
+        self.adreg = 0
+        self.pc = 0
+        self.states = 0
 
-  def reset(self):
-    self.addr <<= 0
-    self.data <<= None
-    self.oe <<= 1
-    self.we <<= 0
+    def reset(self):
+        self.addr <<= 0
+        self.data <<= None
+        self.oe <<= 1
+        self.we <<= 0
 
-  def update(self, signal):
-    if self.clk.had_edge(0, 1):
-      if self.states == 0b000:
-        self.pc = self.adreg + 1
-        self.adreg = self.data.value()
-      else:
-        self.adreg = self.pc
+    def update(self, signal):
+        if self.clk.had_edge(0, 1):
+            if self.states == 0b000:
+                self.pc = self.adreg + 1
+                self.adreg = self.data.value()
+            else:
+                self.adreg = self.pc
 
-      # ALU / Data Path
-      if self.states == 0b010:
-        # print('  add a {} + {}'.format(self.acc, self.data.value()))
-        self.acc = ((self.acc & 0xff) + self.data.value()) & 0x1ff
-        # print('    = {}'.format(self.acc))
-      elif self.states == 0b011:
-        # print('  nor a {} + {}'.format(self.acc, self.data.value()))
-        carry = self.acc & 0b100000000
-        value = self.acc & 0xff
-        nor = (~(value | self.data.value())) & 0xff
-        self.acc = carry | nor
-        # print('    = {}'.format(self.acc))
-      elif self.states == 0b101:
-        # Clear carry
-        self.acc = self.acc & 0xff
+            # ALU / Data Path
+            if self.states == 0b010:
+                # print('  add a {} + {}'.format(self.acc, self.data.value()))
+                self.acc = ((self.acc & 0xFF) + self.data.value()) & 0x1FF
+                # print('    = {}'.format(self.acc))
+            elif self.states == 0b011:
+                # print('  nor a {} + {}'.format(self.acc, self.data.value()))
+                carry = self.acc & 0b100000000
+                value = self.acc & 0xFF
+                nor = (~(value | self.data.value())) & 0xFF
+                self.acc = carry | nor
+                # print('    = {}'.format(self.acc))
+            elif self.states == 0b101:
+                # Clear carry
+                self.acc = self.acc & 0xFF
 
-      # State machine
-      if self.states != 0b000:
-        self.states = 0b000
-      elif (self.data.value() & 0b11000000) == 0b11000000 and self.acc & 0b100000000:
-        self.states = 0b101
-      else:
-        self.states = ~((self.data.value() >> 6) & 0b11) & 0b11
+            # State machine
+            if self.states != 0b000:
+                self.states = 0b000
+            elif (
+                self.data.value() & 0b11000000
+            ) == 0b11000000 and self.acc & 0b100000000:
+                self.states = 0b101
+            else:
+                self.states = ~((self.data.value() >> 6) & 0b11) & 0b11
 
-    clk = self.clk.value()
-    self.addr <<= self.adreg & 0x3f
-    self.data <<= None if self.states != 0b001 else self.acc & 0xff
-    self.oe <<= 0 if (clk == 1 or self.states == 0b001 or self.states == 0b101) else 1
-    self.we <<= 0 if (clk == 1 or self.states != 0b001) else 1
-
+        clk = self.clk.value()
+        self.addr <<= self.adreg & 0x3F
+        self.data <<= None if self.states != 0b001 else self.acc & 0xFF
+        self.oe <<= (
+            0 if (clk == 1 or self.states == 0b001 or self.states == 0b101) else 1
+        )
+        self.we <<= 0 if (clk == 1 or self.states != 0b001) else 1
 
 
 def main():
-  dec = Decoder()
-  
-  ram = Ram(addr_width=6)
-  out = MemDisplay(addr_width=6, base_addr=59)
-  clk = Clock(1)
+    dec = Decoder()
 
-  dec.clk += clk.clk
-  ram.addr += dec.addr + out.addr
-  ram.data += dec.data + out.data
-  ram.oe += dec.oe
-  ram.we += dec.we + out.we
+    ram = Ram(addr_width=6)
+    out = MemDisplay(addr_width=6, base_addr=59)
+    clk = Clock(1)
 
-  print('Loading RAM...')
+    dec.clk += clk.clk
+    ram.addr += dec.addr + out.addr
+    ram.data += dec.data + out.data
+    ram.oe += dec.oe
+    ram.we += dec.we + out.we
 
-  n = 0
-  with Assembler(ram.ram, 0) as asm:
-    if not asm.parse(sys.argv[1]):
-      return
-    asm.hlt()
+    print("Loading RAM...")
 
-  ram.stdout()
+    n = 0
+    with Assembler(ram.ram, 0) as asm:
+        if not asm.parse(sys.argv[1]):
+            return
+        asm.hlt()
 
-  for c in (
-      dec,
-      ram,
-      clk):
-    c.info()
-    c.reset()
+    ram.stdout()
 
-  last_pc = None
-  cycles = 0
-  hlt = 0
+    for c in (dec, ram, clk):
+        c.info()
+        c.reset()
 
-  try:
-    while True:
-      clk.tick()
+    last_pc = None
+    cycles = 0
+    hlt = 0
 
-      cycles += 1
+    try:
+        while True:
+            clk.tick()
 
-      if dec.pc == last_pc:
-        hlt += 1
-      else:
-        hlt = 0
-      last_pc = dec.pc
-      if hlt > 4:
-        break
-  except KeyboardInterrupt:
-    pass
+            cycles += 1
 
-  print(f'Ran for {cycles} cycles and {Net.net_updates} net updates.')
+            if dec.pc == last_pc:
+                hlt += 1
+            else:
+                hlt = 0
+            last_pc = dec.pc
+            if hlt > 4:
+                break
+    except KeyboardInterrupt:
+        pass
 
-  ram.stdout()
+    print(f"Ran for {cycles} cycles and {Net.net_updates} net updates.")
 
-if __name__ == '__main__':
-  main()
+    ram.stdout()
+
+
+if __name__ == "__main__":
+    main()
