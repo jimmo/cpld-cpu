@@ -7,7 +7,7 @@ DIR=`dirname "$DIR"`
 SRC=`readlink -m "$2"`
 
 pushd "$DIR/../pysim"
-source venv/bin/activate
+source .venv/bin/activate
 python3 -m cpu_ax_13.asm "$SRC" /tmp/data.py
 deactivate
 popd
